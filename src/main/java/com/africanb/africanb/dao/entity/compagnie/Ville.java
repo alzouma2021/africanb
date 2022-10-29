@@ -21,13 +21,11 @@ public class Ville implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id ;
     @Column(unique = true, length = 50)
-    @NotNull
     private String designation;
     @Lob
     private String description;
     @Column(name="is_deleted")
     private Boolean isDeleted;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @Column(name="updated_by")
@@ -67,12 +65,6 @@ public class Ville implements Serializable {
     public void setPays(Pays pays) {
         this.pays = pays;
     }
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -108,6 +100,12 @@ public class Ville implements Serializable {
     }
     public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override

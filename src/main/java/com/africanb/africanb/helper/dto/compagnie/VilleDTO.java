@@ -16,6 +16,7 @@ public class VilleDTO {
 
 
     //Historisation
+    private Boolean isDeleted;
     private String updatedAt;
     private Long  updatedBy;
     private String createdAt;
@@ -104,6 +105,12 @@ public class VilleDTO {
     }
     public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public SearchParam<String> getDesignationParam() {

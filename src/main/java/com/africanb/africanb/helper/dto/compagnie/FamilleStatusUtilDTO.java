@@ -4,6 +4,8 @@ import com.africanb.africanb.helper.searchFunctions.SearchParam;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.persistence.Column;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
@@ -15,6 +17,7 @@ public class FamilleStatusUtilDTO {
     private String description;
 
     //Historisation
+    private Boolean isDeleted;
     private String updatedAt;
     private Long  updatedBy;
     private String createdAt;
@@ -85,6 +88,12 @@ public class FamilleStatusUtilDTO {
     }
     public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public SearchParam<String> getDesignationParam() {

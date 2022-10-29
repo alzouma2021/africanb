@@ -41,8 +41,7 @@ public class CompagnieTransport implements Serializable {
     @ManyToOne
     private StatusUtil statusUtilActual;
     @Column(name="is_deleted")
-    private Boolean    isDeleted    ;
-
+    private Boolean    isDeleted ;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt ;
     @Column(name="updated_by")
@@ -52,7 +51,6 @@ public class CompagnieTransport implements Serializable {
     private Long  createdBy;
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-
     private Long  deletedBy;
 
     public Long getId() {

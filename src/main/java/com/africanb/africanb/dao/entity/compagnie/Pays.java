@@ -38,9 +38,8 @@ public class Pays implements Serializable {
     private Long  createdBy;
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-
-
     private Long  deletedBy;
+
     public Long getId() {
         return id;
     }

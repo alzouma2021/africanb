@@ -20,6 +20,7 @@ public class CompagnieTransportDTO {
     private String email;
 
     //Historisation
+    private Boolean isDeleted;
     private String updatedAt;
     private Long  updatedBy;
     private String createdAt;
@@ -165,6 +166,12 @@ public class CompagnieTransportDTO {
     }
     public void setRaisonSocialeParam(SearchParam<String> raisonSocialeParam) {
         this.raisonSocialeParam = raisonSocialeParam;
+    }
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
     public SearchParam<String> getSigleParam() {
         return sigleParam;

@@ -120,6 +120,8 @@ public class StatusUtilCompagnieTransportDTO  {
     public void setStatusUtilDesignationParam(SearchParam<String> statusUtilDesignationParam) {
         this.statusUtilDesignationParam = statusUtilDesignationParam;
     }
+
+
     public SearchParam<String> getUpdatedAtParam() {
         return updatedAtParam;
     }

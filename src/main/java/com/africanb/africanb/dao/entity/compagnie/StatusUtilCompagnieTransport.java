@@ -23,7 +23,7 @@ public class StatusUtilCompagnieTransport implements Serializable {
     @ManyToOne
     private StatusUtil statusUtil;
     @Column(name="is_deleted")
-    private Boolean    isDeleted    ;
+    private Boolean    isDeleted;
 
 
     @Temporal(TemporalType.TIMESTAMP)
