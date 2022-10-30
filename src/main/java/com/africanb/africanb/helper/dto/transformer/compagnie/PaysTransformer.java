@@ -2,7 +2,7 @@ package com.africanb.africanb.helper.dto.transformer.compagnie;
 
 
 import com.africanb.africanb.dao.entity.compagnie.Pays;
-import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
+import com.africanb.africanb.helper.contrat.*;
 import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -21,18 +21,18 @@ public interface PaysTransformer {
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
+
             @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
             @Mapping(source="entity.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
             @Mapping(source="entity.updatedBy", target="updatedBy"),
             @Mapping(source="entity.createdBy", target="createdBy"),
             @Mapping(source="entity.deletedBy", target="deletedBy"),
-            @Mapping(source="entity.isDeleted", target="isDeleted"),
     })
-    PaysDTO toDto(Pays entity);
+    PaysDTO toDto(Pays entity) throws ParseException;
 
-    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<PaysDTO> toDtos(List<Pays> entities) throws ParseException;
+  /*  @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<PaysDTO> toDtos(List<Pays> entities) throws ParseException;*/
 
     public default PaysDTO toLiteDto(Pays entity) {
         if (entity == null) {
@@ -56,6 +56,17 @@ public interface PaysTransformer {
         return dtos;
     }
 
-    @InheritInverseConfiguration
-    Pays toEntity(PaysDTO dto);
+    @Mappings({
+            @Mapping(source = "dto.id", target = "id"),
+            @Mapping(source = "dto.designation", target = "designation"),
+            @Mapping(source = "dto.description", target = "description"),
+
+            @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
+            @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
+            @Mapping(source="dto.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
+            @Mapping(source="dto.updatedBy", target="updatedBy"),
+            @Mapping(source="dto.createdBy", target="createdBy"),
+            @Mapping(source="dto.deletedBy", target="deletedBy"),
+    })
+    Pays toEntity(PaysDTO dto)  throws ParseException;
 }

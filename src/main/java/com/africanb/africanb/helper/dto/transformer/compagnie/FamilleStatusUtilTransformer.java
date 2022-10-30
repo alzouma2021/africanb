@@ -23,18 +23,18 @@ public interface FamilleStatusUtilTransformer {
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
+
             @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
             @Mapping(source="entity.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
             @Mapping(source="entity.updatedBy", target="updatedBy"),
             @Mapping(source="entity.createdBy", target="createdBy"),
             @Mapping(source="entity.deletedBy", target="deletedBy"),
-            @Mapping(source="entity.isDeleted", target="isDeleted"),
     })
-    FamilleStatusUtilDTO toDto(FamilleStatusUtil entity);
+    FamilleStatusUtilDTO toDto(FamilleStatusUtil entity) throws ParseException;
 
-    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<FamilleStatusUtilDTO> toDtos(List<FamilleStatusUtil> entities) throws ParseException;
+    /*@IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<FamilleStatusUtilDTO> toDtos(List<FamilleStatusUtil> entities) throws ParseException;*/
 
     public default FamilleStatusUtilDTO toLiteDto(FamilleStatusUtil entity) {
         if (entity == null) {
@@ -58,6 +58,17 @@ public interface FamilleStatusUtilTransformer {
         return dtos;
     }
 
-    @InheritInverseConfiguration
-    FamilleStatusUtil toEntity(FamilleStatusUtilDTO dto);
+    @Mappings({
+            @Mapping(source = "dto.id", target = "id"),
+            @Mapping(source = "dto.designation", target = "designation"),
+            @Mapping(source = "dto.description", target = "description"),
+
+            @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
+            @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
+            @Mapping(source="dto.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
+            @Mapping(source="dto.updatedBy", target="updatedBy"),
+            @Mapping(source="dto.createdBy", target="createdBy"),
+            @Mapping(source="dto.deletedBy", target="deletedBy"),
+    })
+    FamilleStatusUtil toEntity(FamilleStatusUtilDTO dto) throws ParseException;
 }

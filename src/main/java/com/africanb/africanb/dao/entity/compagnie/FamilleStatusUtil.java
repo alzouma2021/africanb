@@ -1,6 +1,10 @@
 package com.africanb.africanb.dao.entity.compagnie;
 
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +17,10 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "famillestatusutil")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class FamilleStatusUtil implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,92 +42,8 @@ public class FamilleStatusUtil implements Serializable {
     private Long  updatedBy;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    private Long  createdBy;
+    private Long createdBy;
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
     private Long deletedBy;
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getDesignation() {
-        return designation;
-    }
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    public Long getUpdatedBy() {
-        return updatedBy;
-    }
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-    public Date getDeletedAt() {
-        return deletedAt;
-    }
-    public void setDeletedAt(Date deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-    public Long getDeletedBy() {
-        return deletedBy;
-    }
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FamilleStatusUtil pays = (FamilleStatusUtil) o;
-        return Objects.equals(id, pays.id) && designation.equals(pays.designation) && description.equals(pays.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, designation, description);
-    }
-
-    @Override
-    public String toString() {
-        return "Pays{" +
-                "id=" + id +
-                ", designation='" + designation + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
-
 }

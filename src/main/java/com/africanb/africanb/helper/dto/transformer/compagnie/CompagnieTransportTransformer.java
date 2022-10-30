@@ -31,22 +31,24 @@ public interface CompagnieTransportTransformer {
             @Mapping(source = "entity.telephone", target = "telephone"),
             @Mapping(source = "entity.sigle", target = "sigle"),
             @Mapping(source = "entity.email", target = "email"),
-            @Mapping(source = "entity.statusUtilActual.id", target = "statusActualId"),
-            @Mapping(source = "entity.statusUtilActual.designation", target = "statusActualDesignation"),
+
+            @Mapping(source = "entity.statusUtilActual.id", target = "statusUtilActualId"),
+            @Mapping(source = "entity.statusUtilActual.designation", target = "statusUtilActualDesignation"),
             @Mapping(source = "entity.ville.id", target = "villeId"),
             @Mapping(source = "entity.ville.designation", target = "villeDesignation"),
-            @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
-            @Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
-            @Mapping(source="entity.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
-            @Mapping(source="entity.updatedBy", target="updatedBy"),
-            @Mapping(source="entity.createdBy", target="createdBy"),
-            @Mapping(source="entity.deletedBy", target="deletedBy"),
-            @Mapping(source="entity.isDeleted", target="isDeleted"),
-    })
-    CompagnieTransportDTO toDto(CompagnieTransport entity);
 
-    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<CompagnieTransportDTO> toDtos(List<CompagnieTransport> entities) throws ParseException;
+            @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
+            @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
+            @Mapping(source = "entity.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
+            @Mapping(source = "entity.updatedBy", target="updatedBy"),
+            @Mapping(source = "entity.createdBy", target="createdBy"),
+            @Mapping(source = "entity.deletedBy", target="deletedBy"),
+            @Mapping(source = "entity.isDeleted", target="isDeleted"),
+    })
+    CompagnieTransportDTO toDto(CompagnieTransport entity) throws ParseException;;
+
+  /*  @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<CompagnieTransportDTO> toDtos(List<CompagnieTransport> entities) throws ParseException;*/
 
     default CompagnieTransportDTO toLiteDto(CompagnieTransport entity) {
         if (entity == null) {
@@ -56,6 +58,7 @@ public interface CompagnieTransportTransformer {
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
+        dto.setRaisonSociale(entity.getRaisonSociale());
         return dto;
     }
 
@@ -79,6 +82,7 @@ public interface CompagnieTransportTransformer {
             @Mapping(source = "dto.telephone", target = "telephone"),
             @Mapping(source = "dto.sigle", target = "sigle"),
             @Mapping(source = "dto.email", target = "email"),
+
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
             @Mapping(source="dto.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
@@ -86,6 +90,9 @@ public interface CompagnieTransportTransformer {
             @Mapping(source="dto.createdBy", target="createdBy"),
             @Mapping(source="dto.deletedBy", target="deletedBy"),
             @Mapping(source="dto.isDeleted", target="isDeleted"),
+
+            @Mapping(source="ville", target="ville"),
+            @Mapping(source="statusUtilActual", target="statusUtilActual"),
     })
-    CompagnieTransport toEntity(CompagnieTransportDTO dto, Ville ville, StatusUtil statusUtilActual);
+    CompagnieTransport toEntity(CompagnieTransportDTO dto, Ville ville, StatusUtil statusUtilActual) throws ParseException;
 }
