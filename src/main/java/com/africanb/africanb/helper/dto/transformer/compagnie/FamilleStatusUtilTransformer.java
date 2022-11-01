@@ -32,8 +32,7 @@ public interface FamilleStatusUtilTransformer {
             @Mapping(source="entity.deletedBy", target="deletedBy"),
     })
     FamilleStatusUtilDTO toDto(FamilleStatusUtil entity) throws ParseException;
-
-    /*@IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+   /* @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<FamilleStatusUtilDTO> toDtos(List<FamilleStatusUtil> entities) throws ParseException;*/
 
     public default FamilleStatusUtilDTO toLiteDto(FamilleStatusUtil entity) {

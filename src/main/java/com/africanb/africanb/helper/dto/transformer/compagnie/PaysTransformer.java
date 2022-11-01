@@ -30,9 +30,8 @@ public interface PaysTransformer {
             @Mapping(source="entity.deletedBy", target="deletedBy"),
     })
     PaysDTO toDto(Pays entity) throws ParseException;
-
-  /*  @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<PaysDTO> toDtos(List<Pays> entities) throws ParseException;*/
+    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<PaysDTO> toDtos(List<Pays> entities) throws ParseException;
 
     public default PaysDTO toLiteDto(Pays entity) {
         if (entity == null) {

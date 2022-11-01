@@ -1,17 +1,6 @@
 package com.africanb.africanb.Business.compagnie;
 
-import ci.sgabs.gs.souscriptionApp.dao.entity.Agence;
-import ci.sgabs.gs.souscriptionApp.dao.repository.AgenceRepository;
-import ci.sgabs.gs.souscriptionApp.helper.contrat.IBasicBusiness;
-import ci.sgabs.gs.souscriptionApp.helper.contrat.Request;
-import ci.sgabs.gs.souscriptionApp.helper.contrat.Response;
-import ci.sgabs.gs.souscriptionApp.helper.errors.FunctionalError;
-import ci.sgabs.gs.souscriptionApp.helper.errors.TechnicalError;
-import ci.sgabs.gs.souscriptionApp.helper.exception.ExceptionUtils;
-import ci.sgabs.gs.souscriptionApp.helper.validation.Utilities;
-import ci.sgabs.gs.souscriptionApp.helper.validation.Validate;
-import ci.sgabs.gs.souscriptionApp.utils.dto.entityDto.AgenceDto;
-import ci.sgabs.gs.souscriptionApp.utils.dto.transformer.AgenceTransformer;
+
 import com.africanb.africanb.dao.entity.compagnie.Pays;
 import com.africanb.africanb.dao.repository.compagnieRepository.PaysRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
@@ -274,9 +263,8 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
         return null;
     }
 
-
     @Override
-    public Response<PaysDTO> forceDelete(Request<PaysDTO> request, Locale locale) throws ParseException {
+    public Response<PaysDTO> forceDelete(Request<PaysDTO> request, Locale locale) {
         return null ;
     }
 
@@ -286,10 +274,8 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
     }
 
     @Override
-    public Response<PaysDTO> getByCriteria(Request<PaysDTO> request, Locale locale) throws Exception {
-/*
-
-
+    public Response<PaysDTO> getByCriteria(Request<PaysDTO> request, Locale locale) {
+       /*
         log.info("----begin get agence-----");
 
         Response<AgenceDto> response = new Response<AgenceDto>();

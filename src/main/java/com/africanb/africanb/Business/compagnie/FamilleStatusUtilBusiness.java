@@ -179,7 +179,7 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
         log.info("----end update agence-----");
         return response;
     }
-    
+
     @Override
     public Response<FamilleStatusUtilDTO> delete(Request<FamilleStatusUtilDTO> request, Locale locale) {
 
