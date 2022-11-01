@@ -152,11 +152,11 @@ public class Utilities {
 
         return null;
     }
-
+*/
     public static Date getCurrentDate() {
         return new Date();
     }
-
+/*
     public static boolean isValidID(Integer id) {
         return id != null && id > 0;
     }
