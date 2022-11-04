@@ -37,8 +37,8 @@ public interface StatusUtilCompagnieTransportTransformer {
     })
     StatusUtilCompagnieTransportDTO toDto(StatusUtilCompagnieTransport entity) throws ParseException;
 
-   /* @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<StatusUtilCompagnieTransportDTO> toDtos(List<StatusUtilCompagnieTransport> entities) throws ParseException;*/
+    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<StatusUtilCompagnieTransportDTO> toDtos(List<StatusUtilCompagnieTransport> entities) throws ParseException;
 
     public default StatusUtilCompagnieTransportDTO toLiteDto(StatusUtilCompagnieTransport entity) {
         if (entity == null) {

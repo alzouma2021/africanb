@@ -12,6 +12,6 @@ public interface PaysRepository extends JpaRepository<Pays,Long> {
     @Query("select p from  Pays p where p.id = :id and p.isDeleted= :isDeleted")
     Pays findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
-    @Query("select p from Pays p where p.code = :code and p.isDeleted= :isDeleted")
+    @Query("select p from Pays p where p.designation = :designation and p.isDeleted= :isDeleted")
     Pays findByDesignation(@Param("designation") String code, @Param("isDeleted") Boolean isDeleted);
 }

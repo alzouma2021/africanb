@@ -13,6 +13,6 @@ public interface FamilleStatusUtilRepository extends JpaRepository<FamilleStatus
     @Query("select fsu from  FamilleStatusUtil fsu where fsu.id = :id and fsu.isDeleted= :isDeleted")
     FamilleStatusUtil findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
-    @Query("select fsu from FamilleStatusUtil fsu where fsu.code = :code and fsu.isDeleted= :isDeleted")
+    @Query("select fsu from FamilleStatusUtil fsu where fsu.designation = :designation and fsu.isDeleted= :isDeleted")
     FamilleStatusUtil findByDesignation(@Param("designation") String code, @Param("isDeleted") Boolean isDeleted);
 }

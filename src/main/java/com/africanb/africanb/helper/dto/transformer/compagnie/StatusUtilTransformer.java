@@ -42,8 +42,8 @@ public interface StatusUtilTransformer {
     })
     StatusUtilDTO toDto(StatusUtil entity) throws ParseException;
 
-/*    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<StatusUtilDTO> toDtos(List<StatusUtil> entities) throws ParseException;*/
+    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<StatusUtilDTO> toDtos(List<StatusUtil> entities) throws ParseException;
 
     public default StatusUtilDTO toLiteDto(StatusUtil entity) {
         if (entity == null) {

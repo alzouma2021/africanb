@@ -37,8 +37,8 @@ public interface VilleTransformer {
     })
     VilleDTO toDto(Ville entity) throws ParseException;
 
-   /* @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<VilleDTO> toDtos(List<Ville> entities) throws ParseException;*/
+    @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
+    List<VilleDTO> toDtos(List<Ville> entities) throws ParseException;
 
     public default VilleDTO toLiteDto(Ville entity) {
         if (entity == null) {

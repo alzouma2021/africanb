@@ -260,7 +260,7 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
 
 
     @Override
-    public Response<FamilleStatusUtilDTO> forceDelete(Request<FamilleStatusUtilDTO> request, Locale locale) throws ParseException {
+    public Response<FamilleStatusUtilDTO> forceDelete(Request<FamilleStatusUtilDTO> request, Locale locale)  {
         return null ;
     }
 
@@ -270,7 +270,7 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
     }
 
     @Override
-    public Response<FamilleStatusUtilDTO> getByCriteria(Request<FamilleStatusUtilDTO> request, Locale locale) throws Exception {
+    public Response<FamilleStatusUtilDTO> getByCriteria(Request<FamilleStatusUtilDTO> request, Locale locale) {
 /*
 
 
