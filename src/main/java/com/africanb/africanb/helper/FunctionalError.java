@@ -39,6 +39,13 @@ public class FunctionalError {
         status.setMessage(messageSource.getMessage("StatusMessage.FUNC_SAVE_FAIL", new Object[] {}, locale) + ": " + message);
         return status;
     }
+
+    public Status SEND_MAIL_FAIL(String message, Locale locale) {
+        Status status = new Status();
+        status.setCode(StatusCode.FUNC_SEND_MAIL_FAIL);
+        status.setMessage(messageSource.getMessage("StatusMessage.FUNC_SAVE_FAIL", new Object[] {}, locale) + ": " + message);
+        return status;
+    }
     public Status DATA_NOT_DELETABLE(String message, Locale locale) {
         Status status = new Status();
         status.setCode(StatusCode.FUNC_DATA_NOT_DELETABLE);

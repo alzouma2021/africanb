@@ -20,15 +20,12 @@ public class PaysTests {
 
     @Test
     public void createPays(){
-        //Informations
         Pays pays = new Pays();
-        pays.setDesignation("Côte d'ivoire");
+        pays.setDesignation("Nigeria7");
         pays.setDescription("Pays de l'afrique de l'ouest");
 
-        //Exeution de la methode
         Pays rtn=paysRepository.save(pays);
 
-        //Verification du resultat
         assertNotNull(rtn);
         assertEquals(pays.getDesignation(),rtn.getDesignation());
     }

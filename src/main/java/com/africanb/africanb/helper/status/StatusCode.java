@@ -47,4 +47,5 @@ public class StatusCode {
     public static final String 	FUNC_DEFAULT_PWD_NOT_CHANGED 			= "932";
     public static final String 	FUNC_DATA_NOT_AVAILABLE					= "933";
     public static final String FUNC_DATA_VERSION_NULL = "934";
+    public static final String FUNC_SEND_MAIL_FAIL= "935";
 }
