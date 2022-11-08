@@ -33,7 +33,6 @@ import java.util.*;
 @Component
 public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<FamilleStatusUtilDTO>, Response<FamilleStatusUtilDTO>> {
 
-
     private Response<FamilleStatusUtilDTO> response;
     @Autowired
     private FamilleStatusUtilRepository familleStatusUtilRepository;
