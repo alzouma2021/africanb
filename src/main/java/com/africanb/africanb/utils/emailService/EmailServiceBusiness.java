@@ -6,6 +6,9 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.validation.Validate;
+import com.africanb.africanb.rest.api.mail.EmailServiceController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
@@ -27,6 +30,8 @@ import java.util.*;
  */
 @Component
 public class EmailServiceBusiness implements EmailServiceInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailServiceBusiness.class);
 
     @Autowired
     public JavaMailSender emailSender;
@@ -74,6 +79,7 @@ public class EmailServiceBusiness implements EmailServiceInterface {
         try{
             emailSender.send(simpleMailMessage);
         }catch (MailException ex){
+            log.info("_82 Affichage de log ="+ex.getMessage());
             response.setStatus(functionalError.SEND_MAIL_FAIL("Erreur d'envoi", locale));
             response.setHasError(true);
             dto.setIsSent(false);

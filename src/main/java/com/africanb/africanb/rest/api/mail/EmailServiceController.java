@@ -40,7 +40,8 @@ public class EmailServiceController {
     public Response<EmailDTO> sendSimpleEmail(@RequestBody Request<EmailDTO> request) {
         log.info("start method create");
         Response<EmailDTO> response = new Response<EmailDTO>();
-        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_INDETIFIER");
+        requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         log.info("La langue " + languageID);
         Locale locale = new Locale(languageID, "");
         try{
@@ -65,7 +66,7 @@ public class EmailServiceController {
     public Response<EmailDTO> sendEmailWithAttachment(@RequestBody Request<EmailDTO> request) {
         log.info("start method create");
         Response<EmailDTO> response = new Response<EmailDTO>();
-        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_INDETIFIER");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         log.info("La langue " + languageID);
         Locale locale = new Locale(languageID, "");
         try{
