@@ -182,8 +182,7 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
     @Override
     public Response<FamilleStatusUtilDTO> delete(Request<FamilleStatusUtilDTO> request, Locale locale) {
 
-/*        log.info("----begin delete agence-----");
-
+        /* log.info("----begin delete agence-----");
         Response<AgenceDto> response = new Response<AgenceDto>();
         List<Agence> items = new ArrayList<Agence>();
 
@@ -196,16 +195,13 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
 
         //Verification des champs obligatoires
         for(AgenceDto dto : request.getDatas()) {
-
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("id", dto.getId());
-
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-
         }
 
         //Parcourir la liste
@@ -270,32 +266,25 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
 
     @Override
     public Response<FamilleStatusUtilDTO> getByCriteria(Request<FamilleStatusUtilDTO> request, Locale locale) {
-/*
 
-
+        /*
         log.info("----begin get agence-----");
-
         Response<AgenceDto> response = new Response<AgenceDto>();
-
         if (Utilities.blank(request.getData().getOrderField())) {
             request.getData().setOrderField("");
         }
         if (Utilities.blank(request.getData().getOrderDirection())) {
             request.getData().setOrderDirection("asc");
         }
-
         List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-
         if (Utilities.isEmpty(items)) {
             response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
             response.setHasError(false);
             return response;
         }
-
         List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                  ? AgenceTransformer.INSTANCE.toLiteDtos(items)
                                  : AgenceTransformer.INSTANCE.toDtos(items);
-
 
         response.setItems(itemsDto);
         response.setCount(agenceRepository.count(request, em, locale));
@@ -305,7 +294,7 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
         log.info("----end get agence-----");
 
         return response;
-*/
+        */
         return null;
     }
 }

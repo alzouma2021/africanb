@@ -21,7 +21,7 @@ public class PaysTests {
     @Test
     public void createPays(){
         Pays pays = new Pays();
-        pays.setDesignation("Nigeria7");
+        pays.setDesignation("Nigeria1000");
         pays.setDescription("Pays de l'afrique de l'ouest");
 
         Pays rtn=paysRepository.save(pays);

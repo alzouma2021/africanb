@@ -51,7 +51,7 @@ public class Utilities {
         return (list == null || list.isEmpty());
     }
 
-/*    public static boolean notBlank(String str) {
+   /*public static boolean notBlank(String str) {
         return str != null && !str.isEmpty() && !str.equals("\n")
                 && org.apache.commons.lang3.StringUtils.isNotBlank(str);
     }*/
@@ -156,11 +156,11 @@ public class Utilities {
     public static Date getCurrentDate() {
         return new Date();
     }
-/*
-    public static boolean isValidID(Integer id) {
+
+    public static boolean isValidID(Long id) {
         return id != null && id > 0;
     }
-
+/*
     public static Integer getLoginUser() {//HttpRequest request doit etre en parametre
         return 1;
     }
