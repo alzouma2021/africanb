@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PaysRepository extends JpaRepository<Pays,Long> {
-
     @Query("select p from  Pays p where p.id = :id and p.isDeleted= :isDeleted")
     Pays findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 

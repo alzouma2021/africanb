@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "3238504c-9bbb-4ba8-94dd-10caa463e8f7",
+		"name": "AFRICANB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SERVICEMAIL",
+			"item": [
+				{
+					"name": "sendMail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":{\n        \"toAddress\":\"alzoumamoussa18@univmetiers.ci\",\n        \"subject\": \"Test mail\",\n        \"message\": \"This message is my first.It's consists to verify if mail service run\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/mails/sendSimpleEmail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"mails",
+								"sendSimpleEmail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PAYS",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Côte d'ivoire\",\n        \"description\":\"Un pays de l'Afrique de l'ouest\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pays",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pays"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VILLE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Séguéla\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Sinfra\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Soubré\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tabou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tafiré\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Taï\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tanda\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiagba\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiapoum\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiassalé\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiébissou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiédio\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiéningboué\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tingréla\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tinhou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiobli\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Togoniéré\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Touba\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tougbo\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Toulepleu\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Toumodi\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Toumoukoro\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Vavoua\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Varalé\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yakassé-Mé\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yamoussoukro\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yaou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yorodougou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Zonneu\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Zouan-Hounien\",\n        \"paysId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/villes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"villes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FAMILLESTATUSUTIL",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleCompagnieTransport\",\n        \"description\":\"Ensemeble des status liés à la gestion d'une compagnie de transport\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/familleStatusUtil",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"familleStatusUtil"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "STATUSUTIL",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"compagnieTransport_encoursTraitement\",\n        \"description\":\"Creation d'une compagnie de transport en cours de traitement\",\n        \"familleStatusUtilId\":\"155\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/statusUtil",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"statusUtil"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COMPAGNITRANSPORT",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport001\",\n            \"description\":\"Compagnie de transport 0001\",\n            \"raisonSociale\":\"compagnieTransport001\",\n            \"telephone\":\"0565585746\",\n            \"sigle\":\"CT0001\",\n            \"email\":\"alzoumamoussa18@univmetiers.ci\",\n            \"villeDesignation\":\"Abidjan\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/compagnieTransport",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"compagnieTransport"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

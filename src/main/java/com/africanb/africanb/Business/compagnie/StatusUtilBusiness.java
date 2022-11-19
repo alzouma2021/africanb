@@ -78,7 +78,8 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
         for(StatusUtilDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("designation", dto.getDesignation());
-            fieldsToVerify.put("familleStatusUtilDesignation", dto.getFamilleStatusUtilDesignation());
+            fieldsToVerify.put("familleStatusUtilId", dto.getFamilleStatusUtilId());
+            //fieldsToVerify.put("familleStatusUtilDesignation", dto.getFamilleStatusUtilDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
@@ -100,9 +101,9 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
                 return response;
             }
             FamilleStatusUtil existingFamilleStatusUtil = null;
-            existingFamilleStatusUtil=familleStatusUtilRepository.findByDesignation(itemDto.getFamilleStatusUtilDesignation(),false);
+            existingFamilleStatusUtil=familleStatusUtilRepository.findOne(itemDto.getFamilleStatusUtilId(),false);
             if (existingFamilleStatusUtil == null) {
-                response.setStatus(functionalError.DATA_EXIST("FamilleStatusUtil ayant pour designation -> " + itemDto.getFamilleStatusUtilDesignation() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_NOT_EXIST("FamilleStatusUtil ayant pour identifiant -> " + itemDto.getFamilleStatusUtilId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }

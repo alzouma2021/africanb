@@ -93,7 +93,8 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             fieldsToVerify.put("telephone", dto.getTelephone());
             fieldsToVerify.put("sigle", dto.getSigle());
             fieldsToVerify.put("email", dto.getEmail());
-            fieldsToVerify.put("ville", dto.getVilleId());
+            //fieldsToVerify.put("ville", dto.getVilleId());
+            fieldsToVerify.put("villeDesignation", dto.getVilleDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
@@ -108,16 +109,16 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         }
         for(CompagnieTransportDTO dto: itemsDtos) {
             CompagnieTransport existingEntity=null;
-            existingEntity=compagnieTransportRepository.findOne(dto.getId(),false);
+            existingEntity=compagnieTransportRepository.findByDesignation(dto.getVilleDesignation(),false);
             if (existingEntity != null) {
-                response.setStatus(functionalError.DATA_EXIST("CompagnieTransport  -> " + dto.getId(), locale));
+                response.setStatus(functionalError.DATA_EXIST("CompagnieTransport  -> " + dto.getVilleDesignation(), locale));
                 response.setHasError(true);
                 return response;
             }
             Ville existingVille=null;
-            existingVille=villeRepository.findOne(dto.getVilleId(),false);
+            existingVille=villeRepository.findByDesignation(dto.getVilleDesignation(),false);
             if (existingVille == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("Villle  -> " + dto.getId(), locale));
+                response.setStatus(functionalError.DATA_NOT_EXIST("Ville  -> " + dto.getVilleDesignation(), locale));
                 response.setHasError(true);
                 return response;
             }
@@ -243,16 +244,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
                 entityToSave.setSigle(dto.getSigle());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy((long) request.getUser());
             items.add(entityToSave);
-            /*List<StatusUtilCompagnieTransport> currents = statusUtilCompagnieTransportRepository.findByCompagnieTranportId(entityToSave.getId(), false);
-            if (Utilities.isEmpty(currents)) {
-                response.setStatus(
-                        functionalError.DATA_NOT_EXIST("Impossible de retrouver les status liés à la compagnie de transport '"
-                                + entityToSave.getRaisonSociale() + "'.", locale));
-                response.setHasError(true);
-                return response;
-            }*/
         }
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification ",locale));

@@ -26,7 +26,7 @@ public class FamilleStatusUtilDTO {
     private String deletedAt;
     private Long  deletedBy;
 
-    private SearchParam<String> designationParam        ;
+    private SearchParam<String>   designationParam      ;
     private SearchParam<Boolean>  isDeletedParam        ;
     private SearchParam<String>   updatedAtParam        ;
     private SearchParam<Long>     updatedByParam        ;

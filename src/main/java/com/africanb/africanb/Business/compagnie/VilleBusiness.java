@@ -72,8 +72,8 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
         for(VilleDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("designation", dto.getDesignation());
-            fieldsToVerify.put("paysDesignation", dto.getPaysDesignation());
-            //fieldsToVerify.put("paysId", dto.getPaysId());
+            //fieldsToVerify.put("paysDesignation", dto.getPaysDesignation());
+            fieldsToVerify.put("paysId", dto.getPaysId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
@@ -95,9 +95,9 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
                 return response;
             }
             Pays existingPays = null;
-            existingPays=paysRepository.findByDesignation(itemDto.getPaysDesignation(),false);
+            existingPays=paysRepository.findOne(itemDto.getPaysId(),false);
             if (existingPays == null) {
-                response.setStatus(functionalError.DATA_EXIST("Pays ayant  pour designation -> " + itemDto.getPaysDesignation() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("Pays ayant  pour identifiant -> " + itemDto.getPaysId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
