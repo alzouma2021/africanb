@@ -353,7 +353,7 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
         }
         Long count=0L;
         count=villeRepository.countAllCities(false);
-        items=villeRepository.getAllCities(false, PageRequest.of(request.getIndex(), request.getSize()));
+        items=villeRepository.getAllCities(false );
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune ville n'est trouvée",locale));
             response.setHasError(true);

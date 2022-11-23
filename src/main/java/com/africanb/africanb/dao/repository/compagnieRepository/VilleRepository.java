@@ -19,7 +19,7 @@ public interface VilleRepository extends JpaRepository<Ville,Long> {
     Ville findByDesignation(@Param("designation") String code, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select v from Ville v where v.isDeleted= :isDeleted")
-    List<Ville> getAllCities(@Param("isDeleted") Boolean isDeleted, Pageable pageable);
+    List<Ville> getAllCities(@Param("isDeleted") Boolean isDeleteds);
 
     @Query("select count(*) from Ville v where  v.isDeleted= :isDeleted")
     Long countAllCities(@Param("isDeleted") Boolean isDeleted);
