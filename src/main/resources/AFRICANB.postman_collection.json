@@ -102,6 +102,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getAllCities",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"index\":1,\n    \"size\":1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/villes/getAllCities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"villes",
+								"getAllCities"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -197,6 +226,35 @@
 							"port": "8080",
 							"path": [
 								"compagnieTransport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllProcessingCompagnies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"index\":0,\n    \"size\":1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/compagnieTransport/getAllProcessingCompagnies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"compagnieTransport",
+								"getAllProcessingCompagnies"
 							]
 						}
 					},

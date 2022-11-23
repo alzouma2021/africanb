@@ -11,15 +11,15 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.PaysTransformer;
 import com.africanb.africanb.helper.dto.transformer.compagnie.VilleTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -118,7 +118,6 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
         List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? VilleTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : VilleTransformer.INSTANCE.toDtos(itemsSaved);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -298,7 +297,7 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
 
     @Override
     public Response<VilleDTO> getAll(Locale locale) throws ParseException {
-        return null;
+       return null;
     }
 
     @Override
@@ -336,7 +335,38 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
         log.info("----end get agence-----");
 
         return response;
-*/
+    */
         return null;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<VilleDTO> getAllCities(Request<VilleDTO> request, Locale locale) throws ParseException {
+        Response<VilleDTO> response = new Response<VilleDTO>();
+        List<Ville> items = new ArrayList<Ville>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("size",request.getSize());
+        fieldsToVerify.put("index",request.getIndex());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        Long count=0L;
+        count=villeRepository.countAllCities(false);
+        items=villeRepository.getAllCities(false, PageRequest.of(request.getIndex(), request.getSize()));
+        if(CollectionUtils.isEmpty(items)){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune ville n'est trouvée",locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                                ? VilleTransformer.INSTANCE.toLiteDtos(items)
+                                : VilleTransformer.INSTANCE.toDtos(items);
+        response.setCount(count);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end update ville-----");
+        return response;
     }
 }

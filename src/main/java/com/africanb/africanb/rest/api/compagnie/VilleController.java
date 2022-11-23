@@ -2,15 +2,23 @@ package com.africanb.africanb.rest.api.compagnie;
 
 
 import com.africanb.africanb.Business.compagnie.VilleBusiness;
+import com.africanb.africanb.helper.ExceptionUtils;
+import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
+import com.africanb.africanb.helper.status.StatusCode;
+import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.CannotCreateTransactionException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 
 @Log
@@ -24,6 +32,12 @@ public class VilleController {
     @Autowired
     private VilleBusiness villeBusiness;
 
+    @Autowired
+    private TechnicalError technicalError;
+    @Autowired
+    private ExceptionUtils exceptionUtils;
+    @Autowired
+    private HttpServletRequest requestBasic;
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<VilleDTO> create(@RequestBody Request<VilleDTO> request) {
@@ -57,4 +71,28 @@ public class VilleController {
         return response;
     }
 
+    @RequestMapping(value="/getAllCities",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<VilleDTO> getAllCities(@RequestBody Request<VilleDTO> request) {
+        log.info("start method create");
+        Response<VilleDTO> response = new Response<VilleDTO>();
+        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=villeBusiness.getAllCities(request,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
 }

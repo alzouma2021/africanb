@@ -1,12 +1,13 @@
 package com.africanb.africanb.dao.repository.compagnieRepository;
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.Pays;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface VilleRepository extends JpaRepository<Ville,Long> {
@@ -16,5 +17,11 @@ public interface VilleRepository extends JpaRepository<Ville,Long> {
 
     @Query("select v from Ville v where v.designation = :designation and v.isDeleted= :isDeleted")
     Ville findByDesignation(@Param("designation") String code, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("select v from Ville v where v.isDeleted= :isDeleted")
+    List<Ville> getAllCities(@Param("isDeleted") Boolean isDeleted, Pageable pageable);
+
+    @Query("select count(*) from Ville v where  v.isDeleted= :isDeleted")
+    Long countAllCities(@Param("isDeleted") Boolean isDeleted);
 
 }

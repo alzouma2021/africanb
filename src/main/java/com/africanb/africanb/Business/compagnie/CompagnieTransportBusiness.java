@@ -1,16 +1,12 @@
 
-/*
- * Java business for entity table profil
- * Created on 2022-01-20 ( Time 09:42:57 )
- * Generator tool : Telosys Tools Generator ( version 3.3.0 )
- * Copyright 2018 Smile Bakend generator. All Rights Reserved.
+/**
+ * @Author ALZOUMA MOUSSA MAHAMADOU
  */
 
 package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.repository.compagnieRepository.CompagnieTransportRepository;
 import com.africanb.africanb.dao.repository.compagnieRepository.StatusUtilCompagnieTransportRepository;
@@ -30,19 +26,17 @@ import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.StatusUtilConstants;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAMADOU
- */
 @Log
 @Component
 public class CompagnieTransportBusiness implements IBasicBusiness<Request<CompagnieTransportDTO>, Response<CompagnieTransportDTO>> {
@@ -293,7 +287,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             // -----------------------------------------------------------------------
             // ----------- CHECK IF DATA IS USED
             // -----------------------------------------------------------------------
-
             // user
             List<User> listOfUser = userRepository.findByProfilId(existingEntity.getId(), false);
             if (listOfUser != null && !listOfUser.isEmpty()) {
@@ -315,7 +308,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             existingEntity.setDeletedBy((long) request.getUser());
             items.add(existingEntity);
         }
-
         if (!items.isEmpty()) {
             // supprimer les donnees en base
             statusUtilRepository.saveAll((Iterable<Profil>) items);
@@ -323,7 +315,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(false);
             response.setStatus(functionalError.SUCCESS("", locale));
         }
-
         log.info("----end delete Profil-----");
         return response;*/
         return null;
@@ -473,4 +464,37 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         }
         return dto;
     }*/
+
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<CompagnieTransportDTO> getAllProcessingCompagnies(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
+        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
+        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("size",request.getSize());
+        fieldsToVerify.put("index",request.getIndex());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        Long count=0L;
+        count=compagnieTransportRepository.countAllProcessingCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
+        log.info("_493 COUNT=====:"+count); //TODO A effacer
+        items=compagnieTransportRepository.getAllProcessingCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false, PageRequest.of(request.getIndex(), request.getSize()));
+        log.info("_494 ITEMS=====:"+items.toString()); //TODO A effacer
+        if(CollectionUtils.isEmpty(items)){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport en de traiement",locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<CompagnieTransportDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                             ? CompagnieTransportTransformer.INSTANCE.toLiteDtos(items)
+                             : CompagnieTransportTransformer.INSTANCE.toDtos(items);
+        response.setCount(count);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        return response;
+    }
 }
