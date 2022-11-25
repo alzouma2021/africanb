@@ -344,13 +344,13 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
         Response<VilleDTO> response = new Response<VilleDTO>();
         List<Ville> items = new ArrayList<Ville>();
         Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        fieldsToVerify.put("size",request.getSize());
+       /* fieldsToVerify.put("size",request.getSize());
         fieldsToVerify.put("index",request.getIndex());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             response.setHasError(true);
             return response;
-        }
+        }*/
         Long count=0L;
         count=villeRepository.countAllCities(false);
         items=villeRepository.getAllCities(false );
