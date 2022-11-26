@@ -32,9 +32,7 @@ public class Pays implements Serializable {
     @Column(unique = true , length = 50)
     @NotNull
     private String designation;
-    @Lob
     private String description;
-
     @Column(name="is_deleted")
     private Boolean isDeleted;
     @Temporal(TemporalType.TIMESTAMP)

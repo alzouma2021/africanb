@@ -32,7 +32,6 @@ public class CompagnieTransport implements Serializable {
     @Column(unique = true , length = 50)
     @NotNull
     private String designation;
-    @Lob
     private String description;
     @NotNull
     private Boolean isActif;

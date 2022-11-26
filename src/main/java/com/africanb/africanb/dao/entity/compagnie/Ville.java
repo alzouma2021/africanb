@@ -30,7 +30,6 @@ public class Ville implements Serializable {
     private Long id;
     @Column(unique = true, length = 50)
     private String designation;
-    @Lob
     private String description;
 
     @Column(name="is_deleted")

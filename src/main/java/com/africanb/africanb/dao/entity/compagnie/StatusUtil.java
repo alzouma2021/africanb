@@ -31,7 +31,6 @@ public class StatusUtil implements Serializable {
     @Column(unique = true , length = 50)
     @NotNull
     private String designation;
-    @Lob
     private String description;
     @ManyToOne
     private FamilleStatusUtil familleStatusUtil;
