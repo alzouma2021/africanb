@@ -16,4 +16,5 @@ public interface IController<DTO> {
     Response<DTO> getByCriteria(IBasicBusiness iBasicBusiness, Request<DTO> request, FunctionalityEnum functionalityEnum);
 
     Response<DTO> getAll(IBasicBusiness iBasicBusiness);
+
 }

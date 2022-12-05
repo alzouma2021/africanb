@@ -24,6 +24,9 @@ import com.africanb.africanb.helper.dto.transformer.compagnie.CompagnieTransport
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.StatusUtilConstants;
+import com.africanb.africanb.utils.emailService.BodiesOfEmail;
+import com.africanb.africanb.utils.emailService.EmailDTO;
+import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -58,6 +61,8 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
     private ExceptionUtils exceptionUtils;
     @Autowired
     private EntityManager em;
+    @Autowired
+    private EmailServiceBusiness emailServiceBusiness;
 
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat dateTimeFormat;
@@ -131,8 +136,12 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             //entityToSave.setCreatedBy((long) request.getUser());
             CompagnieTransport entitySaved = compagnieTransportRepository.save(entityToSave);
-            items.add(entitySaved);
-
+            if(entitySaved==null){
+                response.setStatus(functionalError.SAVE_FAIL("Erreur creation",locale));
+                response.setHasError(true);
+                return response;
+            }
+            //
             List<StatusUtilCompagnieTransportDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<StatusUtilCompagnieTransportDTO>());
             StatusUtilCompagnieTransportDTO statusUtilCompagnieTransportDTO= new StatusUtilCompagnieTransportDTO();
             statusUtilCompagnieTransportDTO.setStatusUtilId(existingStatusUtilActual.getId());
@@ -147,6 +156,21 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
                 response.setHasError(Boolean.TRUE);
                 return response;
             }
+            //Send mail de création
+            Runnable runnable = () -> {
+                BodiesOfEmail bodiesOfEmail= new BodiesOfEmail();
+                EmailDTO emailDTO = new EmailDTO();
+                Request<EmailDTO> subRequestEmail = new Request<EmailDTO>();
+
+                emailDTO.setSubject("Creation de compagnie de transport");
+                emailDTO.setMessage(bodiesOfEmail.bodyHtmlMailCreateCompagny());
+                emailDTO.setToAddress(entitySaved.getEmail());
+                subRequestEmail.setData(emailDTO);
+
+                emailServiceBusiness.sendSimpleEmail(subRequestEmail,locale);
+            };
+            runnable.run();
+            items.add(entitySaved);
         }
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de creation ",locale));
