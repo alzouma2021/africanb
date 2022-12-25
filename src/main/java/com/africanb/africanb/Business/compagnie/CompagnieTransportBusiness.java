@@ -6,6 +6,7 @@
 package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.Pays;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.repository.compagnieRepository.CompagnieTransportRepository;
@@ -19,8 +20,10 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
+import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.transformer.compagnie.CompagnieTransportTransformer;
+import com.africanb.africanb.helper.dto.transformer.compagnie.PaysTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.StatusUtilConstants;
@@ -100,6 +103,16 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getId().equals(dto.getId()))){
+                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de compagnie '" + dto.getId() , locale));
+                response.setHasError(true);
+                return response;
+            }
+            if(itemsDtos.stream().anyMatch(a->a.getEmail().equalsIgnoreCase(dto.getEmail()))){
+                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de compagnie '" + dto.getEmail() , locale));
+                response.setHasError(true);
+                return response;
+            }
+            if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de compagnie '" + dto.getDesignation() , locale));
                 response.setHasError(true);
                 return response;
@@ -521,4 +534,116 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
+
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<CompagnieTransportDTO> validateAdhesionRequestCompagny(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
+        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        CompagnieTransportDTO itemDTO= new CompagnieTransportDTO();
+        if(request.getData() == null){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        fieldsToVerify.put("id",request.getData().getId());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        CompagnieTransport existingEntity=null;
+        existingEntity=compagnieTransportRepository.findOne(request.getData().getId(),false);
+        if (existingEntity == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
+            response.setHasError(true);
+            return response;
+        }
+        StatusUtil existingStatusUtilActual=null;
+        existingStatusUtilActual=statusUtilRepository.findByDesignation(StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
+        if (existingStatusUtilActual == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE, locale));
+            response.setHasError(true);
+            return response;
+        }
+        existingEntity.setStatusUtilActual(existingStatusUtilActual);
+        existingEntity.setIsValidate(true);
+        existingEntity.setUpdatedAt(Utilities.getCurrentDate());
+        CompagnieTransport entityUpdate=compagnieTransportRepository.save(existingEntity);
+        if (entityUpdate == null || entityUpdate.getIsValidate()==false) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'a pas été validée", locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<StatusUtilCompagnieTransportDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<StatusUtilCompagnieTransportDTO>());
+        StatusUtilCompagnieTransportDTO statusUtilCompagnieTransportDTO=new StatusUtilCompagnieTransportDTO();
+        statusUtilCompagnieTransportDTO.setStatusUtilId(existingStatusUtilActual.getId());
+        statusUtilCompagnieTransportDTO.setCompagnieTransportId(entityUpdate.getId());
+        itemsDatas.add(statusUtilCompagnieTransportDTO);
+        Request<StatusUtilCompagnieTransportDTO> subRequest = new Request<StatusUtilCompagnieTransportDTO>();
+        subRequest.setDatas(itemsDatas);
+        //subRequest.setUser(request.getUser());
+        Response<StatusUtilCompagnieTransportDTO> subResponse = statusUtilCompagnieTransportBusiness.create(subRequest, locale);
+        if (subResponse.isHasError()) {
+            response.setStatus(subResponse.getStatus());
+            response.setHasError(Boolean.TRUE);
+            return response;
+        }
+        //Send mail de validation
+        Runnable runnable = () -> {
+            BodiesOfEmail bodiesOfEmail= new BodiesOfEmail();
+            EmailDTO emailDTO = new EmailDTO();
+            Request<EmailDTO> subRequestEmail = new Request<EmailDTO>();
+
+            emailDTO.setSubject("Validation de compagnie de transport");
+            emailDTO.setMessage(bodiesOfEmail.bodyHtmlMailValidationCompagny());
+            emailDTO.setToAddress(entityUpdate.getEmail());
+            subRequestEmail.setData(emailDTO);
+
+            emailServiceBusiness.sendSimpleEmail(subRequestEmail,locale);
+        };
+        runnable.run();
+
+        CompagnieTransportDTO itemDto = CompagnieTransportTransformer.INSTANCE.toDto(entityUpdate);
+        //response.setCount(count);
+        response.setItem(itemDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get Compgnaie de transport-----");
+        return response;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<CompagnieTransportDTO> getAllValidedCompagnies(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
+        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
+        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("size",request.getSize());
+        fieldsToVerify.put("index",request.getIndex());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        Long count=0L;
+        count=compagnieTransportRepository.countAllValidedCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
+        log.info("_493 COUNT=====:"+count); //TODO A effacer
+        items=compagnieTransportRepository.getAllValidedCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE,false, PageRequest.of(request.getIndex(), request.getSize()));
+        log.info("_494 ITEMS=====:"+items.toString()); //TODO A effacer
+        if(CollectionUtils.isEmpty(items)){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport valide n'est disponible",locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<CompagnieTransportDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? CompagnieTransportTransformer.INSTANCE.toLiteDtos(items)
+                : CompagnieTransportTransformer.INSTANCE.toDtos(items);
+        response.setCount(count);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        return response;
+    }
+
 }

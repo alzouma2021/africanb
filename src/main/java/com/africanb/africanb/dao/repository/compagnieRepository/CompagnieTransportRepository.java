@@ -24,4 +24,10 @@ public interface CompagnieTransportRepository extends JpaRepository<CompagnieTra
 
     @Query("select count(*) from CompagnieTransport ct where ct.statusUtilActual.designation = :designation and ct.isDeleted= :isDeleted")
     Long countAllProcessingCompagnies(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("select ct from CompagnieTransport ct where ct.statusUtilActual.designation = :designation and ct.isDeleted= :isDeleted")
+    List<CompagnieTransport> getAllValidedCompagnies(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted, Pageable pageable);
+
+    @Query("select count(*) from CompagnieTransport ct where ct.statusUtilActual.designation = :designation and ct.isDeleted= :isDeleted")
+    Long countAllValidedCompagnies(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
 }

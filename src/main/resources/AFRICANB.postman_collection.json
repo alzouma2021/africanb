@@ -69,6 +69,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getAllPays",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pays/getAllPays",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pays",
+								"getAllPays"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -210,7 +239,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport002\",\n            \"description\":\"Compagnie de transport 0002\",\n            \"raisonSociale\":\"compagnieTransport002\",\n            \"telephone\":\"0565585742\",\n            \"sigle\":\"CT0002\",\n            \"email\":\"alzoumamoussa18@univmetiers.co\",\n            \"villeDesignation\":\"Abidjan\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport03\",\n            \"description\":\"Compagnie de transport03\",\n            \"raisonSociale\":\"compagnieTransport03\",\n            \"telephone\":\"0565585741203\",\n            \"sigle\":\"CT000213\",\n            \"email\":\"alzoumamoussa18@univmetiers.ci\",\n            \"villeDesignation\":\"Abidjan\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -218,14 +247,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/compagnieTransport",
+							"raw": "http://localhost:8080/compagnieTransport/getAllProcessingCompagnies",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"compagnieTransport"
+								"compagnieTransport",
+								"getAllProcessingCompagnies"
 							]
 						}
 					},
@@ -255,6 +285,64 @@
 							"path": [
 								"compagnieTransport",
 								"getAllProcessingCompagnies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "validateAdhesionRequestCompagny",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":{\n        \"id\":3\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/compagnieTransport/validateAdhesionRequestCompagny",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"compagnieTransport",
+								"validateAdhesionRequestCompagny"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllValidedCompagnies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"index\":0,\n    \"size\":1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/compagnieTransport/getAllValidedCompagnies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"compagnieTransport",
+								"getAllValidedCompagnies"
 							]
 						}
 					},

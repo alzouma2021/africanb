@@ -75,13 +75,63 @@ public class CompagnieTransportController {
 
     @RequestMapping(value="/getAllProcessingCompagnies",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<CompagnieTransportDTO> getAllProcessingCompagnies(@RequestBody Request<CompagnieTransportDTO> request) {
-        log.info("start method create");
+        log.info("start method getAllProcessingCompagnies");
         Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
         //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale = new Locale(languageID, "");
         try{
             response=compagnieTransportBusiness.getAllProcessingCompagnies(request,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
+
+    @RequestMapping(value="/getAllValidedCompagnies",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<CompagnieTransportDTO> getAllValidedCompagnies(@RequestBody Request<CompagnieTransportDTO> request) {
+        log.info("start method getAllValidedCompagnies");
+        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
+        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=compagnieTransportBusiness.getAllValidedCompagnies(request,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
+
+    @RequestMapping(value="/validateAdhesionRequestCompagny",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<CompagnieTransportDTO> validateAdhesionRequestCompagny(@RequestBody Request<CompagnieTransportDTO> request) {
+        log.info("start method validateAdhesionRequestCompagny");
+        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
+        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=compagnieTransportBusiness.validateAdhesionRequestCompagny(request,locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }

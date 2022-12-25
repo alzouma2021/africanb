@@ -17,6 +17,7 @@ public class CompagnieTransportDTO {
     private String designation;
     private String description;
     private Boolean isActif;
+    private Boolean isValidate;
     private String raisonSociale;
     private String telephone;
     private String sigle;

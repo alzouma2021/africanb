@@ -36,6 +36,8 @@ public class CompagnieTransport implements Serializable {
     @NotNull
     private Boolean isActif;
     @NotNull
+    private Boolean isValidate;
+    @NotNull
     private String raisonSociale;
     @NotNull
     private String telephone;

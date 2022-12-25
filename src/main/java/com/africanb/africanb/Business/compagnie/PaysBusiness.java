@@ -2,6 +2,7 @@ package com.africanb.africanb.Business.compagnie;
 
 
 import com.africanb.africanb.dao.entity.compagnie.Pays;
+import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.repository.compagnieRepository.PaysRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
@@ -10,13 +11,16 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
+import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.transformer.compagnie.PaysTransformer;
+import com.africanb.africanb.helper.dto.transformer.compagnie.VilleTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -310,6 +314,28 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
         return response;
 */
         return null;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<PaysDTO> getAllPays(Request<PaysDTO> request, Locale locale) throws ParseException {
+        Response<PaysDTO> response = new Response<PaysDTO>();
+        List<Pays> items = new ArrayList<Pays>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        items=paysRepository.getAllPays(false );
+        if(CollectionUtils.isEmpty(items)){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucun pays n'existe",locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<PaysDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? PaysTransformer.INSTANCE.toLiteDtos(items)
+                : PaysTransformer.INSTANCE.toDtos(items);
+        //response.setCount(count);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get pays-----");
+        return response;
     }
 
 }
