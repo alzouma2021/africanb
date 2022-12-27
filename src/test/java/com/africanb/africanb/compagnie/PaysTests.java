@@ -1,16 +1,13 @@
 package com.africanb.africanb.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.Pays;
-import com.africanb.africanb.dao.repository.compagnieRepository.PaysRepository;
+import com.africanb.africanb.dao.repository.compagnie.PaysRepository;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

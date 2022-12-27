@@ -2,13 +2,9 @@ package com.africanb.africanb.Business.compagnie;
 
 
 import com.africanb.africanb.dao.entity.compagnie.FamilleStatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Pays;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
-import com.africanb.africanb.dao.repository.compagnieRepository.FamilleStatusUtilRepository;
-import com.africanb.africanb.dao.repository.compagnieRepository.PaysRepository;
-import com.africanb.africanb.dao.repository.compagnieRepository.StatusUtilRepository;
-import com.africanb.africanb.dao.repository.compagnieRepository.VilleRepository;
+import com.africanb.africanb.dao.repository.compagnie.FamilleStatusUtilRepository;
+import com.africanb.africanb.dao.repository.compagnie.StatusUtilRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -18,12 +14,9 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilDTO;
 import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.transformer.compagnie.StatusUtilTransformer;
-import com.africanb.africanb.helper.dto.transformer.compagnie.VilleTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.status.Status;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.apache.catalina.manager.StatusTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;

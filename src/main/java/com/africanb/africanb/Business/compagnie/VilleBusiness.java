@@ -3,8 +3,8 @@ package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.Pays;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
-import com.africanb.africanb.dao.repository.compagnieRepository.PaysRepository;
-import com.africanb.africanb.dao.repository.compagnieRepository.VilleRepository;
+import com.africanb.africanb.dao.repository.compagnie.PaysRepository;
+import com.africanb.africanb.dao.repository.compagnie.VilleRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -17,7 +17,6 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;

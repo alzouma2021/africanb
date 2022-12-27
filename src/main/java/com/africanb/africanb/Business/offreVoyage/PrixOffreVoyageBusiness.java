@@ -1,18 +1,26 @@
-package com.africanb.africanb.Business.compagnie;
+package com.africanb.africanb.Business.offreVoyage;
 
 
 import com.africanb.africanb.dao.entity.compagnie.Pays;
-import com.africanb.africanb.dao.repository.compagnie.PaysRepository;
+import com.africanb.africanb.dao.entity.compagnie.Ville;
+import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
+import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.PrixOffreVoyageRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.PaysTransformer;
+import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
+import com.africanb.africanb.helper.dto.transformer.compagnie.VilleTransformer;
+import com.africanb.africanb.helper.dto.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
+import com.africanb.africanb.utils.Reference.Reference;
+import com.africanb.africanb.utils.Reference.ReferenceRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,18 +33,20 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Cette classe traite les operations portant sur les agences
- * @author  Alzouma Moussa Mahamadou
- * @date 09/05/2022
+ * @Author ALZOUMA MOUSSA MAHAAMADOU
  */
 @Log
 @Component
-public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<PaysDTO>> {
+public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffreVoyageDTO>, Response<PrixOffreVoyageDTO>> {
 
 
-    private Response<PaysDTO> response;
+    private Response<PrixOffreVoyageDTO> response;
     @Autowired
-    private PaysRepository paysRepository;
+    private ReferenceRepository referenceRepository;
+    @Autowired
+    private PrixOffreVoyageRepository prixOffreVoyageRepository;
+    @Autowired
+    private OffreVoyageRepository offreVoyageRepository;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
@@ -49,85 +59,104 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public PaysBusiness() {
+    public PrixOffreVoyageBusiness() {
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
-    public Response<PaysDTO> create(Request<PaysDTO> request, Locale locale) throws ParseException {
-        log.info("_66 Traitement des pays"); //TODO A effacer
-        Response<PaysDTO> response = new Response<PaysDTO>();
-        List<Pays> items = new ArrayList<Pays>();
+    public Response<PrixOffreVoyageDTO> create(Request<PrixOffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<PrixOffreVoyageDTO> response = new Response<PrixOffreVoyageDTO>();
+        List<Ville> items = new ArrayList<Ville>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
-            //TODO Mise à jour des messages derreur
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<PaysDTO>());
-        for(PaysDTO dto: request.getDatas() ) {
+        List<PrixOffreVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<PrixOffreVoyageDTO>());
+        for(PrixOffreVoyageDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("designation", dto.getDesignation());
+            fieldsToVerify.put("modeDesignation", dto.getModeDesignation());
+            fieldsToVerify.put("categorieVoyageur", dto.getCategorieVoyageurDesignation());
+            fieldsToVerify.put("prix", dto.getPrix());
+            fieldsToVerify.put("offreVoyageDesignation", dto.getOffreVoyageDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
-                //TODO Mise à jour des messages d'erreur
-                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation() + "' pour les pays", locale));
+                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation(), locale));
                 response.setHasError(true);
                 return response;
             }
             itemsDtos.add(dto);
         }
-        for(PaysDTO itemDto : itemsDtos){
-            Pays existingEntity = null;
-            existingEntity = paysRepository.findByDesignation(itemDto.getDesignation(), false);
-            if (existingEntity != null) {
-                response.setStatus(functionalError.DATA_EXIST("Pays ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
+        for(PrixOffreVoyageDTO itemDto : itemsDtos){
+            PrixOffreVoyage existingPrixOffrVoyage = null;
+            existingPrixOffrVoyage = prixOffreVoyageRepository.findByDesignation(itemDto.getDesignation(), false);
+            if (existingPrixOffrVoyage != null) {
+                response.setStatus(functionalError.DATA_EXIST("PrixOffreVoyage ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            Pays entityToSave = PaysTransformer.INSTANCE.toEntity(itemDto);
-            log.info("_103 PaysDTO transform to Entity :: ="+ entityToSave.toString());
-
+            OffreVoyage existingOffreVoyage = null;
+            existingOffreVoyage= offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
+            if (existingOffreVoyage == null) {
+                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            Reference existingMode = null;
+            existingMode= referenceRepository.findByDesignation(itemDto.getDesignation(),false);
+            if (existingMode == null) {
+                response.setStatus(functionalError.DATA_EXIST("Mode ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            Reference existingCategorieVoyageur = null;
+            existingCategorieVoyageur= referenceRepository.findByDesignation(itemDto.getDesignation(),false);
+            if (existingCategorieVoyageur == null) {
+                response.setStatus(functionalError.DATA_EXIST("CategorieVoyageur ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            PrixOffreVoyage entityToSave = PrixOffreVoyageTransformer.INSTANCE.toEntity(itemDto,existingMode, existingOffreVoyage,existingCategorieVoyageur);
+            log.info("_105 VilleDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<Pays> itemsSaved = null;
-        itemsSaved = paysRepository.saveAll((Iterable<Pays>) items);
+        List<Ville> itemsSaved = null;
+        itemsSaved = prixOffreVoyageRepository.saveAll((Iterable<Ville>) items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                    ? PaysTransformer.INSTANCE.toLiteDtos(itemsSaved)
-                                    : PaysTransformer.INSTANCE.toDtos(itemsSaved);
-
+        List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                                    ? VilleTransformer.INSTANCE.toLiteDtos(itemsSaved)
+                                    : VilleTransformer.INSTANCE.toDtos(itemsSaved);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
-
         return response;
     }
 
     @Override
-    public Response<PaysDTO> update(Request<PaysDTO> request, Locale locale) throws ParseException {
+    public Response<VilleDTO> update(Request<VilleDTO> request, Locale locale) throws ParseException {
 
-        Response<PaysDTO> response = new Response<PaysDTO>();
-        List<Pays> items = new ArrayList<Pays>();
+        Response<VilleDTO> response = new Response<VilleDTO>();
+        List<Ville> items = new ArrayList<Ville>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
+            response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<PaysDTO>());
-        for(PaysDTO dto: request.getDatas() ) {
+        List<VilleDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<VilleDTO>());
+        for(VilleDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -136,33 +165,54 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
-                //TODO Mise à jour des messages d'erreur
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation() + "' pour les pays", locale));
                 response.setHasError(true);
                 return response;
             }
             itemsDtos.add(dto);
-            itemsDtos.add(dto);
         }
-
-        for(PaysDTO dto: itemsDtos) {
-            Pays entityToSave = paysRepository.findOne(dto.getId(), false);
+        for(VilleDTO dto: itemsDtos) {
+            Ville entityToSave = prixOffreVoyageRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant l'identifiant suivant -> " + dto.getId() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_NOT_EXIST("La ville ayant l'identifiant suivant -> " + dto.getId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             if (Utilities.isNotBlank(dto.getDesignation()) && !dto.getDesignation().equals(entityToSave.getDesignation())) {
-                Pays existingEntity = paysRepository.findByDesignation(dto.getDesignation(), false);
-                //Verification de l'identifiant
-                if (existingEntity != null && !existingEntity.getId().equals(entityToSave.getId())) {
-                    response.setStatus(functionalError.DATA_EXIST("Pays -> " + dto.getDesignation(), locale));
+                Ville existingVille = prixOffreVoyageRepository.findByDesignation(dto.getDesignation(), false);
+                if (existingVille != null && !existingVille.getId().equals(entityToSave.getId())) {
+                    response.setStatus(functionalError.DATA_EXIST("Ville -> " + dto.getDesignation(), locale));
                     response.setHasError(true);
                     return response;
                 }
                 entityToSave.setDesignation(dto.getDesignation());
             }
-            entityToSave.setDescription(dto.getDescription());
+            String paysDesignation=entityToSave.getPays()!=null&&entityToSave.getPays().getDesignation()!=null
+                                       ?entityToSave.getPays().getDesignation()
+                                       :null;
+            if(paysDesignation==null){
+                response.setStatus(functionalError.DATA_NOT_EXIST("La ville n'est rattachée à aucun pays", locale));
+                response.setHasError(true);
+                return response;
+            }
+            Pays existingPays = referenceRepository.findByDesignation(paysDesignation,false);
+            if (existingPays == null) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("Le pays de la ville n'existe pas-> " + dto.getId() +", n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (Utilities.isNotBlank(dto.getPaysDesignation()) && !dto.getPaysDesignation().equals(existingPays.getDesignation())) {
+                Pays paysToSave = referenceRepository.findByDesignation(dto.getPaysDesignation(), false);
+                if (paysToSave == null) {
+                    response.setStatus(functionalError.DATA_NOT_EXIST("Le pays de la ville n'existe pas-> " + dto.getId() +", n'existe pas", locale));
+                    response.setHasError(true);
+                    return response;
+                }
+                entityToSave.setPays(paysToSave);
+            }
+            if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDesignation().equals(entityToSave.getDescription())){
+                entityToSave.setDescription(dto.getDescription());
+            }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
             //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
@@ -172,21 +222,19 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                ? PaysTransformer.INSTANCE.toLiteDtos(items)
-                                : PaysTransformer.INSTANCE.toDtos(items);
+        List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                                ? VilleTransformer.INSTANCE.toLiteDtos(items)
+                                : VilleTransformer.INSTANCE.toDtos(items);
 
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end update agence-----");
+        log.info("----end update ville-----");
         return response;
     }
 
-
-
     @Override
-    public Response<PaysDTO> delete(Request<PaysDTO> request, Locale locale) {
+    public Response<VilleDTO> delete(Request<VilleDTO> request, Locale locale) {
 
 /*        log.info("----begin delete agence-----");
 
@@ -264,17 +312,17 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
     }
 
     @Override
-    public Response<PaysDTO> forceDelete(Request<PaysDTO> request, Locale locale) {
+    public Response<VilleDTO> forceDelete(Request<VilleDTO> request, Locale locale) {
         return null ;
     }
 
     @Override
-    public Response<PaysDTO> getAll(Locale locale) throws ParseException {
-        return null;
+    public Response<VilleDTO> getAll(Locale locale) throws ParseException {
+       return null;
     }
 
     @Override
-    public Response<PaysDTO> getByCriteria(Request<PaysDTO> request, Locale locale) {
+    public Response<VilleDTO> getByCriteria(Request<VilleDTO> request, Locale locale) {
        /*
         log.info("----begin get agence-----");
 
@@ -308,30 +356,38 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
         log.info("----end get agence-----");
 
         return response;
-*/
+    */
         return null;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public  Response<PaysDTO> getAllPays(Request<PaysDTO> request, Locale locale) throws ParseException {
-        Response<PaysDTO> response = new Response<PaysDTO>();
-        List<Pays> items = new ArrayList<Pays>();
+    public  Response<VilleDTO> getAllCities(Request<VilleDTO> request, Locale locale) throws ParseException {
+        Response<VilleDTO> response = new Response<VilleDTO>();
+        List<Ville> items = new ArrayList<Ville>();
         Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        items=paysRepository.getAllPays(false );
+       /* fieldsToVerify.put("size",request.getSize());
+        fieldsToVerify.put("index",request.getIndex());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }*/
+        Long count=0L;
+        count= prixOffreVoyageRepository.countAllCities(false);
+        items= prixOffreVoyageRepository.getAllCities(false );
         if(CollectionUtils.isEmpty(items)){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Aucun pays n'existe",locale));
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune ville n'est trouvée",locale));
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                ? PaysTransformer.INSTANCE.toLiteDtos(items)
-                : PaysTransformer.INSTANCE.toDtos(items);
-        //response.setCount(count);
+        List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                                ? VilleTransformer.INSTANCE.toLiteDtos(items)
+                                : VilleTransformer.INSTANCE.toDtos(items);
+        response.setCount(count);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end get pays-----");
+        log.info("----end update ville-----");
         return response;
     }
-
 }

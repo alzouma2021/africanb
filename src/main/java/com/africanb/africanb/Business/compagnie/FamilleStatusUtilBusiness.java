@@ -1,9 +1,7 @@
 package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.FamilleStatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Pays;
-import com.africanb.africanb.dao.repository.compagnieRepository.FamilleStatusUtilRepository;
-import com.africanb.africanb.dao.repository.compagnieRepository.PaysRepository;
+import com.africanb.africanb.dao.repository.compagnie.FamilleStatusUtilRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -11,9 +9,7 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.FamilleStatusUtilDTO;
-import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.transformer.compagnie.FamilleStatusUtilTransformer;
-import com.africanb.africanb.helper.dto.transformer.compagnie.PaysTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
