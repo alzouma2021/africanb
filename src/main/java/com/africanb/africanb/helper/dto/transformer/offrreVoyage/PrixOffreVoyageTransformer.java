@@ -1,12 +1,9 @@
 package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
+import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
@@ -89,5 +86,5 @@ public interface PrixOffreVoyageTransformer {
             @Mapping(source="offreVoyage", target="offreVoyage"),
             @Mapping(source="categorieVoyageur", target="categorieVoyageur"),
     })
-    PrixOffreVoyage toEntity(PrixOffreVoyageDTO dto, Reference mode,Reference offreVoyage,Reference categorieVoyageur) throws ParseException;
+    PrixOffreVoyage toEntity(PrixOffreVoyageDTO dto, Reference mode, OffreVoyage offreVoyage, Reference categorieVoyageur) throws ParseException;
 }

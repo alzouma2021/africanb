@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReferenceFamilleRepository extends JpaRepository<ReferenceFamille,Long> {
     @Query("select rf from  ReferenceFamille rf where rf.id = :id and rf.isDeleted= :isDeleted")
-    PrixOffreVoyage findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
+    ReferenceFamille findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select rf from ReferenceFamille rf where rf.designation = :designation and rf.isDeleted= :isDeleted")
-    PrixOffreVoyage findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
+    ReferenceFamille findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
 }

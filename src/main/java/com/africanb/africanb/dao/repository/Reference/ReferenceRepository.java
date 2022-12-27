@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReferenceRepository extends JpaRepository<Reference,Long> {
     @Query("select r from  Reference r where r.id = :id and r.isDeleted= :isDeleted")
-    PrixOffreVoyage findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
+    Reference findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select r from Reference r where r.designation = :designation and r.isDeleted= :isDeleted")
-    PrixOffreVoyage findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
+    Reference findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
 }
