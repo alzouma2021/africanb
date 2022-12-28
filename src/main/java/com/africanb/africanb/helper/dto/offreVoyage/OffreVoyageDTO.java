@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Set;
+
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -32,6 +34,8 @@ public class OffreVoyageDTO {
     private String typeOffreVoyageDesignation;
     private String villeDepartDesignation;
     private String villeDestinationDesignation;
+
+    private Set<PrixOffreVoyageDTO> prixOffreVoyageDTOList;
 
     // Search param
     private SearchParam<String> designationParam;

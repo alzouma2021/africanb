@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OffreVoyageRepository extends JpaRepository<PrixOffreVoyage,Long> {
+public interface OffreVoyageRepository extends JpaRepository<OffreVoyage,Long> {
     @Query("select ov from  OffreVoyage ov where ov.id = :id and ov.isDeleted= :isDeleted")
     OffreVoyage findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
