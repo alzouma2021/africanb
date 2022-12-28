@@ -9,6 +9,7 @@ import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
 import com.africanb.africanb.dao.repository.compagnie.VilleRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.VilleEscaleRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -19,6 +20,7 @@ import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDT
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
 import com.africanb.africanb.helper.dto.transformer.offrreVoyage.OffreVoyageTransformer;
 import com.africanb.africanb.helper.dto.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
@@ -53,6 +55,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     private OffreVoyageRepository offreVoyageRepository;
     @Autowired
     private PrixOffreVoyageBusiness prixOffreVoyageBusiness;
+    @Autowired
+    private VilleEscaleBusiness villeEscaleBusiness;
     @Autowired
     private JourSemaineBusiness jourSemaineBusinesse;
     @Autowired
@@ -166,6 +170,22 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 subRequestJourSemaine.setDatas((List<JourSemaineDTO>) itemDto.getJourSemaineDTOList());
                 //subRequest.setUser(request.getUser());
                 Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.create(subRequestJourSemaine, locale);
+                if (subResponse.isHasError()) {
+                    response.setStatus(subResponse.getStatus());
+                    response.setHasError(Boolean.TRUE);
+                    return response;
+                }
+            }
+            //Check if villeEscaleList
+            if(!CollectionUtils.isEmpty(itemDto.getVilleEscaleDTOList())){
+                Request<VilleEscaleDTO> subRequestVilleEscale = new Request<VilleEscaleDTO>();
+                subRequestVilleEscale.setDatas((List<VilleEscaleDTO>) itemDto.getVilleEscaleDTOList());
+                //subRequest.setUser(request.getUser());
+                //Initialisation de l'offre de voyage
+                for(VilleEscaleDTO villeEscaleDTO: itemDto.getVilleEscaleDTOList()){
+                    villeEscaleDTO.setOffreVoyageId(entitySaved.getId());
+                }
+                Response<VilleEscaleDTO> subResponse = villeEscaleBusiness.create(subRequestVilleEscale, locale);
                 if (subResponse.isHasError()) {
                     response.setStatus(subResponse.getStatus());
                     response.setHasError(Boolean.TRUE);
@@ -343,6 +363,22 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 subRequestJourSemaine.setDatas((List<JourSemaineDTO>) dto.getJourSemaineDTOList());
                 //subRequest.setUser(request.getUser());
                 Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.update(subRequestJourSemaine, locale);
+                if (subResponse.isHasError()) {
+                    response.setStatus(subResponse.getStatus());
+                    response.setHasError(Boolean.TRUE);
+                    return response;
+                }
+            }
+            //Check if villeEscaleList
+            if(!CollectionUtils.isEmpty(dto.getVilleEscaleDTOList())){
+                Request<VilleEscaleDTO> subRequestVilleEscale = new Request<VilleEscaleDTO>();
+                subRequestVilleEscale.setDatas((List<VilleEscaleDTO>) dto.getVilleEscaleDTOList());
+                //subRequest.setUser(request.getUser());
+                //Initialisation de l'offre de voyage
+                for(VilleEscaleDTO villeEscaleDTO: dto.getVilleEscaleDTOList()){
+                    villeEscaleDTO.setOffreVoyageId(entityupdated.getId());
+                }
+                Response<VilleEscaleDTO> subResponse = villeEscaleBusiness.update(subRequestVilleEscale, locale);
                 if (subResponse.isHasError()) {
                     response.setStatus(subResponse.getStatus());
                     response.setHasError(Boolean.TRUE);

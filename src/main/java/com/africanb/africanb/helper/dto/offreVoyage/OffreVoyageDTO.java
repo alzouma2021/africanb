@@ -1,5 +1,6 @@
 package com.africanb.africanb.helper.dto.offreVoyage;
 
+import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -37,6 +38,7 @@ public class OffreVoyageDTO {
 
     private Set<PrixOffreVoyageDTO> prixOffreVoyageDTOList;
     private Set<JourSemaineDTO> jourSemaineDTOList;
+    private Set<VilleEscaleDTO> villeEscaleDTOList;
 
     // Search param
     private SearchParam<String> designationParam;
