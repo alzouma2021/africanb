@@ -16,6 +16,7 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.transformer.offrreVoyage.OffreVoyageTransformer;
@@ -52,6 +53,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     private OffreVoyageRepository offreVoyageRepository;
     @Autowired
     private PrixOffreVoyageBusiness prixOffreVoyageBusiness;
+    @Autowired
+    private JourSemaineBusiness jourSemaineBusinesse;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
@@ -156,6 +159,18 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                         response.setHasError(Boolean.TRUE);
                         return response;
                     }
+            }
+            //Check if jourSemaine
+            if(!CollectionUtils.isEmpty(itemDto.getJourSemaineDTOList())){
+                Request<JourSemaineDTO> subRequestJourSemaine = new Request<JourSemaineDTO>();
+                subRequestJourSemaine.setDatas((List<JourSemaineDTO>) itemDto.getJourSemaineDTOList());
+                //subRequest.setUser(request.getUser());
+                Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.create(subRequestJourSemaine, locale);
+                if (subResponse.isHasError()) {
+                    response.setStatus(subResponse.getStatus());
+                    response.setHasError(Boolean.TRUE);
+                    return response;
+                }
             }
             //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entitySaved);
@@ -316,6 +331,18 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 subRequest.setDatas((List<PrixOffreVoyageDTO>) dto.getPrixOffreVoyageDTOList());
                 //subRequest.setUser(request.getUser());
                 Response<PrixOffreVoyageDTO> subResponse = prixOffreVoyageBusiness.update(subRequest, locale);
+                if (subResponse.isHasError()) {
+                    response.setStatus(subResponse.getStatus());
+                    response.setHasError(Boolean.TRUE);
+                    return response;
+                }
+            }
+            //Check if jourSemaine
+            if(!CollectionUtils.isEmpty(dto.getJourSemaineDTOList())){
+                Request<JourSemaineDTO> subRequestJourSemaine = new Request<JourSemaineDTO>();
+                subRequestJourSemaine.setDatas((List<JourSemaineDTO>) dto.getJourSemaineDTOList());
+                //subRequest.setUser(request.getUser());
+                Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.update(subRequestJourSemaine, locale);
                 if (subResponse.isHasError()) {
                     response.setStatus(subResponse.getStatus());
                     response.setHasError(Boolean.TRUE);

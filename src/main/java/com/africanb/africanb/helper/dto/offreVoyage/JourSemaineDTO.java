@@ -6,20 +6,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.Set;
-
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
-public class OffreVoyageDTO {
+public class JourSemaineDTO {
 
     //Proprietes
     private Long id ;
     private String designation;
     private String description;
-    private Boolean isActif;
-
 
     private Boolean isDeleted;
     private String updatedAt;
@@ -30,20 +26,13 @@ public class OffreVoyageDTO {
     private Long  deletedBy;
 
     //relationShip
-    private String compagnieTransportRaisonSociale;
-    private String typeOffreVoyageDesignation;
-    private String villeDepartDesignation;
-    private String villeDestinationDesignation;
+    private String offreVoyageDesignation;
+    private String  jourSemaineDesignation;
 
-    private Set<PrixOffreVoyageDTO> prixOffreVoyageDTOList;
-    private Set<JourSemaineDTO> jourSemaineDTOList;
 
     // Search param
     private SearchParam<String> designationParam;
     private SearchParam<String>   compagnieTransportDesignationDesignationParam ;
-    private SearchParam<String>   typeOffreVoyageDesignationParam;
-    private SearchParam<String>   villeDepartDesignationParam;
-    private SearchParam<String>   villeDstinationDesignationParam;
     private SearchParam<Boolean>  isDeletedParam;
     private SearchParam<String>   updatedAtParam        ;
     private SearchParam<Long>     updatedByParam        ;
@@ -52,5 +41,4 @@ public class OffreVoyageDTO {
 
     private String orderField;
     private String orderDirection;
-
 }
