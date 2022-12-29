@@ -77,7 +77,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
         for(VilleEscaleDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("villeId", dto.getVilleId());
-            fieldsToVerify.put("order", dto.getOrder());
+            fieldsToVerify.put("position", dto.getPosition());
             fieldsToVerify.put("offreVoyageId", dto.getOffreVoyageId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -197,6 +197,9 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                     return response;
                 }
                 entityToSave.setVille(existingVille);
+            }
+            if(Utilities.isValidID(dto.getPosition()) && !dto.getPosition().equals(entityToSave.getPosition())){
+                entityToSave.setPosition(dto.getPosition());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
             //entityToSave.setUpdatedBy(request.user);

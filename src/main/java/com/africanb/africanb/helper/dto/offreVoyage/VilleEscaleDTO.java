@@ -16,10 +16,9 @@ import lombok.ToString;
 public class VilleEscaleDTO {
 
     private Long id ;
-
     private Long offreVoyageId;
     private Long villeId;
-    private Integer order;
+    private Long position;
     private Boolean  isDeleted;
     private String updatedAt;
     private Long  updatedBy;

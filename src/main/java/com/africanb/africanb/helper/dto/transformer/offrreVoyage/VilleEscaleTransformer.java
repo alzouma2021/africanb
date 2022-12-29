@@ -28,10 +28,9 @@ public interface VilleEscaleTransformer {
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
-
             @Mapping(source = "entity.offreVoyage.id", target = "offreVoyageId"),
             @Mapping(source = "entity.ville.id", target = "villeId"),
-            @Mapping(source = "entity.order", target = "order"),
+            @Mapping(source = "entity.position", target = "position"),
 
             @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -70,7 +69,7 @@ public interface VilleEscaleTransformer {
 
     @Mappings({
             @Mapping(source = "dto.id", target = "id"),
-            @Mapping(source = "dto.order", target = "order"),
+            @Mapping(source = "dto.position", target = "position"),
 
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),

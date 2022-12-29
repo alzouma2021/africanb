@@ -1,7 +1,5 @@
 package com.africanb.africanb.dao.entity.offreVoyage;
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.utils.Reference.Reference;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,40 +9,36 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 
 /**
- * @author Alzouma Moussa Mahamadou
+ * @Authir Alzouma Moussa Mahamadou
+ * Cette classe consiste à programme une offre de voyage
  */
 @Entity
-@Table(name = "offrevoyage")
+@Table(name = "programme")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class OffreVoyage implements Serializable {
+public class Programme implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id ;
+    private Long id;
     @Column(unique = true , length = 50)
     @NotNull
     private String designation;
     private String description;
-
-    @NotNull
-    private Boolean isActif;
     @ManyToOne
-    CompagnieTransport compagnieTransport;
-    @ManyToOne
-    private Reference typeOffreVoyage;
-    @ManyToOne
-    private Ville villeDepart;
-    @ManyToOne
-    private Ville villeDestination;
-
+    JourSemaine jourSemaine;
+    private Date dateDepart;
+    private Date dateArrivee;
+    private String HeureDepart;
+    private String HeureArrivee;
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;

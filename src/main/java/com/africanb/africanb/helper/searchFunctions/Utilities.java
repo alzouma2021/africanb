@@ -14,6 +14,8 @@ import org.joda.time.format.DateTimeFormat;*/
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.security.MessageDigest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +24,7 @@ import java.util.*;
 
 //@Slf4j
 public class Utilities {
+
 
     public static boolean isBlank(String str) {
         int strLen;
@@ -155,6 +158,20 @@ public class Utilities {
 */
     public static Date getCurrentDate() {
         return new Date();
+    }
+
+    public static Date convertStringToDate(String dateString) throws ParseException {
+        if(dateString==null)  return new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date=formatter.parse(dateString);
+        return date;
+    }
+
+    public static String convertDateToString(Date date) throws ParseException {
+        if(date==null)  return null;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString=formatter.format(date);
+        return dateString;
     }
 
     public static boolean isValidID(Long id) {

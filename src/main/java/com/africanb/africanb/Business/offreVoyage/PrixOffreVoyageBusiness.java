@@ -254,10 +254,10 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
                 entityToSave.setCategorieVoyageur(offreVoyageToSave);
             }
             //Autres
-            if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDesignation().equals(entityToSave.getDescription())){
+            if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDescription().equals(entityToSave.getDescription())){
                 entityToSave.setDescription(dto.getDescription());
             }
-            if(!dto.getPrix().equals(entityToSave.getPrix())){
+            if(Utilities.isValidID(dto.getPrix())&&!dto.getPrix().equals(entityToSave.getPrix())){
                 entityToSave.setPrix(dto.getPrix());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());

@@ -3,6 +3,7 @@ package com.africanb.africanb.dao.entity.offreVoyage;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,13 +29,9 @@ public class VilleEscale implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id ;
-    @ManyToOne
-    private OffreVoyage offreVoyage;
-    @ManyToOne
-    private Ville ville;
-    private Integer order;
+    private Long position;
     @Column(name="is_deleted")
-    private Boolean    isDeleted;
+    private Boolean   isDeleted;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @Column(name="updated_by")
@@ -45,5 +42,8 @@ public class VilleEscale implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
     private Long  deletedBy;
-
+    @ManyToOne
+    private OffreVoyage offreVoyage;
+    @ManyToOne
+    private Ville ville;
 }
