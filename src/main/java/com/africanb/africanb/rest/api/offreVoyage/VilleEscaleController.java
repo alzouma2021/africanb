@@ -67,4 +67,5 @@ public class VilleEscaleController {
         log.info("end method /villeEscale/getByCriteria");
         return response;
     }
+
 }

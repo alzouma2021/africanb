@@ -124,7 +124,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             //Check if programmeList
             if(!CollectionUtils.isEmpty(itemDto.getProgrammeDTOList())){
                 Request<ProgrammeDTO> subRequest = new Request<ProgrammeDTO>();
-                subRequest.setDatas((List<ProgrammeDTO>) itemDto.getProgrammeDTOList());
+                subRequest.setDatas(itemDto.getProgrammeDTOList());
                 //subRequest.setUser(request.getUser());
                 //Initialisation de l'offre de voyage
                 for(ProgrammeDTO programmeDTO: itemDto.getProgrammeDTOList()){
@@ -258,7 +258,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             //Check if programmeList
             if(!CollectionUtils.isEmpty(dto.getProgrammeDTOList())){
                 Request<ProgrammeDTO> subRequest = new Request<ProgrammeDTO>();
-                subRequest.setDatas((List<ProgrammeDTO>) dto.getProgrammeDTOList());
+                subRequest.setDatas(dto.getProgrammeDTOList());
                 //subRequest.setUser(request.getUser());
                 //Initialisation de l'offre de voyage
                 for(ProgrammeDTO programmeDTO: dto.getProgrammeDTOList()){

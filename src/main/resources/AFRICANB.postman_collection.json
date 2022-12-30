@@ -206,7 +206,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"compagnieTransport_encoursTraitement\",\n        \"description\":\"Creation d'une compagnie de transport en cours de traitement\",\n        \"familleStatusUtilId\":\"155\"\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"compagnieTransport_encoursTraitement\",\n        \"description\":\"Creation d'une compagnie de transport en cours de traitement\",\n        \"familleStatusUtilId\":27\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -239,7 +239,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport03\",\n            \"description\":\"Compagnie de transport03\",\n            \"raisonSociale\":\"compagnieTransport03\",\n            \"telephone\":\"0565585741203\",\n            \"sigle\":\"CT000213\",\n            \"email\":\"alzoumamoussa18@univmetiers.ci\",\n            \"villeDesignation\":\"Abidjan\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport03\",\n            \"description\":\"Compagnie de transport03\",\n            \"raisonSociale\":\"amm\",\n            \"telephone\":\"0565585741203\",\n            \"sigle\":\"CT000213\",\n            \"email\":\"alzoumamoussa18@univmetiers.ci\",\n            \"villeDesignation\":\"Abidjan\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -247,15 +247,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/compagnieTransport/getAllProcessingCompagnies",
+							"raw": "http://localhost:8080/compagnieTransport",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"compagnieTransport",
-								"getAllProcessingCompagnies"
+								"compagnieTransport"
 							]
 						}
 					},
@@ -343,6 +342,349 @@
 							"path": [
 								"compagnieTransport",
 								"getAllValidedCompagnies"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "REFERENCEFAMILLE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleCategorieVoyaeur\",\n        \"description\":\"la famille reference de categorie famille\"\n        },\n        {\n        \"designation\":\"referenceFamilleMode\",\n        \"description\":\"la famille reference mode\"\n        },\n        {\n        \"designation\":\"referenceFamilleTypeOffreVoyage\",\n        \"description\":\"la famille reference du type de l'offre de voyage\"\n        },\n        {\n        \"designation\":\"referenceFamilleJourSemaine\",\n        \"description\":\"la famille reference du jour de la semaine\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "REFERENCE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Adulte\",\n        \"referenceFamilleDesignation\":\"referenceFamilleCategorieVoyaeur\"\n        },\n        {\n        \"designation\":\"Enfant\",\n        \"referenceFamilleDesignation\":\"referenceFamilleCategorieVoyaeur\"\n        },\n        {\n        \"designation\":\"Classique\",\n        \"referenceFamilleDesignation\":\"referenceFamilleMode\"\n        },\n         {\n        \"designation\":\"VIP\",\n        \"referenceFamilleDesignation\":\"referenceFamilleMode\"\n        }\n       \n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"National\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeOffreVoyage\"\n        },\n        {\n        \"designation\":\"International\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeOffreVoyage\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Lundi\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        },\n        {\n        \"designation\":\"Mardi\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        },\n        {\n        \"designation\":\"Mercredi\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        },\n        {\n        \"designation\":\"Jeudi\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        },\n        {\n        \"designation\":\"Vendredi\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        },\n        {\n        \"designation\":\"Samedi\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        },\n        {\n        \"designation\":\"Dimanche\",\n        \"referenceFamilleDesignation\":\"referenceFamilleJourSemaine\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OffreVoyage",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"compagnieTransportRaisonSociale\":\"amm\",\n        \"typeOffreVoyageDesignation\":\"National\",\n        \"villeDepartDesignation\":\"Abidjan\",\n        \"villeDestinationDesignation\":\"Yamoussoukro\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/offreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"offreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"AbidjanDaloaCompagnieTransport\",\n            \"compagnieTransportRaisonSociale\":\"amm\",\n            \"typeOffreVoyageDesignation\":\"National\",\n            \"villeDepartDesignation\":\"Abidjan\",\n            \"villeDestinationDesignation\":\"Daloa\",\n            \"prixOffreVoyageDTOList\":[\n                {\n                \"designation\":\"prixOffreVoyage002\",\n                \"prix\":5000,\n                \"modeDesignation\":\"Classique\",\n                \"categorieVoyageurDesignation\":\"Adulte\"\n                }\n            ],\n            \"jourSemaineDTOList\":[\n                {\n                    \"designation\":\"jourSemaine0090\",\n                    \"jourSemaineDesignation\":\"Lundi\",\n                    \"programmeDTOList\":[\n                        {\n                        \"designation\":\"programme010\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"08H00\",\n                        \"heureArrivee\":\"11H00\"\n                        },\n                        {\n                        \"designation\":\"programme011\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"12H00\",\n                        \"heureArrivee\":\"15H00\"\n                        },\n                        {\n                        \"designation\":\"programme012\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"15H00\",\n                        \"heureArrivee\":\"18H00\"\n                        }\n                    ]\n                },\n                {\n                    \"designation\":\"jourSemaine010\",\n                    \"jourSemaineDesignation\":\"Mardi\",\n                    \"programmeDTOList\":[\n                        {\n                        \"designation\":\"programme013\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"08H00\",\n                        \"heureArrivee\":\"11H00\"\n                        },\n                        {\n                        \"designation\":\"programme014\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"12H00\",\n                        \"heureArrivee\":\"15H00\"\n                        },\n                        {\n                        \"designation\":\"programme015\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"15H00\",\n                        \"heureArrivee\":\"18H00\"\n                        }\n                    ]\n                }\n            ],\n            \"villeEscaleDTOList\":[\n                {\n                    \"villeDesignation\":\"Abidjan\",\n                    \"position\":1\n                },\n                {\n                    \"villeDesignation\":\"Yamoussoukro\",\n                    \"position\":2\n                },\n                {\n                    \"villeDesignation\":\"Daloa\",\n                    \"position\":3\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/offreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"offreVoyages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PrixOffreVoyage",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"prixOffreVoyage001\",\n        \"prix\":5000,\n        \"modeDesignation\":\"Classique\",\n        \"categorieVoyageurDesignation\":\"Adulte\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prixOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prixOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JOURSEMAINE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"jourSemaine001\",\n        \"jourSemaineDesignation\":\"Lundi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine002\",\n        \"jourSemaineDesignation\":\"Mardi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine003\",\n        \"jourSemaineDesignation\":\"Mercredi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine004\",\n        \"jourSemaineDesignation\":\"Jeudi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine005\",\n        \"jourSemaineDesignation\":\"Vendredi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine006\",\n        \"jourSemaineDesignation\":\"Samedi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine007\",\n        \"jourSemaineDesignation\":\"Dimanche\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/jourSemaines",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jourSemaines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"jourSemaine008\",\n            \"jourSemaineDesignation\":\"Lundi\",\n            \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n            \"programmeDTOList\":[\n                {\n                \"designation\":\"programme004\",\n                \"dateArrivee\":\"30/12/2022\",\n                \"dateDepart\":\"30/12/2022\",\n                \"heureDepart\":\"08H00\",\n                \"heureArrivee\":\"11H00\"\n                },\n                {\n                \"designation\":\"programme005\",\n                \"dateArrivee\":\"30/12/2022\",\n                \"dateDepart\":\"30/12/2022\",\n                \"heureDepart\":\"12H00\",\n                \"heureArrivee\":\"15H00\"\n                },\n                {\n                \"designation\":\"programme006\",\n                \"dateArrivee\":\"30/12/2022\",\n                \"dateDepart\":\"30/12/2022\",\n                \"heureDepart\":\"15H00\",\n                \"heureArrivee\":\"18H00\"\n                }\n            ]\n        },\n        {\n            \"designation\":\"jourSemaine009\",\n            \"jourSemaineDesignation\":\"Mardi\",\n            \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n            \"programmeDTOList\":[\n                 {\n                \"designation\":\"programme007\",\n                \"dateArrivee\":\"30/12/2022\",\n                \"dateDepart\":\"30/12/2022\",\n                \"heureDepart\":\"08H00\",\n                \"heureArrivee\":\"11H00\"\n                },\n                {\n                \"designation\":\"programme008\",\n                \"dateArrivee\":\"30/12/2022\",\n                \"dateDepart\":\"30/12/2022\",\n                \"heureDepart\":\"12H00\",\n                \"heureArrivee\":\"15H00\"\n                },\n                {\n                \"designation\":\"programme009\",\n                \"dateArrivee\":\"30/12/2022\",\n                \"dateDepart\":\"30/12/2022\",\n                \"heureDepart\":\"15H00\",\n                \"heureArrivee\":\"18H00\"\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/jourSemaines",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jourSemaines"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PROGRAMME",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " { \n    \"datas\":[\n        {\n        \"designation\":\"programme001\",\n        \"jourSemaineDesignation\":\"jourSemaine001\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"08H00\",\n        \"heureArrivee\":\"11H00\"\n        },\n        {\n        \"designation\":\"programme002\",\n        \"jourSemaineDesignation\":\"jourSemaine001\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"12H00\",\n        \"heureArrivee\":\"15H00\"\n        },\n        {\n        \"designation\":\"programme003\",\n        \"jourSemaineDesignation\":\"jourSemaine001\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"15H00\",\n        \"heureArrivee\":\"18H00\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/programmes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"programmes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VILLEESCALE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " { \n    \"datas\":[\n        {\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"villeDesignation\":\"Abidjan\",\n        \"position\":1\n        },\n        {\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"villeDesignation\":\"Yamoussoukro\",\n        \"position\":2\n        },\n        {\n       \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"villeDesignation\":\"Daloa\",\n        \"position\":3\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/villeEscales",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"villeEscales"
 							]
 						}
 					},

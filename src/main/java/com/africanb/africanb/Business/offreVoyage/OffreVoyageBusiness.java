@@ -108,8 +108,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         for(OffreVoyageDTO itemDto : itemsDtos){
             OffreVoyage existingOffreVoyage = null;
             existingOffreVoyage= offreVoyageRepository.findByDesignation(itemDto.getDesignation(),false);
-            if (existingOffreVoyage == null) {
-                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+            if (existingOffreVoyage!=null) {
+                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getDesignation() +",existe", locale));
                 response.setHasError(true);
                 return response;
             }
@@ -131,6 +131,11 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingCompagnieTransport.getIsValidate()==null || !existingCompagnieTransport.getIsValidate()) {
+                response.setStatus(functionalError.DATA_EXIST("Vous ne pouvez pas créer des offres de voyage.Car,votre compagnie n'est encore validée", locale));
                 response.setHasError(true);
                 return response;
             }
@@ -156,6 +161,9 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             if(!CollectionUtils.isEmpty(itemDto.getPrixOffreVoyageDTOList())){
                     Request<PrixOffreVoyageDTO> subRequest = new Request<PrixOffreVoyageDTO>();
                     subRequest.setDatas((List<PrixOffreVoyageDTO>) itemDto.getPrixOffreVoyageDTOList());
+                    for(PrixOffreVoyageDTO prixOffreVoyageDTO: itemDto.getPrixOffreVoyageDTOList()){
+                        prixOffreVoyageDTO.setOffreVoyageDesignation(entitySaved.getDesignation());
+                    }
                     //subRequest.setUser(request.getUser());
                     Response<PrixOffreVoyageDTO> subResponse = prixOffreVoyageBusiness.create(subRequest, locale);
                     if (subResponse.isHasError()) {
@@ -168,6 +176,9 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             if(!CollectionUtils.isEmpty(itemDto.getJourSemaineDTOList())){
                 Request<JourSemaineDTO> subRequestJourSemaine = new Request<JourSemaineDTO>();
                 subRequestJourSemaine.setDatas((List<JourSemaineDTO>) itemDto.getJourSemaineDTOList());
+                for(JourSemaineDTO jourSemaineDTO: itemDto.getJourSemaineDTOList()){
+                    jourSemaineDTO.setOffreVoyageDesignation(entitySaved.getDesignation());
+                }
                 //subRequest.setUser(request.getUser());
                 Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.create(subRequestJourSemaine, locale);
                 if (subResponse.isHasError()) {
@@ -183,7 +194,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 //subRequest.setUser(request.getUser());
                 //Initialisation de l'offre de voyage
                 for(VilleEscaleDTO villeEscaleDTO: itemDto.getVilleEscaleDTOList()){
-                    villeEscaleDTO.setOffreVoyageId(entitySaved.getId());
+                    villeEscaleDTO.setOffreVoyageDesignation(entitySaved.getDesignation());
                 }
                 Response<VilleEscaleDTO> subResponse = villeEscaleBusiness.create(subRequestVilleEscale, locale);
                 if (subResponse.isHasError()) {
@@ -348,7 +359,10 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             //Check if prixOffreVoyageExist
             if(!CollectionUtils.isEmpty(dto.getPrixOffreVoyageDTOList())){
                 Request<PrixOffreVoyageDTO> subRequest = new Request<PrixOffreVoyageDTO>();
-                subRequest.setDatas((List<PrixOffreVoyageDTO>) dto.getPrixOffreVoyageDTOList());
+                subRequest.setDatas( dto.getPrixOffreVoyageDTOList());
+                for(PrixOffreVoyageDTO prixOffreVoyageDTO: dto.getPrixOffreVoyageDTOList()){
+                    prixOffreVoyageDTO.setOffreVoyageDesignation(entityupdated.getDesignation());
+                }
                 //subRequest.setUser(request.getUser());
                 Response<PrixOffreVoyageDTO> subResponse = prixOffreVoyageBusiness.update(subRequest, locale);
                 if (subResponse.isHasError()) {
@@ -360,7 +374,10 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             //Check if jourSemaine
             if(!CollectionUtils.isEmpty(dto.getJourSemaineDTOList())){
                 Request<JourSemaineDTO> subRequestJourSemaine = new Request<JourSemaineDTO>();
-                subRequestJourSemaine.setDatas((List<JourSemaineDTO>) dto.getJourSemaineDTOList());
+                subRequestJourSemaine.setDatas( dto.getJourSemaineDTOList());
+                for(JourSemaineDTO jourSemaineDTO: dto.getJourSemaineDTOList()){
+                    jourSemaineDTO.setOffreVoyageDesignation(entityupdated.getDesignation());
+                }
                 //subRequest.setUser(request.getUser());
                 Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.update(subRequestJourSemaine, locale);
                 if (subResponse.isHasError()) {
@@ -372,11 +389,11 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             //Check if villeEscaleList
             if(!CollectionUtils.isEmpty(dto.getVilleEscaleDTOList())){
                 Request<VilleEscaleDTO> subRequestVilleEscale = new Request<VilleEscaleDTO>();
-                subRequestVilleEscale.setDatas((List<VilleEscaleDTO>) dto.getVilleEscaleDTOList());
+                subRequestVilleEscale.setDatas( dto.getVilleEscaleDTOList());
                 //subRequest.setUser(request.getUser());
                 //Initialisation de l'offre de voyage
                 for(VilleEscaleDTO villeEscaleDTO: dto.getVilleEscaleDTOList()){
-                    villeEscaleDTO.setOffreVoyageId(entityupdated.getId());
+                    villeEscaleDTO.setOffreVoyageDesignation(entityupdated.getDesignation());
                 }
                 Response<VilleEscaleDTO> subResponse = villeEscaleBusiness.update(subRequestVilleEscale, locale);
                 if (subResponse.isHasError()) {

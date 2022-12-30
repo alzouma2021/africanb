@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface VilleEscaleRepository extends JpaRepository<VilleEscale,Long> {
 
-    @Query("select ve from  VilleEscale ve where ve.offreVoyage.id= :offreVoyageId and ve.ville.id= :villeId and ve.isDeleted= :isDeleted")
-    VilleEscale findByOffreVoyageAndVille(@Param("offreVoyageId") Long offreVoyageId ,@Param("villeId") Long villeId, @Param("isDeleted") Boolean isDeleted);
+    @Query("select ve from  VilleEscale ve where ve.offreVoyage.designation= :offreVoyageDesignation and ve.ville.designation= :villeDesignation and ve.isDeleted= :isDeleted")
+    VilleEscale findByOffreVoyageAndVille(@Param("offreVoyageDesignation") String offreVoyageDesignation ,@Param("villeDesignation") String villeDesignation, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select ve from  VilleEscale ve where ve.id = :id and ve.isDeleted= :isDeleted")
     VilleEscale findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);

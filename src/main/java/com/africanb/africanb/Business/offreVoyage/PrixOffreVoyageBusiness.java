@@ -89,9 +89,9 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
             itemsDtos.add(dto);
         }
         for(PrixOffreVoyageDTO itemDto : itemsDtos){
-            PrixOffreVoyage existingPrixOffrVoyage = null;
-            existingPrixOffrVoyage = prixOffreVoyageRepository.findByDesignation(itemDto.getDesignation(), false);
-            if (existingPrixOffrVoyage != null) {
+            PrixOffreVoyage existingPrixOffreVoyage = null;
+            existingPrixOffreVoyage = prixOffreVoyageRepository.findByDesignation(itemDto.getDesignation(), false);
+            if (existingPrixOffreVoyage != null) {
                 response.setStatus(functionalError.DATA_EXIST("PrixOffreVoyage ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
@@ -99,21 +99,21 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
             OffreVoyage existingOffreVoyage = null;
             existingOffreVoyage= offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
             if (existingOffreVoyage == null) {
-                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getOffreVoyageDesignation() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             Reference existingMode = null;
-            existingMode= referenceRepository.findByDesignation(itemDto.getDesignation(),false);
+            existingMode= referenceRepository.findByDesignation(itemDto.getModeDesignation(),false);
             if (existingMode == null) {
-                response.setStatus(functionalError.DATA_EXIST("Mode ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("Mode ayant  pour identifiant -> " + itemDto.getModeDesignation() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             Reference existingCategorieVoyageur = null;
-            existingCategorieVoyageur= referenceRepository.findByDesignation(itemDto.getDesignation(),false);
+            existingCategorieVoyageur= referenceRepository.findByDesignation(itemDto.getCategorieVoyageurDesignation(),false);
             if (existingCategorieVoyageur == null) {
-                response.setStatus(functionalError.DATA_EXIST("CategorieVoyageur ayant  pour identifiant -> " + itemDto.getDesignation() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("CategorieVoyageur ayant  pour identifiant -> " + itemDto.getCategorieVoyageurDesignation() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }

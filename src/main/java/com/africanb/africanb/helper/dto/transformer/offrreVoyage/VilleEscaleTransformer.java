@@ -28,8 +28,8 @@ public interface VilleEscaleTransformer {
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
-            @Mapping(source = "entity.offreVoyage.id", target = "offreVoyageId"),
-            @Mapping(source = "entity.ville.id", target = "villeId"),
+            @Mapping(source = "entity.offreVoyage.designation", target = "offreVoyageDesignation"),
+            @Mapping(source = "entity.ville.designation", target = "villeDesignation"),
             @Mapping(source = "entity.position", target = "position"),
 
             @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
@@ -51,8 +51,8 @@ public interface VilleEscaleTransformer {
         }
         VilleEscaleDTO dto = new VilleEscaleDTO();
         dto.setId(entity.getId() );
-        dto.setVilleId(entity.getVille().getId());
-        dto.setOffreVoyageId(entity.getOffreVoyage().getId());
+        dto.setVilleDesignation(entity.getVille().getDesignation());
+        dto.setOffreVoyageDesignation(entity.getOffreVoyage().getDesignation());
         return dto;
     }
 

@@ -61,7 +61,8 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
         for(ReferenceDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("designation", dto.getDesignation());
-            fieldsToVerify.put("referenceFamilleId", dto.getReferenceFamilleId());
+            //fieldsToVerify.put("referenceFamilleId", dto.getReferenceFamilleId());
+            fieldsToVerify.put("referenceFamilleDesignation", dto.getReferenceFamilleDesignation());
             //fieldsToVerify.put("familleStatusUtilDesignation", dto.getFamilleStatusUtilDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -84,7 +85,7 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
                 return response;
             }
             ReferenceFamille existingReferenceFamille = null;
-            existingReferenceFamille= referenceFamilleRepository.findOne(itemDto.getReferenceFamilleId(),false);
+            existingReferenceFamille= referenceFamilleRepository.findByDesignation(itemDto.getReferenceFamilleDesignation(),false);
             if (existingReferenceFamille == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("ReferencFamille ayant pour identifiant -> " + itemDto.getReferenceFamilleId() +", n'existe pas", locale));
                 response.setHasError(true);

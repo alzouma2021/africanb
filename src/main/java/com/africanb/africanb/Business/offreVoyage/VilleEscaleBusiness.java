@@ -76,46 +76,42 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
         List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<VilleEscaleDTO>());
         for(VilleEscaleDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("villeId", dto.getVilleId());
+            fieldsToVerify.put("villeDesignation", dto.getVilleDesignation());
             fieldsToVerify.put("position", dto.getPosition());
-            fieldsToVerify.put("offreVoyageId", dto.getOffreVoyageId());
+            fieldsToVerify.put("offreVoyageDesignation", dto.getOffreVoyageDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            if(itemsDtos.stream().anyMatch(a->a.getOffreVoyageId().equals(dto.getOffreVoyageId()))){
-                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de l'offre de voyage'" + dto.getOffreVoyageId() , locale));
+            /*if(itemsDtos.stream().anyMatch(a->a.getOffreVoyageDesignation().equals(dto.getOffreVoyageDesignation()))){
+                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de l'offre de voyage'" + dto.getOffreVoyageDesignation() , locale));
                 response.setHasError(true);
                 return response;
-            }
+            }*/
             itemsDtos.add(dto);
         }
         for(VilleEscaleDTO dto : itemsDtos){
             VilleEscale existingEntity = null;
-            existingEntity = villeEscaleRepository.findByOffreVoyageAndVille(dto.getOffreVoyageId(),dto.getVilleId(),false);
+            existingEntity = villeEscaleRepository.findByOffreVoyageAndVille(dto.getOffreVoyageDesignation(),dto.getVilleDesignation(),false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("VilleEscale ", locale));
                 response.setHasError(true);
                 return response;
             }
             OffreVoyage existingOffreVoyage = null;
-            if (Utilities.isValidID(dto.getOffreVoyageId())) {
-                existingOffreVoyage = offreVoyageRepository.findOne(dto.getOffreVoyageId(), false);
-                if (existingOffreVoyage == null) {
-                    response.setStatus(functionalError.DATA_NOT_EXIST("offreVoyage offreVoyageID -> " + dto.getOffreVoyageId(), locale));
-                    response.setHasError(true);
-                    return response;
-                }
+            existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
+            if (existingOffreVoyage == null) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("offreVoyage offreVoyageID -> " + dto.getOffreVoyageDesignation(), locale));
+                response.setHasError(true);
+                return response;
             }
             Ville existingVille = null;
-            if (Utilities.isValidID(dto.getVilleId())) {
-                existingVille = villeRepository.findOne(dto.getVilleId(), false);
-                if (existingVille == null) {
-                    response.setStatus(functionalError.DATA_NOT_EXIST("ville villeID -> " + dto.getVilleId(), locale));
-                    response.setHasError(true);
-                    return response;
-                }
+            existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
+            if (existingVille == null) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("ville villeID -> " + dto.getVilleDesignation(), locale));
+                response.setHasError(true);
+                return response;
             }
             VilleEscale entityToSave = VilleEscaleTransformer
                                         .INSTANCE.toEntity(dto, existingOffreVoyage, existingVille);
@@ -164,7 +160,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getId().equals(dto.getId()))){
-                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication offreVoyage '" + dto.getOffreVoyageId() , locale));
+                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication offreVoyage '" + dto.getOffreVoyageDesignation() , locale));
                 response.setHasError(true);
                 return response;
             }
@@ -179,20 +175,20 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 return response;
             }
             OffreVoyage existingOffreVoyage = null;
-            if (Utilities.isValidID(dto.getOffreVoyageId()) && !entityToSave.getOffreVoyage().getId().equals(dto.getOffreVoyageId())) {
-                existingOffreVoyage = offreVoyageRepository.findOne(dto.getOffreVoyageId(), false);
+            if (Utilities.isNotBlank(dto.getOffreVoyageDesignation()) && !entityToSave.getOffreVoyage().getDesignation().equalsIgnoreCase(dto.getOffreVoyageDesignation())) {
+                existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
                 if (existingOffreVoyage == null) {
-                    response.setStatus(functionalError.DATA_NOT_EXIST("OffreVoyageId -> " + dto.getOffreVoyageId(), locale));
+                    response.setStatus(functionalError.DATA_NOT_EXIST("OffreVoyageDesignation -> " + dto.getOffreVoyageDesignation(), locale));
                     response.setHasError(true);
                     return response;
                 }
                 entityToSave.setOffreVoyage(existingOffreVoyage);
             }
             Ville existingVille = null;
-            if (Utilities.isValidID(dto.getVilleId()) && !entityToSave.getVille().getId().equals(dto.getVilleId())) {
-                existingVille = villeRepository.findOne(dto.getVilleId(), false);
+            if (Utilities.isNotBlank(dto.getVilleDesignation()) && !entityToSave.getVille().getDesignation().equalsIgnoreCase(dto.getVilleDesignation())) {
+                existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
                 if (existingVille == null) {
-                    response.setStatus(functionalError.DATA_NOT_EXIST("Ville villeId -> " + dto.getVilleId(), locale));
+                    response.setStatus(functionalError.DATA_NOT_EXIST("Ville villeDesignation -> " + dto.getVilleDesignation(), locale));
                     response.setHasError(true);
                     return response;
                 }

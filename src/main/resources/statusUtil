@@ -1,3 +1,0 @@
-
-INSERT INTO public.statusutil (id, created_at, created_by, deleted_at, deleted_by, description, designation, is_deleted, updated_at, updated_by, famille_status_util_id) VALUES (157, '2022-11-18 15:34:59.12', NULL, NULL, NULL, 32959, 'compagnieTransportValide', false, NULL, NULL, 155);
-
