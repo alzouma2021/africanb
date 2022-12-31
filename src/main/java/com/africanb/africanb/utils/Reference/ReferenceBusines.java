@@ -14,6 +14,7 @@ import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -193,6 +194,47 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
         log.info("----end update ville-----");
         return response;
     }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<ReferenceDTO> getReferenceByReferenceFamilleDesignation(Request<RechercherReferenceDTO> request, Locale locale) throws ParseException {
+       log.info("_200 Debut de traitement");
+        Response<ReferenceDTO> response = new Response<ReferenceDTO>();
+        if(request.getDatas() == null  || request.getDatas().isEmpty()){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<RechercherReferenceDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<RechercherReferenceDTO>());
+        for(RechercherReferenceDTO dto: request.getDatas() ) {
+            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            fieldsToVerify.put("referenceFamilleDesignation", dto.getReferenceFamilleDesignation());
+            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        List<Reference> items = null;
+        for(RechercherReferenceDTO dto: request.getDatas()) {
+            log.info("_Affichage de la designation de la reference famille="+dto.getReferenceFamilleDesignation());
+            items=referenceRepository.findByReferenceFamilleDesignation(dto.getReferenceFamilleDesignation(),false);
+        }
+        if(CollectionUtils.isEmpty(items)){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune reference trouvée ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<ReferenceDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? ReferenceTransformer.INSTANCE.toLiteDtos(items)
+                : ReferenceTransformer.INSTANCE.toDtos(items);
+
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end update ville-----");
+        return response;
+    }
+
 
     @Override
     public Response<ReferenceDTO> delete(Request<ReferenceDTO> request, Locale locale) {

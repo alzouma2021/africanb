@@ -468,6 +468,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getReferenceByReferenceFamille",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n             \"referenceFamilleDesignation\":\"referenceFamilleCategorieVoyageur\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references/getReferenceByReferenceFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references",
+								"getReferenceByReferenceFamille"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
