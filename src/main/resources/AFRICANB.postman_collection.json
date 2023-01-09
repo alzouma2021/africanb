@@ -558,6 +558,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "update1",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"id\": 31,\n        \"typeOffreVoyageDesignation\":\"National\",\n        \"villeDepartDesignation\":\"Yamoussoukro\",\n        \"villeDestinationDesignation\":\"Abidjan\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/offreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"offreVoyages"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -572,6 +600,62 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"prixOffreVoyage001\",\n        \"prix\":5000,\n        \"modeDesignation\":\"Classique\",\n        \"categorieVoyageurDesignation\":\"Adulte\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prixOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prixOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"id\":32,\n        \"prix\":10000\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prixOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prixOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update1",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"id\":32,\n            \"modeDesignation\":\"VIP\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -652,6 +736,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"id\":40,\n        \"jourSemaineDesignation\":\"Mardi\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/jourSemaines",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jourSemaines"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -685,6 +797,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " { \n    \"datas\":[\n        {\n        \"id\":47,\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2023\",\n        \"heureDepart\":\"12H00\",\n        \"heureArrivee\":\"16H00\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/programmes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"programmes"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -699,6 +839,34 @@
 						"body": {
 							"mode": "raw",
 							"raw": " { \n    \"datas\":[\n        {\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"villeDesignation\":\"Abidjan\",\n        \"position\":1\n        },\n        {\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"villeDesignation\":\"Yamoussoukro\",\n        \"position\":2\n        },\n        {\n       \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"villeDesignation\":\"Daloa\",\n        \"position\":3\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/villeEscales",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"villeEscales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " { \n    \"datas\":[\n        {\n          \"id\": 77,\n          \"villeDesignation\":\"Bouaké\",\n          \"position\":2\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"

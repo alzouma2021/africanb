@@ -238,9 +238,14 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
                 response.setHasError(true);
                 return response;
             }
-            Reference existingOffreVoyage = referenceRepository.findByDesignation(offreVoyageDesignation,false);
+            OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
             if (existingOffreVoyage == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("L'offre de voyage du prix de l'offre de voyage -> " + dto.getId() +", n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingOffreVoyage.getIsActif()!=null && existingOffreVoyage.getIsActif() == true) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("Desactivez l'offre de voyage avant de proceder au changement du prix", locale));
                 response.setHasError(true);
                 return response;
             }

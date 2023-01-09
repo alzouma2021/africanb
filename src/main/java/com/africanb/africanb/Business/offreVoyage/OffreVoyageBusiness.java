@@ -252,21 +252,20 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 response.setHasError(true);
                 return response;
             }
+            if (entityToSave.getIsActif() == true) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("Vous ne pouvez pas modifier l'offre de voyage car elle est active.", locale));
+                response.setHasError(true);
+                return response;
+            }
+            //TODO Verifier si l'offre de voyage a été réservée
             if (Utilities.isNotBlank(dto.getDesignation()) && !dto.getDesignation().equals(entityToSave.getDesignation())) {
-                OffreVoyage existingPrixOffreVoyage = offreVoyageRepository.findByDesignation(dto.getDesignation(), false);
-                if (existingPrixOffreVoyage != null && !existingPrixOffreVoyage.getId().equals(entityToSave.getId())) {
+                OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getDesignation(), false);
+                if (existingOffreVoyage != null && !existingOffreVoyage.getId().equals(entityToSave.getId())) {
                     response.setStatus(functionalError.DATA_EXIST("OffreVoyage -> " + dto.getDesignation(), locale));
                     response.setHasError(true);
                     return response;
                 }
                 entityToSave.setDesignation(dto.getDesignation());
-            }
-            CompagnieTransport existingCompagnieTransport = null;
-            existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(dto.getCompagnieTransportRaisonSociale(),false);
-            if (existingCompagnieTransport == null) {
-                response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
-                response.setHasError(true);
-                return response;
             }
             //Ville depart
             String villeDepartDesignation=entityToSave.getVilleDepart()!=null&&entityToSave.getVilleDepart().getDesignation()!=null
@@ -344,7 +343,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDesignation().equals(entityToSave.getDescription())){
                 entityToSave.setDescription(dto.getDescription());
             }
-            if(!dto.getIsActif().equals(entityToSave.getIsActif())){
+            if(dto.getIsActif()!=null && !dto.getIsActif().equals(entityToSave.getIsActif())){
                 entityToSave.setIsActif(dto.getIsActif());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());

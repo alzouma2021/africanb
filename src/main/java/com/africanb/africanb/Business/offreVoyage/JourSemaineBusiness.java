@@ -233,6 +233,11 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
                 response.setHasError(true);
                 return response;
             }
+            if (existingOffreVoyage.getIsActif()!=null && existingOffreVoyage.getIsActif() == true) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("Desactivez l'offre de voyage avant de proceder au changement du prix", locale));
+                response.setHasError(true);
+                return response;
+            }
             if (Utilities.isNotBlank(dto.getOffreVoyageDesignation()) && !dto.getOffreVoyageDesignation().equals(existingOffreVoyage.getDesignation())) {
                 OffreVoyage offreVoyageToSave = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
                 if (offreVoyageToSave == null) {

@@ -38,7 +38,6 @@ import java.util.*;
 @Component
 public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, Response<ProgrammeDTO>> {
 
-
     private Response<ProgrammeDTO> response;
     @Autowired
     private JourSemaineRepository jourSemaineRepository;
@@ -66,12 +65,14 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
     @Override
     public Response<ProgrammeDTO> create(Request<ProgrammeDTO> request, Locale locale) throws ParseException {
         Response<ProgrammeDTO> response = new Response<ProgrammeDTO>();
+
         List<Programme> items = new ArrayList<Programme>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
+
         List<ProgrammeDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<ProgrammeDTO>());
         for(ProgrammeDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
@@ -93,6 +94,7 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             }
             itemsDtos.add(dto);
         }
+
         for(ProgrammeDTO itemDto : itemsDtos){
             Programme existingProgramme = null;
             existingProgramme = programmeRepository.findByDesignation(itemDto.getDesignation(), false);
@@ -114,6 +116,7 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
+
         List<Programme> itemsSaved = null;
         itemsSaved = programmeRepository.saveAll((Iterable<Programme>) items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
@@ -121,9 +124,11 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             response.setHasError(true);
             return response;
         }
+
         List<ProgrammeDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? ProgrammeTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : ProgrammeTransformer.INSTANCE.toDtos(itemsSaved);
+
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
