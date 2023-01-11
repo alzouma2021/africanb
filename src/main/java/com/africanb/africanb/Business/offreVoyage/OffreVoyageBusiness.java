@@ -3,32 +3,35 @@ package com.africanb.africanb.Business.offreVoyage;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
+import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
 import com.africanb.africanb.dao.repository.compagnie.VilleRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.JourSemaineRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
-import com.africanb.africanb.dao.repository.offreVoyage.VilleEscaleRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.PrixOffreVoyageRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.ProgrammeRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
 import com.africanb.africanb.helper.dto.transformer.offrreVoyage.OffreVoyageTransformer;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -50,9 +53,15 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     @Autowired
     private VilleRepository villeRepository;
     @Autowired
+    private ProgrammeRepository programmeRepository;
+    @Autowired
+    private JourSemaineRepository jourSemaineRepository;
+    @Autowired
     private CompagnieTransportRepository compagnieTransportRepository;
     @Autowired
     private OffreVoyageRepository offreVoyageRepository;
+    @Autowired
+    private PrixOffreVoyageRepository prixOffreVoyageRepository;
     @Autowired
     private PrixOffreVoyageBusiness prixOffreVoyageBusiness;
     @Autowired
@@ -134,7 +143,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 response.setHasError(true);
                 return response;
             }
-            if (existingCompagnieTransport.getIsValidate()==null || !existingCompagnieTransport.getIsValidate()) {
+            if (existingCompagnieTransport.getIsValidate()==null || existingCompagnieTransport.getIsValidate()==false) {
                 response.setStatus(functionalError.DATA_EXIST("Vous ne pouvez pas créer des offres de voyage.Car,votre compagnie n'est encore validée", locale));
                 response.setHasError(true);
                 return response;
@@ -538,6 +547,135 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
 
         return response;
     */
+        return null;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<Boolean> toActiveTravelOffer(Request<OffreVoyageDTO> request, Locale locale) {
+        Response<Boolean> response = new Response<Boolean>();
+        List<OffreVoyage> items = new ArrayList<OffreVoyage>();
+        if (request.getDatas() == null || request.getDatas().isEmpty()) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide", locale));
+            response.setHasError(true);
+            return response;
+        }
+        for (OffreVoyageDTO dto : request.getDatas()) {
+            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            fieldsToVerify.put("id", dto.getId());
+            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        for (OffreVoyageDTO dto : request.getDatas()) {
+            OffreVoyage existingOffreVoyage = null;
+            existingOffreVoyage = offreVoyageRepository.findOne(dto.getId(), false);
+            if (existingOffreVoyage == null) {
+                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage que vous voulez activer n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingOffreVoyage.getCompagnieTransport() == null) {
+                response.setStatus(functionalError.DATA_EXIST("La compagnie de transport de l'offre de voyage n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingOffreVoyage.getCompagnieTransport() != null
+                    && (existingOffreVoyage.getCompagnieTransport().getIsValidate() == null
+                    || existingOffreVoyage.getCompagnieTransport().getIsValidate() == false)) {
+                response.setStatus(functionalError.DATA_EXIST("La compagnie de transport de l'offre de voyage n'est pas validée", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingOffreVoyage.getVilleDepart() == null || existingOffreVoyage.getVilleDepart().getDesignation() == null) {
+                response.setStatus(functionalError.DATA_EXIST("Aucune ville de départ n'est définie pour l'offre de voyage", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingOffreVoyage.getVilleDepart() == null || existingOffreVoyage.getVilleDepart().getDesignation() == null) {
+                response.setStatus(functionalError.DATA_EXIST("Aucune ville de départ n'est définie pour l'offre de voyage", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (existingOffreVoyage.getVilleDestination() == null || existingOffreVoyage.getVilleDestination().getDesignation() == null) {
+                response.setStatus(functionalError.DATA_EXIST("Aucune ville de destination n'est définie pour l'offre de voyage", locale));
+                response.setHasError(true);
+                return response;
+            }
+
+            //Vérifier si l'offre de voyage comporte au moins un prix
+            List<PrixOffreVoyage> existingEntityPrixOffreVoyageList = null;
+            existingEntityPrixOffreVoyageList = prixOffreVoyageRepository.findAllByOffreVoyageDesignation(existingOffreVoyage.getDesignation(), false);
+            if (CollectionUtils.isEmpty(existingEntityPrixOffreVoyageList)) {
+                response.setStatus(functionalError.DATA_EXIST("Aucun prix n'est défini pour l'offre de voyage", locale));
+                response.setHasError(true);
+                return response;
+            }
+            Response<Boolean> responsePrixVoyage = verifierSiPrixOffreVoyageEstDifferentDeZero(locale, response, existingEntityPrixOffreVoyageList);
+            if (responsePrixVoyage != null) return responsePrixVoyage;
+
+            //Verifier si l'offre de voyage est programmé
+            List<JourSemaine> existingEntityJourSemaineList = null;
+            existingEntityJourSemaineList = jourSemaineRepository.findAllByOffreVoyageDesignation(existingOffreVoyage.getDesignation(), false);
+            if (CollectionUtils.isEmpty(existingEntityJourSemaineList)) {
+                response.setStatus(functionalError.DATA_EXIST("L'offre de voyayge n'est programmé sur aucun jour de la semaine", locale));
+                response.setHasError(true);
+                return response;
+            }
+            List<Programme> existingProgrammeList = null;
+            for(JourSemaine jourSemaine: existingEntityJourSemaineList){
+                if(jourSemaine!=null){
+                    log.info("_Affichage de la designation Jour semaine="+jourSemaine.getDesignation()); //TODO A effacer
+                    existingProgrammeList = programmeRepository.findByJourSemaine(jourSemaine.getDesignation(),false);
+                    if (CollectionUtils.isEmpty(existingProgrammeList)) {
+                        response.setStatus(functionalError.DATA_EXIST("Aucun programme pour le jour de la semaine", locale));
+                        response.setHasError(true);
+                        return response;
+                    }
+                    for(Programme programme: existingProgrammeList){
+                        if(programme!=null){
+                            if(programme.getHeureDepart()==null){
+                                response.setStatus(functionalError.DATA_EXIST("Heure départ non définie", locale));
+                                response.setHasError(true);
+                                return response;
+                            }
+                            if(programme.getHeureArrivee()==null){
+                                response.setStatus(functionalError.DATA_EXIST("Heure arrivee non définie", locale));
+                                response.setHasError(true);
+                                return response;
+                            }
+                        }
+                    }
+                }
+            }
+            existingOffreVoyage.setIsActif(true);
+            OffreVoyage entityToActive = offreVoyageRepository.save(existingOffreVoyage);
+            if(entityToActive==null){
+                response.setStatus(functionalError.DATA_EXIST("Echec d'activation de l'offe de voyage", locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        response.setItem(true);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end activation l'offre de voyage-----");
+        return response;
+    }
+
+
+    private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale
+    locale, Response < Boolean > response, List < PrixOffreVoyage > existingEntityPrixOffreVoyageList){
+        for (PrixOffreVoyage prixOffreVoyage : existingEntityPrixOffreVoyageList) {
+            if (prixOffreVoyage != null) {
+                if (prixOffreVoyage.getPrix() == 0L) {
+                    response.setStatus(functionalError.DATA_EXIST("Lr prix de l'offre de voyage doit être différent de 0", locale));
+                    response.setHasError(true);
+                    return response;
+                }
+            }
+        }
         return null;
     }
 

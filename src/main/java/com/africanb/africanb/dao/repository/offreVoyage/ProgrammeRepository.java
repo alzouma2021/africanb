@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProgrammeRepository extends JpaRepository<Programme,Long> {
     @Query("select p from  Programme p where p.id = :id and p.isDeleted= :isDeleted")
@@ -16,6 +18,5 @@ public interface ProgrammeRepository extends JpaRepository<Programme,Long> {
     Programme findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select p from Programme p where p.jourSemaine.designation = :jourSemaineDesignation and p.isDeleted= :isDeleted")
-    Programme findByJourSemaine(@Param("jourSemaineDesignation") String jourSemaineDesignation, @Param("isDeleted") Boolean isDeleted);
-
+    List<Programme> findByJourSemaine(@Param("jourSemaineDesignation") String jourSemaineDesignation, @Param("isDeleted") Boolean isDeleted);
 }
