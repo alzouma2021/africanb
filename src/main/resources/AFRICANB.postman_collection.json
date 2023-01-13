@@ -379,6 +379,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "create1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -497,11 +525,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "create3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"refElementInteger\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementLong\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementBoolean\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementString\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementDate\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementDateTime\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementFloat\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "OffreVoyage",
+			"name": "OFFREVOYAGE",
 			"item": [
 				{
 					"name": "create",
@@ -619,7 +675,7 @@
 			]
 		},
 		{
-			"name": "PrixOffreVoyage",
+			"name": "PRIXOFFREVOYAGE",
 			"item": [
 				{
 					"name": "create",
@@ -911,6 +967,68 @@
 							"port": "8080",
 							"path": [
 								"villeEscales"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PROPRIETEOFFREVOYAGE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Wifi\",\n        \"estObligatoire\":true,\n        \"typeProprieteOffreVoyageDesignation\":\"refElementBoolean\"\n        },\n        {\n        \"designation\":\"Prise de charge\",\n        \"estObligatoire\":true,\n        \"typeProprieteOffreVoyageDesignation\":\"refElementBoolean\"\n        },\n        {\n        \"designation\":\"Confort\",\n        \"estObligatoire\":true,\n        \"typeProprieteOffreVoyageDesignation\":\"refElementBoolean\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/proprieteOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"proprieteOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllProprieteOffreVoyage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/proprieteOffreVoyages/getAllProprieteOffreVoyage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"proprieteOffreVoyages",
+								"getAllProprieteOffreVoyage"
 							]
 						}
 					},

@@ -1,6 +1,7 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
+import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
@@ -14,17 +15,22 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProprieteOffreVoyageDTO;
+import com.africanb.africanb.helper.dto.transformer.compagnie.CompagnieTransportTransformer;
 import com.africanb.africanb.helper.dto.transformer.offrreVoyage.JourSemaineTransformer;
 import com.africanb.africanb.helper.dto.transformer.offrreVoyage.ProprieteOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
+import com.africanb.africanb.utils.Constants.StatusUtilConstants;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -354,4 +360,28 @@ public class ProprieteOffreVoyageBusiness implements IBasicBusiness<Request<Prop
     */
         return null;
     }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<ProprieteOffreVoyageDTO> getAllProprieteOffreVoyage(Request<ProprieteOffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<ProprieteOffreVoyageDTO> response = new Response<ProprieteOffreVoyageDTO>();
+        List<ProprieteOffreVoyage> items = new ArrayList<ProprieteOffreVoyage>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        items=proprieteOffreVoyageRepository.findAll(false);
+        if(CollectionUtils.isEmpty(items)){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune propriété offre voyage n'est définie",locale));
+            response.setHasError(true);
+            return response;
+        }
+
+        List<ProprieteOffreVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? ProprieteOffreVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : ProprieteOffreVoyageTransformer.INSTANCE.toDtos(items);
+
+       // response.setCount(count);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        return response;
+    }
+
 }
