@@ -3,23 +3,21 @@ package com.africanb.africanb.Business.offreVoyage;
 
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageLong;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
-import com.africanb.africanb.dao.repository.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.*;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageBooleanTransformer;
-import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageLongTransformer;
+import com.africanb.africanb.helper.validation.Validate;
+import com.africanb.africanb.utils.Constants.ProjectConstants;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,28 +26,30 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * @Author ALZOUMA MOUSSA MAHAAMADOU
  */
 @Log
 @Component
-public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBusiness<Request<ValeurCaracteristiqueOffreVoyageBooleanDTO>, Response<ValeurCaracteristiqueOffreVoyageBooleanDTO>> {
+public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<Request<ValeurCaracteristiqueOffreVoyageDTO>, Response<ValeurCaracteristiqueOffreVoyageDTO>>,ValeurCaracteristiqueOffreVoyageInterface {
 
 
-    private Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> response;
+    private Response<ValeurCaracteristiqueOffreVoyageDTO> response;
 
-    @Autowired
-    ValeurCaracteristiqueOffreVoyageBooleanRepository valeurCaracteristiqueOffreVoyageBooleanRepository;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
-    OffreVoyageRepository offreVoyageRepository;
+    private OffreVoyageRepository offreVoyageRepository;
     @Autowired
-    ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
+    private ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
+    @Autowired
+    private ValeurCaracteristiqueOffreVoyageBooleanBusiness valeurCaracteristiqueOffreVoyageBooleanBusiness;
+    @Autowired
+    private ValeurCaracteristiqueOffreVoyageLongBusiness valeurCaracteristiqueOffreVoyageLongBusiness;
+    @Autowired
+    private ValeurCaracteristiqueOffreVoyageStringBusiness valeurCaracteristiqueOffreVoyageStringBusiness;
     @Autowired
     private TechnicalError technicalError;
     @Autowired
@@ -60,29 +60,41 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ValeurCaracteristiqueOffreVoyageBooleanBusiness() {
+    public ValeurCaracteristiqueOffreVoyageBusiness() {
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
-    public Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> create(Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> request, Locale locale) throws ParseException {
-        Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> response = new Response<ValeurCaracteristiqueOffreVoyageBooleanDTO>();
-        List<ValeurCaracteristiqueOffreVoyageBoolean> items = new ArrayList<ValeurCaracteristiqueOffreVoyageBoolean>();
+    public Response<ValeurCaracteristiqueOffreVoyageDTO> create(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<ValeurCaracteristiqueOffreVoyageDTO> response = new Response<ValeurCaracteristiqueOffreVoyageDTO>();
+        List<ValeurCaracteristiqueOffreVoyage> items = new ArrayList<ValeurCaracteristiqueOffreVoyage>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        for(ValeurCaracteristiqueOffreVoyageBooleanDTO itemDto : request.getDatas() ){
-            //Chech If ValeurCaracteristique existe
-            ValeurCaracteristiqueOffreVoyageBoolean exitingEntity=null;
-            exitingEntity=valeurCaracteristiqueOffreVoyageBooleanRepository.findByDesignationByOffreVoyageDesignation(itemDto.getDesignation(),itemDto.getProprieteOffreVoyageDesignation(),false);
-            if (exitingEntity != null) {
-                response.setStatus(functionalError.DATA_EXIST("ValeurCaracteristiqueOffreVoyage ayant la designation"+itemDto.getDesignation()+"existe", locale));
-                response.setHasError(true);
-                return response;
+        List<ValeurCaracteristiqueOffreVoyageDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageDTO>());
+        for(ValeurCaracteristiqueOffreVoyageDTO dto: request.getDatas() ) {
+            if(dto!=null){
+                Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+                fieldsToVerify.put("designation", dto.getDesignation());
+                fieldsToVerify.put("offfreVoyageDesignation", dto.getOffreVoyageDesignation());
+                fieldsToVerify.put("proprieteOffreVoyageDesignation", dto.getProprieteOffreVoyageDesignation());
+                if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+                    response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+                    response.setHasError(true);
+                    return response;
+                }
+                if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
+                    response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation() + "' pour les pays", locale));
+                    response.setHasError(true);
+                    return response;
+                }
+                itemsDtos.add(dto);
             }
+        }
+        for(ValeurCaracteristiqueOffreVoyageDTO itemDto : itemsDtos){
             //Get Offre Voyage
             OffreVoyage existingOffreVoyage = null;
             existingOffreVoyage = offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
@@ -99,12 +111,11 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
                 response.setHasError(true);
                 return response;
             }
-            ValeurCaracteristiqueOffreVoyageBoolean entityToSave = ValeurCaracteristiqueOffreVoyageBooleanTransformer.INSTANCE.toEntity(itemDto,existingOffreVoyage,existingProprieteOffreVoyage);
-            entityToSave.setIsDeleted(false);
-            entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            ValeurCaracteristiqueOffreVoyageBoolean entitySaved=null;
-            entitySaved=valeurCaracteristiqueOffreVoyageBooleanRepository.save(entityToSave);
-            items.add(entitySaved);
+
+            //TODO Transformation de la classe ValeurCaracteristiqueOffreVoyageDTO dans la bonne classe fille DTO
+
+            //TODO Appel d'une fonction qui permet de faire appel au bon service pour la creation de la bonne classe fille
+
         }
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
@@ -120,8 +131,9 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
         return response;
     }
 
+
     @Override
-    public Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> update(Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> request, Locale locale) throws ParseException {
+    public Response<ValeurCaracteristiqueOffreVoyageDTO> update(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) throws ParseException {
        /* Response<JourSemaineDTO> response = new Response<JourSemaineDTO>();
         List<JourSemaine> items = new ArrayList<JourSemaine>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
@@ -263,7 +275,7 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
     }
 
     @Override
-    public Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> delete(Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> request, Locale locale) {
+    public Response<ValeurCaracteristiqueOffreVoyageDTO> delete(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) {
 
 /*        log.info("----begin delete agence-----");
 
@@ -341,17 +353,17 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
     }
 
     @Override
-    public Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> forceDelete(Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> request, Locale locale) {
+    public Response<ValeurCaracteristiqueOffreVoyageDTO> forceDelete(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) {
         return null ;
     }
 
     @Override
-    public Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> getAll(Locale locale) throws ParseException {
+    public Response<ValeurCaracteristiqueOffreVoyageDTO> getAll(Locale locale) throws ParseException {
        return null;
     }
 
     @Override
-    public Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> getByCriteria(Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> request, Locale locale) {
+    public Response<ValeurCaracteristiqueOffreVoyageDTO> getByCriteria(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) {
        /*
         log.info("----begin get agence-----");
 
@@ -389,4 +401,100 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
         return null;
     }
 
+    @Override
+    public ValeurCaracteristiqueOffreVoyageDTO transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO dto) {
+        if(dto!=null){
+            if(dto.getOffreVoyageDesignation()!=null ){
+               if( dto.getOffreVoyageDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_TYPE_LONG)) {
+                   ValeurCaracteristiqueOffreVoyageLongDTO valeurLongDTO = new ValeurCaracteristiqueOffreVoyageLongDTO();
+                   valeurLongDTO = (ValeurCaracteristiqueOffreVoyageLongDTO) dto;
+                   return valeurLongDTO;
+               }
+                else if( dto.getOffreVoyageDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_TYPE_BOOLEAN)) {
+                    ValeurCaracteristiqueOffreVoyageBooleanDTO valeurBooleanDTO = new ValeurCaracteristiqueOffreVoyageBooleanDTO();
+                    valeurBooleanDTO = (ValeurCaracteristiqueOffreVoyageBooleanDTO) dto;
+                    return valeurBooleanDTO;
+                }
+               else if( dto.getOffreVoyageDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_TYPE_STRING)) {
+                   ValeurCaracteristiqueOffreVoyageStringDTO valeurStringDTO = new ValeurCaracteristiqueOffreVoyageStringDTO();
+                   valeurStringDTO = (ValeurCaracteristiqueOffreVoyageStringDTO) dto;
+                   return valeurStringDTO;
+               }
+               else {
+                   //
+               }
+            }
+        }
+        return new ValeurCaracteristiqueOffreVoyageDTO();
+    }
+
+    @Override
+    public ValeurCaracteristiqueOffreVoyageDTO saveValeurCaracteristiqueOffreVoyageDTOEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO,Locale locale) throws ParseException {
+
+        if(valeurCaracteristiqueOffreVoyageDTO instanceof  ValeurCaracteristiqueOffreVoyageLongDTO){
+            Request<ValeurCaracteristiqueOffreVoyageLongDTO> subRequest = new Request<ValeurCaracteristiqueOffreVoyageLongDTO>();
+            List<ValeurCaracteristiqueOffreVoyageLongDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageLongDTO>());
+            ValeurCaracteristiqueOffreVoyageLongDTO valeurLongDTO =  new ValeurCaracteristiqueOffreVoyageLongDTO();
+            valeurLongDTO = (ValeurCaracteristiqueOffreVoyageLongDTO) valeurCaracteristiqueOffreVoyageDTO;
+            //Conversion
+            log.info("_ 445 Affichae de la valeur texte avant conversion en Long" +valeurLongDTO.getValeurTexte());
+            Long valeur = Utilities.convertStringToLong(valeurLongDTO.getValeurTexte());
+            log.info("_ 447 Affichae de la valeur apres conversion" +valeur);
+            valeurLongDTO.setValeur(valeur);
+            itemsDTO.add(valeurLongDTO);
+            subRequest.setDatas( itemsDTO);
+            //subRequest.setUser(request.getUser());
+            Response<ValeurCaracteristiqueOffreVoyageLongDTO> subResponse = valeurCaracteristiqueOffreVoyageLongBusiness.create(subRequest,locale);
+            if (subResponse.isHasError()) {
+                response.setStatus(subResponse.getStatus());
+                response.setHasError(Boolean.TRUE);
+                return new ValeurCaracteristiqueOffreVoyageDTO();
+            }
+            ValeurCaracteristiqueOffreVoyageDTO rtn = subResponse.getItems().get(0);
+            return rtn;
+        }
+        else if(valeurCaracteristiqueOffreVoyageDTO instanceof  ValeurCaracteristiqueOffreVoyageStringDTO){
+            Request<ValeurCaracteristiqueOffreVoyageStringDTO> subRequest = new Request<ValeurCaracteristiqueOffreVoyageStringDTO>();
+            List<ValeurCaracteristiqueOffreVoyageStringDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageStringDTO>());
+            ValeurCaracteristiqueOffreVoyageStringDTO valeurStringDTO =  new ValeurCaracteristiqueOffreVoyageStringDTO();
+            valeurStringDTO = (ValeurCaracteristiqueOffreVoyageStringDTO) valeurCaracteristiqueOffreVoyageDTO;
+            //Conversion
+            valeurStringDTO.setValeur(valeurStringDTO.getValeurTexte());
+            itemsDTO.add(valeurStringDTO);
+            subRequest.setDatas( itemsDTO);
+            //subRequest.setUser(request.getUser());
+            Response<ValeurCaracteristiqueOffreVoyageStringDTO> subResponse = valeurCaracteristiqueOffreVoyageStringBusiness.create(subRequest,locale);
+            if (subResponse.isHasError()) {
+                response.setStatus(subResponse.getStatus());
+                response.setHasError(Boolean.TRUE);
+                return new ValeurCaracteristiqueOffreVoyageDTO();
+            }
+            ValeurCaracteristiqueOffreVoyageDTO rtn = subResponse.getItems().get(0);
+            return rtn;
+        }
+        else if(valeurCaracteristiqueOffreVoyageDTO instanceof  ValeurCaracteristiqueOffreVoyageBooleanDTO){
+            Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> subRequest = new Request<ValeurCaracteristiqueOffreVoyageBooleanDTO>();
+            List<ValeurCaracteristiqueOffreVoyageBooleanDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageBooleanDTO>());
+            ValeurCaracteristiqueOffreVoyageBooleanDTO valeurBooleanDTO =  new ValeurCaracteristiqueOffreVoyageBooleanDTO();
+            valeurBooleanDTO = (ValeurCaracteristiqueOffreVoyageBooleanDTO) valeurCaracteristiqueOffreVoyageDTO;
+            //Conversion
+            Boolean valeur = Utilities.convertStringToBoolean(valeurBooleanDTO.getValeurTexte());
+            valeurBooleanDTO.setValeur(valeur);
+            itemsDTO.add(valeurBooleanDTO);
+            subRequest.setDatas( itemsDTO);
+            //subRequest.setUser(request.getUser());
+            Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> subResponse = valeurCaracteristiqueOffreVoyageBooleanBusiness.create(subRequest,locale);
+            if (subResponse.isHasError()) {
+                response.setStatus(subResponse.getStatus());
+                response.setHasError(Boolean.TRUE);
+                return new ValeurCaracteristiqueOffreVoyageDTO();
+            }
+            ValeurCaracteristiqueOffreVoyageDTO rtn = subResponse.getItems().get(0);
+            return rtn;
+        }
+        else{
+
+        }
+        return new ValeurCaracteristiqueOffreVoyageDTO();
+    }
 }

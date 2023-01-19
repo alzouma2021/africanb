@@ -14,5 +14,5 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 public class ValeurCaracteristiqueOffreVoyageStringDTO extends ValeurCaracteristiqueOffreVoyageDTO {
-    private String valeur;
+    private Boolean valeur;
 }

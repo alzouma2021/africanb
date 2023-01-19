@@ -15,7 +15,6 @@ public interface ValeurCaracteristiqueOffreVoyageLongRepository extends JpaRepos
 
     @Query("select vcovl from ValeurCaracteristiqueOffreVoyageLong vcovl where vcovl.designation = :designation and vcovl.isDeleted= :isDeleted")
     ValeurCaracteristiqueOffreVoyageLong findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
-
     @Query("select vcovl from ValeurCaracteristiqueOffreVoyageLong vcovl where vcovl.designation = :designation and vcovl.offreVoyage.designation = :offreVoyageDesignation  and vcovl.isDeleted= :isDeleted")
     ValeurCaracteristiqueOffreVoyageLong findByDesignationByOffreVoyageDesignation(@Param("designation") String designation, @Param("offreVoyageDesignation") String offreVoyageDesignation,@Param("isDeleted") Boolean isDeleted);
 
