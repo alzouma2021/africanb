@@ -3,9 +3,13 @@ package com.africanb.africanb.Business.offreVoyage;
 
 import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageString;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.JourSemaineRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.ValeurCaracteristiqueOffreVoyageStringRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -14,8 +18,10 @@ import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
-import com.africanb.africanb.helper.transformer.offrreVoyage.JourSemaineTransformer;
+import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
+import com.africanb.africanb.helper.transformer.offrreVoyage.JourSemaineTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageStringTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
@@ -33,20 +39,19 @@ import java.util.*;
  */
 @Log
 @Component
-public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDTO>, Response<JourSemaineDTO>> {
+public class ValeurCaracteristiqueOffreVoyageStringBusiness implements IBasicBusiness<Request<ValeurCaracteristiqueOffreVoyageStringDTO>, Response<ValeurCaracteristiqueOffreVoyageStringDTO>> {
 
 
-    private Response<JourSemaineDTO> response;
+    private Response<ValeurCaracteristiqueOffreVoyageStringDTO> response;
+
     @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private JourSemaineRepository jourSemaineRepository;
-    @Autowired
-    private ProgrammeBusiness programmeBusiness;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
+    ValeurCaracteristiqueOffreVoyageStringRepository valeurCaracteristiqueOffreVoyageStringRepository;
     @Autowired
     private FunctionalError functionalError;
+    @Autowired
+    OffreVoyageRepository offreVoyageRepository;
+    @Autowired
+    ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
     @Autowired
     private TechnicalError technicalError;
     @Autowired
@@ -57,82 +62,42 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public JourSemaineBusiness() {
+    public ValeurCaracteristiqueOffreVoyageStringBusiness() {
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
-    public Response<JourSemaineDTO> create(Request<JourSemaineDTO> request, Locale locale) throws ParseException {
-        Response<JourSemaineDTO> response = new Response<JourSemaineDTO>();
-        List<JourSemaine> items = new ArrayList<JourSemaine>();
+    public Response<ValeurCaracteristiqueOffreVoyageStringDTO> create(Request<ValeurCaracteristiqueOffreVoyageStringDTO> request, Locale locale) throws ParseException {
+        Response<ValeurCaracteristiqueOffreVoyageStringDTO> response = new Response<ValeurCaracteristiqueOffreVoyageStringDTO>();
+        List<ValeurCaracteristiqueOffreVoyageString> items = new ArrayList<ValeurCaracteristiqueOffreVoyageString>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<JourSemaineDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<JourSemaineDTO>());
-        for(JourSemaineDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("designation", dto.getDesignation());
-            fieldsToVerify.put("offreVoyageDesignation", dto.getOffreVoyageDesignation());
-            fieldsToVerify.put("jourSemaineDesignation", dto.getJourSemaineDesignation());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
-                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            itemsDtos.add(dto);
-        }
-        for(JourSemaineDTO itemDto : itemsDtos){
-            JourSemaine existingJourSemaine = null;
-            existingJourSemaine = jourSemaineRepository.findByDesignation(itemDto.getDesignation(), false);
-            if (existingJourSemaine != null) {
-                response.setStatus(functionalError.DATA_EXIST("JourSemaine ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
-                response.setHasError(true);
-                return response;
-            }
+        for(ValeurCaracteristiqueOffreVoyageStringDTO itemDto : request.getDatas() ){
+            //Get Offre Voyage
             OffreVoyage existingOffreVoyage = null;
-            existingOffreVoyage= offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
+            existingOffreVoyage = offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
             if (existingOffreVoyage == null) {
-                response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getOffreVoyageDesignation() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("Offre de voyage n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            Reference existingJourSemaineReference = null;
-            existingJourSemaineReference= referenceRepository.findByDesignation(itemDto.getJourSemaineDesignation(),false);
-            if (existingJourSemaineReference == null) {
-                response.setStatus(functionalError.DATA_EXIST("Le  jour effectif de la ssemaine ayant  pour identifiant -> " + itemDto.getJourSemaineDesignation() +", n'existe pas", locale));
+            //Get Propriete Offre Voyage
+            ProprieteOffreVoyage existingProprieteOffreVoyage = null;
+            existingProprieteOffreVoyage = proprieteOffreVoyageRepository.findByDesignation(itemDto.getProprieteOffreVoyageDesignation(),false);
+            if (existingProprieteOffreVoyage == null) {
+                response.setStatus(functionalError.DATA_EXIST("ProprieteOffre de voyage n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            JourSemaine entityToSave = JourSemaineTransformer.INSTANCE.toEntity(itemDto,existingJourSemaineReference,existingOffreVoyage);
+            ValeurCaracteristiqueOffreVoyageString entityToSave = ValeurCaracteristiqueOffreVoyageStringTransformer.INSTANCE.toEntity(itemDto,existingOffreVoyage,existingProprieteOffreVoyage);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
-            JourSemaine entitySaved=null;
-            entitySaved=jourSemaineRepository.save(entityToSave);
-            //Check if programmeList
-            if(!CollectionUtils.isEmpty(itemDto.getProgrammeDTOList())){
-                Request<ProgrammeDTO> subRequest = new Request<ProgrammeDTO>();
-                subRequest.setDatas(itemDto.getProgrammeDTOList());
-                //subRequest.setUser(request.getUser());
-                //Initialisation de l'offre de voyage
-                for(ProgrammeDTO programmeDTO: itemDto.getProgrammeDTOList()){
-                    programmeDTO.setJourSemaineDesignation(entitySaved.getDesignation());
-                }
-                Response<ProgrammeDTO> subResponse = programmeBusiness.create(subRequest, locale);
-                if (subResponse.isHasError()) {
-                    response.setStatus(subResponse.getStatus());
-                    response.setHasError(Boolean.TRUE);
-                    return response;
-                }
-            }
+            ValeurCaracteristiqueOffreVoyageString entitySaved=null;
+            valeurCaracteristiqueOffreVoyageStringRepository.save(entityToSave);
             items.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -140,9 +105,9 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             response.setHasError(true);
             return response;
         }
-        List<JourSemaineDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                    ? JourSemaineTransformer.INSTANCE.toLiteDtos(items)
-                                    : JourSemaineTransformer.INSTANCE.toDtos(items);
+        List<ValeurCaracteristiqueOffreVoyageStringDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                                    ? ValeurCaracteristiqueOffreVoyageStringTransformer.INSTANCE.toLiteDtos(items)
+                                    : ValeurCaracteristiqueOffreVoyageStringTransformer.INSTANCE.toDtos(items);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -150,8 +115,8 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
     }
 
     @Override
-    public Response<JourSemaineDTO> update(Request<JourSemaineDTO> request, Locale locale) throws ParseException {
-        Response<JourSemaineDTO> response = new Response<JourSemaineDTO>();
+    public Response<ValeurCaracteristiqueOffreVoyageStringDTO> update(Request<ValeurCaracteristiqueOffreVoyageStringDTO> request, Locale locale) throws ParseException {
+       /* Response<JourSemaineDTO> response = new Response<JourSemaineDTO>();
         List<JourSemaine> items = new ArrayList<JourSemaine>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
@@ -175,14 +140,14 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             itemsDtos.add(dto);
         }
         for(JourSemaineDTO dto: itemsDtos) {
-            JourSemaine entityToSave = jourSemaineRepository.findOne(dto.getId(), false);
+            JourSemaine entityToSave = Repository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Le jour de la semaine ayant l'identifiant suivant -> " + dto.getId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             if (Utilities.isNotBlank(dto.getDesignation()) && !dto.getDesignation().equals(entityToSave.getDesignation())) {
-                JourSemaine existingJourSemaine = jourSemaineRepository.findByDesignation(dto.getDesignation(), false);
+                JourSemaine existingJourSemaine = Repository.findByDesignation(dto.getDesignation(), false);
                 if (existingJourSemaine != null && !existingJourSemaine.getId().equals(entityToSave.getId())) {
                     response.setStatus(functionalError.DATA_EXIST("Joursemaine -> " + dto.getDesignation(), locale));
                     response.setHasError(true);
@@ -250,7 +215,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
             //entityToSave.setUpdatedBy(request.user);
             JourSemaine entityUpdated=null;
-            entityUpdated=jourSemaineRepository.save(entityToSave);
+            entityUpdated=Repository.save(entityToSave);
             if (entityUpdated == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification", locale));
                 response.setHasError(true);
@@ -287,11 +252,12 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
         log.info("----end update Jour semaine-----");
-        return response;
+        return response;*/
+        return null;
     }
 
     @Override
-    public Response<JourSemaineDTO> delete(Request<JourSemaineDTO> request, Locale locale) {
+    public Response<ValeurCaracteristiqueOffreVoyageStringDTO> delete(Request<ValeurCaracteristiqueOffreVoyageStringDTO> request, Locale locale) {
 
 /*        log.info("----begin delete agence-----");
 
@@ -369,17 +335,17 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
     }
 
     @Override
-    public Response<JourSemaineDTO> forceDelete(Request<JourSemaineDTO> request, Locale locale) {
+    public Response<ValeurCaracteristiqueOffreVoyageStringDTO> forceDelete(Request<ValeurCaracteristiqueOffreVoyageStringDTO> request, Locale locale) {
         return null ;
     }
 
     @Override
-    public Response<JourSemaineDTO> getAll(Locale locale) throws ParseException {
+    public Response<ValeurCaracteristiqueOffreVoyageStringDTO> getAll(Locale locale) throws ParseException {
        return null;
     }
 
     @Override
-    public Response<JourSemaineDTO> getByCriteria(Request<JourSemaineDTO> request, Locale locale) {
+    public Response<ValeurCaracteristiqueOffreVoyageStringDTO> getByCriteria(Request<ValeurCaracteristiqueOffreVoyageStringDTO> request, Locale locale) {
        /*
         log.info("----begin get agence-----");
 

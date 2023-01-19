@@ -1,13 +1,11 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
-import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,6 +28,9 @@ public interface ValeurCaracteristiqueOffreVoyageBooleanTransformer {
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
             @Mapping(source = "entity.valeur", target = "valeur"),
+
+            @Mapping(source = "entity.offreVoyage.designation", target = "offreVoyageDesignation"),
+            @Mapping(source = "entity.proprieteOffreVoyage.designation", target = "proprieteOffreVoyageDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -74,14 +75,17 @@ public interface ValeurCaracteristiqueOffreVoyageBooleanTransformer {
             @Mapping(source = "dto.description", target = "description"),
             @Mapping(source = "dto.valeur", target = "valeur"),
 
-
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
             @Mapping(source="dto.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
             @Mapping(source="dto.updatedBy", target="updatedBy"),
             @Mapping(source="dto.createdBy", target="createdBy"),
             @Mapping(source="dto.deletedBy", target="deletedBy"),
-            @Mapping(source="dto.isDeleted", target="isDeleted")
+            @Mapping(source="dto.isDeleted", target="isDeleted"),
+
+            @Mapping(source="offreVoyage", target="offreVoyage"),
+            @Mapping(source="proprieteOffreVoyage", target="proprieteOffreVoyage")
+
     })
-    ValeurCaracteristiqueOffreVoyageBoolean toEntity(ValeurCaracteristiqueOffreVoyageBooleanDTO dto) throws ParseException;
+    ValeurCaracteristiqueOffreVoyageBoolean toEntity(ValeurCaracteristiqueOffreVoyageBooleanDTO dto, OffreVoyage offreVoyage, ProprieteOffreVoyage proprieteOffreVoyage) throws ParseException;
 }

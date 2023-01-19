@@ -1,4 +1,4 @@
-package com.africanb.africanb.helper.dto.transformer.compagnie;
+package com.africanb.africanb.helper.transformer.compagnie;
 
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;

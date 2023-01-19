@@ -10,7 +10,7 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.PaysTransformer;
+import com.africanb.africanb.helper.transformer.compagnie.PaysTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;

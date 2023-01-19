@@ -1,14 +1,10 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
+import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
-import com.africanb.africanb.utils.Reference.Reference;
+import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,21 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface OffreVoyageTransformer {
+public interface ProgrammeTransformer {
 
-    OffreVoyageTransformer INSTANCE = Mappers.getMapper(OffreVoyageTransformer.class);
+    ProgrammeTransformer INSTANCE = Mappers.getMapper(ProgrammeTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
-            @Mapping(source = "entity.isActif", target = "isActif"),
 
-            @Mapping(source = "entity.villeDepart.designation", target = "villeDepartDesignation"),
-            @Mapping(source = "entity.villeDestination.designation", target = "villeDestinationDesignation"),
-            @Mapping(source = "entity.typeOffreVoyage.designation", target = "typeOffreVoyageDesignation"),
-            @Mapping(source = "entity.compagnieTransport.raisonSociale", target = "compagnieTransportRaisonSociale"),
+            @Mapping(source = "entity.dateDepart", dateFormat="dd/MM/yyyy",target = "dateDepart"),
+            @Mapping(source = "entity.dateArrivee", dateFormat="dd/MM/yyyy",target = "dateArrivee"),
+            @Mapping(source = "entity.heureDepart", target = "heureDepart"),
+            @Mapping(source = "entity.heureArrivee",target = "heureArrivee"),
+
+            @Mapping(source = "entity.jourSemaine.designation", target = "jourSemaineDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -44,28 +41,29 @@ public interface OffreVoyageTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    OffreVoyageDTO toDto(OffreVoyage entity) throws ParseException;;
+    ProgrammeDTO toDto(Programme entity) throws ParseException;;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<OffreVoyageDTO> toDtos(List<OffreVoyage> entities) throws ParseException;
+    List<ProgrammeDTO> toDtos(List<Programme> entities) throws ParseException;
 
-    default OffreVoyageDTO toLiteDto(OffreVoyage entity) {
+    default ProgrammeDTO toLiteDto(Programme entity) {
         if (entity == null) {
             return null;
         }
-        OffreVoyageDTO dto = new OffreVoyageDTO();
+        ProgrammeDTO dto = new ProgrammeDTO();
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
+        dto.setJourSemaineDesignation(entity.getJourSemaine().getDesignation());
         return dto;
     }
 
-    default List<OffreVoyageDTO> toLiteDtos(List<OffreVoyage> entities) {
+    default List<ProgrammeDTO> toLiteDtos(List<Programme> entities) {
         if (entities == null || entities.stream().allMatch(o -> o == null)) {
             return null;
         }
-        List<OffreVoyageDTO> dtos = new ArrayList<OffreVoyageDTO>();
-        for (OffreVoyage entity : entities) {
+        List<ProgrammeDTO> dtos = new ArrayList<ProgrammeDTO>();
+        for (Programme entity : entities) {
             dtos.add(toLiteDto(entity));
         }
         return dtos;
@@ -75,7 +73,11 @@ public interface OffreVoyageTransformer {
             @Mapping(source = "dto.id", target = "id"),
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
-            @Mapping(source = "dto.isActif", target = "isActif"),
+
+            @Mapping(source = "dto.dateDepart", dateFormat="dd/MM/yyyy",target = "dateDepart"),
+            @Mapping(source = "dto.dateArrivee", dateFormat="dd/MM/yyyy",target = "dateArrivee"),
+            @Mapping(source = "dto.heureDepart", target = "heureDepart"),
+            @Mapping(source = "dto.heureArrivee",target = "heureArrivee"),
 
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -85,10 +87,7 @@ public interface OffreVoyageTransformer {
             @Mapping(source="dto.deletedBy", target="deletedBy"),
             @Mapping(source="dto.isDeleted", target="isDeleted"),
 
-            @Mapping(source="villeDepart", target="villeDepart"),
-            @Mapping(source="villeDestination", target="villeDestination"),
-            @Mapping(source="typeOffreVoyage", target="typeOffreVoyage"),
-            @Mapping(source="compagnieTransport", target="compagnieTransport"),
+            @Mapping(source="jourSemaine", target="jourSemaine"),
     })
-    OffreVoyage toEntity(OffreVoyageDTO dto, Ville villeDepart, Ville villeDestination, Reference typeOffreVoyage, CompagnieTransport compagnieTransport) throws ParseException;
+    Programme toEntity(ProgrammeDTO dto, JourSemaine jourSemaine) throws ParseException;
 }

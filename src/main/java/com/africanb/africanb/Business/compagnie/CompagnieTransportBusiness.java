@@ -20,10 +20,10 @@ import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.CompagnieTransportTransformer;
+import com.africanb.africanb.helper.transformer.compagnie.CompagnieTransportTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
-import com.africanb.africanb.utils.Constants.StatusUtilConstants;
+import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.emailService.BodiesOfEmail;
 import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
@@ -132,9 +132,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
                 return response;
             }
             StatusUtil existingStatusUtilActual=null;
-            existingStatusUtilActual=statusUtilRepository.findByDesignation(StatusUtilConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
+            existingStatusUtilActual=statusUtilRepository.findByDesignation(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
             if (existingStatusUtilActual == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + StatusUtilConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT, locale));
+                response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT, locale));
                 response.setHasError(true);
                 return response;
             }
@@ -513,9 +513,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             return response;
         }
         Long count=0L;
-        count=compagnieTransportRepository.countAllProcessingCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
+        count=compagnieTransportRepository.countAllProcessingCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
         log.info("_493 COUNT=====:"+count); //TODO A effacer
-        items=compagnieTransportRepository.getAllProcessingCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false, PageRequest.of(request.getIndex(), request.getSize()));
+        items=compagnieTransportRepository.getAllProcessingCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false, PageRequest.of(request.getIndex(), request.getSize()));
         log.info("_494 ITEMS=====:"+items.toString()); //TODO A effacer
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport en de traiement",locale));
@@ -558,9 +558,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             return response;
         }
         StatusUtil existingStatusUtilActual=null;
-        existingStatusUtilActual=statusUtilRepository.findByDesignation(StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
+        existingStatusUtilActual=statusUtilRepository.findByDesignation(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
         if (existingStatusUtilActual == null) {
-            response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE, locale));
+            response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE, locale));
             response.setHasError(true);
             return response;
         }
@@ -624,9 +624,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             return response;
         }
         Long count=0L;
-        count=compagnieTransportRepository.countAllValidedCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
+        count=compagnieTransportRepository.countAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
         log.info("_493 COUNT=====:"+count); //TODO A effacer
-        items=compagnieTransportRepository.getAllValidedCompagnies(StatusUtilConstants.COMPAGNIE_TRANSPORT_VALIDE,false, PageRequest.of(request.getIndex(), request.getSize()));
+        items=compagnieTransportRepository.getAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false, PageRequest.of(request.getIndex(), request.getSize()));
         log.info("_494 ITEMS=====:"+items.toString()); //TODO A effacer
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport valide n'est disponible",locale));

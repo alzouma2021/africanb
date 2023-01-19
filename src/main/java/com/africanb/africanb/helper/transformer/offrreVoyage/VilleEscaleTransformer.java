@@ -1,14 +1,10 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.VilleEscale;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;

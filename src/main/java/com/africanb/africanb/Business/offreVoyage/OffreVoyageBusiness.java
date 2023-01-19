@@ -24,7 +24,7 @@ import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.OffreVoyageTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;

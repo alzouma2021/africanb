@@ -1,4 +1,4 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;

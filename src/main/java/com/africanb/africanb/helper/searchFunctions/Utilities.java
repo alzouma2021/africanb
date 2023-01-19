@@ -174,6 +174,21 @@ public class Utilities {
         return dateString;
     }
 
+    public static Boolean convertStringToBoolean(String str) {
+        boolean rtn=Boolean.parseBoolean(str);
+        return rtn;
+    }
+
+    public static Long convertStringToLong(String str){
+        Long rtn = Long.parseLong(str);
+        return rtn;
+    }
+
+    public static Double convertStringTODouble(String str){
+        Double rtn = Double.parseDouble(str);
+        return rtn;
+    }
+
     public static boolean isValidID(Long id) {
         return id != null && id > 0;
     }

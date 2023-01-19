@@ -1,12 +1,11 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
+import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ProprieteOffreVoyageDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -19,18 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface ProprieteOffreVoyageTransformer {
+public interface OffreVoyageTransformer {
 
-    ProprieteOffreVoyageTransformer INSTANCE = Mappers.getMapper(ProprieteOffreVoyageTransformer.class);
+    OffreVoyageTransformer INSTANCE = Mappers.getMapper(OffreVoyageTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
-            @Mapping(source = "entity.estObligatoire", target = "estObligatoire"),
+            @Mapping(source = "entity.isActif", target = "isActif"),
 
-            @Mapping(source = "entity.typeProprieteOffreVoyage.designation", target = "typeProprieteOffreVoyageDesignation"),
+            @Mapping(source = "entity.villeDepart.designation", target = "villeDepartDesignation"),
+            @Mapping(source = "entity.villeDestination.designation", target = "villeDestinationDesignation"),
+            @Mapping(source = "entity.typeOffreVoyage.designation", target = "typeOffreVoyageDesignation"),
+            @Mapping(source = "entity.compagnieTransport.raisonSociale", target = "compagnieTransportRaisonSociale"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -40,29 +42,28 @@ public interface ProprieteOffreVoyageTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ProprieteOffreVoyageDTO toDto(ProprieteOffreVoyage entity) throws ParseException;;
+    OffreVoyageDTO toDto(OffreVoyage entity) throws ParseException;;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<ProprieteOffreVoyageDTO> toDtos(List<ProprieteOffreVoyage> entities) throws ParseException;
+    List<OffreVoyageDTO> toDtos(List<OffreVoyage> entities) throws ParseException;
 
-    default ProprieteOffreVoyageDTO toLiteDto(ProprieteOffreVoyage entity) {
+    default OffreVoyageDTO toLiteDto(OffreVoyage entity) {
         if (entity == null) {
             return null;
         }
-        ProprieteOffreVoyageDTO dto = new ProprieteOffreVoyageDTO();
+        OffreVoyageDTO dto = new OffreVoyageDTO();
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
-        dto.setTypeProprieteOffreVoyageDesignation(entity.getTypeProprieteOffreVoyage().getDesignation());
         return dto;
     }
 
-    default List<ProprieteOffreVoyageDTO> toLiteDtos(List<ProprieteOffreVoyage> entities) {
+    default List<OffreVoyageDTO> toLiteDtos(List<OffreVoyage> entities) {
         if (entities == null || entities.stream().allMatch(o -> o == null)) {
             return null;
         }
-        List<ProprieteOffreVoyageDTO> dtos = new ArrayList<ProprieteOffreVoyageDTO>();
-        for (ProprieteOffreVoyage entity : entities) {
+        List<OffreVoyageDTO> dtos = new ArrayList<OffreVoyageDTO>();
+        for (OffreVoyage entity : entities) {
             dtos.add(toLiteDto(entity));
         }
         return dtos;
@@ -72,6 +73,7 @@ public interface ProprieteOffreVoyageTransformer {
             @Mapping(source = "dto.id", target = "id"),
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
+            @Mapping(source = "dto.isActif", target = "isActif"),
 
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -81,7 +83,10 @@ public interface ProprieteOffreVoyageTransformer {
             @Mapping(source="dto.deletedBy", target="deletedBy"),
             @Mapping(source="dto.isDeleted", target="isDeleted"),
 
-            @Mapping(source="typeProprieteOffreVoyage", target="typeProprieteOffreVoyage")
+            @Mapping(source="villeDepart", target="villeDepart"),
+            @Mapping(source="villeDestination", target="villeDestination"),
+            @Mapping(source="typeOffreVoyage", target="typeOffreVoyage"),
+            @Mapping(source="compagnieTransport", target="compagnieTransport"),
     })
-    ProprieteOffreVoyage toEntity(ProprieteOffreVoyageDTO dto, Reference typeProprieteOffreVoyage) throws ParseException;
+    OffreVoyage toEntity(OffreVoyageDTO dto, Ville villeDepart, Ville villeDestination, Reference typeOffreVoyage, CompagnieTransport compagnieTransport) throws ParseException;
 }

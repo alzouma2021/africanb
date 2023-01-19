@@ -14,7 +14,7 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.StatusUtilCompagnieTransportTransformer;
+import com.africanb.africanb.helper.transformer.compagnie.StatusUtilCompagnieTransportTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;

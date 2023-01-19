@@ -1,17 +1,10 @@
-package com.africanb.africanb.helper.dto.transformer.compagnie;
+package com.africanb.africanb.helper.transformer.compagnie;
 
 
 import com.africanb.africanb.dao.entity.compagnie.FamilleStatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Pays;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilDTO;
-import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
-import org.mapstruct.IterableMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import com.africanb.africanb.helper.dto.compagnie.FamilleStatusUtilDTO;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.text.ParseException;
@@ -19,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface StatusUtilTransformer {
+public interface FamilleStatusUtilTransformer {
 
-    StatusUtilTransformer INSTANCE = Mappers.getMapper(StatusUtilTransformer.class);
+    FamilleStatusUtilTransformer INSTANCE = Mappers.getMapper(FamilleStatusUtilTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
@@ -29,39 +22,34 @@ public interface StatusUtilTransformer {
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
 
-            @Mapping(source = "entity.familleStatusUtil.id", target = "familleStatusUtilId"),
-            @Mapping(source = "entity.familleStatusUtil.designation", target = "familleStatusUtilDesignation"),
-
             @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
             @Mapping(source="entity.deletedAt", dateFormat="dd/MM/yyyy",target="deletedAt"),
             @Mapping(source="entity.updatedBy", target="updatedBy"),
             @Mapping(source="entity.createdBy", target="createdBy"),
             @Mapping(source="entity.deletedBy", target="deletedBy"),
-            @Mapping(source="entity.isDeleted", target="isDeleted"),
     })
-    StatusUtilDTO toDto(StatusUtil entity) throws ParseException;
-
+    FamilleStatusUtilDTO toDto(FamilleStatusUtil entity) throws ParseException;
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<StatusUtilDTO> toDtos(List<StatusUtil> entities) throws ParseException;
+    List<FamilleStatusUtilDTO> toDtos(List<FamilleStatusUtil> entities) throws ParseException;
 
-    public default StatusUtilDTO toLiteDto(StatusUtil entity) {
+    public default FamilleStatusUtilDTO toLiteDto(FamilleStatusUtil entity) {
         if (entity == null) {
             return null;
         }
-        StatusUtilDTO dto = new StatusUtilDTO();
+        FamilleStatusUtilDTO dto = new FamilleStatusUtilDTO();
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
         return dto;
     }
 
-    public default List<StatusUtilDTO> toLiteDtos(List<StatusUtil> entities) {
+    public default List<FamilleStatusUtilDTO> toLiteDtos(List<FamilleStatusUtil> entities) {
         if (entities == null || entities.stream().allMatch(o -> o == null)) {
             return null;
         }
-        List<StatusUtilDTO> dtos = new ArrayList<StatusUtilDTO>();
-        for (StatusUtil entity : entities) {
+        List<FamilleStatusUtilDTO> dtos = new ArrayList<FamilleStatusUtilDTO>();
+        for (FamilleStatusUtil entity : entities) {
             dtos.add(toLiteDto(entity));
         }
         return dtos;
@@ -78,8 +66,6 @@ public interface StatusUtilTransformer {
             @Mapping(source="dto.updatedBy", target="updatedBy"),
             @Mapping(source="dto.createdBy", target="createdBy"),
             @Mapping(source="dto.deletedBy", target="deletedBy"),
-            @Mapping(source="dto.isDeleted", target="isDeleted"),
-            @Mapping(source = "familleStatusUtil", target = "familleStatusUtil"),
     })
-    StatusUtil toEntity(StatusUtilDTO dto, FamilleStatusUtil familleStatusUtil) throws ParseException;
+    FamilleStatusUtil toEntity(FamilleStatusUtilDTO dto) throws ParseException;
 }

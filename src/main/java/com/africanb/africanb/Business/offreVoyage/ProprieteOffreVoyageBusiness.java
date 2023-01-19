@@ -1,12 +1,8 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
-import com.africanb.africanb.dao.repository.offreVoyage.JourSemaineRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
@@ -15,20 +11,13 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProprieteOffreVoyageDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.CompagnieTransportTransformer;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.JourSemaineTransformer;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.ProprieteOffreVoyageTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.ProprieteOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
-import com.africanb.africanb.utils.Constants.StatusUtilConstants;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;

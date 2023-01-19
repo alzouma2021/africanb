@@ -1,13 +1,11 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.Programme;
+import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageLong;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
-import com.africanb.africanb.utils.Reference.Reference;
+import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,22 +17,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface ProgrammeTransformer {
+public interface ValeurCaracteristiqueOffreVoyageLongTransformer {
 
-    ProgrammeTransformer INSTANCE = Mappers.getMapper(ProgrammeTransformer.class);
+
+    ValeurCaracteristiqueOffreVoyageLongTransformer INSTANCE = Mappers.getMapper(ValeurCaracteristiqueOffreVoyageLongTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
+            @Mapping(source = "entity.valeur", target = "valeur"),
 
-            @Mapping(source = "entity.dateDepart", dateFormat="dd/MM/yyyy",target = "dateDepart"),
-            @Mapping(source = "entity.dateArrivee", dateFormat="dd/MM/yyyy",target = "dateArrivee"),
-            @Mapping(source = "entity.heureDepart", target = "heureDepart"),
-            @Mapping(source = "entity.heureArrivee",target = "heureArrivee"),
-
-            @Mapping(source = "entity.jourSemaine.designation", target = "jourSemaineDesignation"),
+            @Mapping(source = "entity.offreVoyage.designation", target = "offreVoyageDesignation"),
+            @Mapping(source = "entity.proprieteOffreVoyage.designation", target = "proprieteOffreVoyageDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -44,29 +40,30 @@ public interface ProgrammeTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ProgrammeDTO toDto(Programme entity) throws ParseException;;
+    ValeurCaracteristiqueOffreVoyageLongDTO toDto(ValeurCaracteristiqueOffreVoyageLong entity) throws ParseException;;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<ProgrammeDTO> toDtos(List<Programme> entities) throws ParseException;
+    List<ValeurCaracteristiqueOffreVoyageLongDTO> toDtos(List<ValeurCaracteristiqueOffreVoyageLong> entities) throws ParseException;
 
-    default ProgrammeDTO toLiteDto(Programme entity) {
+    default ValeurCaracteristiqueOffreVoyageLongDTO toLiteDto(ValeurCaracteristiqueOffreVoyageLong entity) {
         if (entity == null) {
             return null;
         }
-        ProgrammeDTO dto = new ProgrammeDTO();
+        ValeurCaracteristiqueOffreVoyageLongDTO dto = new ValeurCaracteristiqueOffreVoyageLongDTO();
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
-        dto.setJourSemaineDesignation(entity.getJourSemaine().getDesignation());
+        dto.setValeur(entity.getValeur());
+        //dto.setJourSemaineDesignation(entity.getJourSemaine().getDesignation());
         return dto;
     }
 
-    default List<ProgrammeDTO> toLiteDtos(List<Programme> entities) {
+    default List<ValeurCaracteristiqueOffreVoyageLongDTO> toLiteDtos(List<ValeurCaracteristiqueOffreVoyageLong> entities) {
         if (entities == null || entities.stream().allMatch(o -> o == null)) {
             return null;
         }
-        List<ProgrammeDTO> dtos = new ArrayList<ProgrammeDTO>();
-        for (Programme entity : entities) {
+        List<ValeurCaracteristiqueOffreVoyageLongDTO> dtos = new ArrayList<ValeurCaracteristiqueOffreVoyageLongDTO>();
+        for (ValeurCaracteristiqueOffreVoyageLong entity : entities) {
             dtos.add(toLiteDto(entity));
         }
         return dtos;
@@ -76,11 +73,7 @@ public interface ProgrammeTransformer {
             @Mapping(source = "dto.id", target = "id"),
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
-
-            @Mapping(source = "dto.dateDepart", dateFormat="dd/MM/yyyy",target = "dateDepart"),
-            @Mapping(source = "dto.dateArrivee", dateFormat="dd/MM/yyyy",target = "dateArrivee"),
-            @Mapping(source = "dto.heureDepart", target = "heureDepart"),
-            @Mapping(source = "dto.heureArrivee",target = "heureArrivee"),
+            @Mapping(source = "dto.valeur", target = "valeur"),
 
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -90,7 +83,8 @@ public interface ProgrammeTransformer {
             @Mapping(source="dto.deletedBy", target="deletedBy"),
             @Mapping(source="dto.isDeleted", target="isDeleted"),
 
-            @Mapping(source="jourSemaine", target="jourSemaine"),
+            @Mapping(source="offreVoyage", target="offreVoyage"),
+            @Mapping(source="proprieteOffreVoyage", target="proprieteOffreVoyage")
     })
-    Programme toEntity(ProgrammeDTO dto, JourSemaine jourSemaine) throws ParseException;
+    ValeurCaracteristiqueOffreVoyageLong toEntity(ValeurCaracteristiqueOffreVoyageLongDTO dto, OffreVoyage offreVoyage, ProprieteOffreVoyage proprieteOffreVoyage) throws ParseException;
 }

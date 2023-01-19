@@ -13,27 +13,6 @@ import lombok.ToString;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
-public class ValeurCaracteristiqueOffreVoyageBooleanDTO {
-
-    private Long id ;
-    private String designation;
-    private String description;
+public class ValeurCaracteristiqueOffreVoyageBooleanDTO extends ValeurCaracteristiqueOffreVoyageDTO{
     private Boolean valeur;
-    private Boolean  isDeleted;
-    private String updatedAt;
-    private Long  updatedBy;
-    private String createdAt;
-    private Long  createdBy;
-    private String deletedAt;
-    private Long  deletedBy;
-
-    private SearchParam<Boolean>  isDeletedParam;
-    private SearchParam<String>   designationParam;
-    private SearchParam<String>   updatedAtParam;
-    private SearchParam<Long>     updatedByParam;
-    private SearchParam<String>   createdAtParam;
-    private SearchParam<Long>     createdByParam;
-
-    private String orderField;
-    private String orderDirection;
 }

@@ -1,15 +1,9 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.VilleEscale;
-import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
-import com.africanb.africanb.dao.repository.compagnie.StatusUtilCompagnieTransportRepository;
-import com.africanb.africanb.dao.repository.compagnie.StatusUtilRepository;
 import com.africanb.africanb.dao.repository.compagnie.VilleRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.VilleEscaleRepository;
@@ -19,10 +13,8 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
-import com.africanb.africanb.helper.dto.transformer.compagnie.StatusUtilCompagnieTransportTransformer;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.VilleEscaleTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.VilleEscaleTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;

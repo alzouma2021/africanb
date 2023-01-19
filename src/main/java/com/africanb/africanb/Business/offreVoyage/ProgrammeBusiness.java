@@ -2,8 +2,6 @@ package com.africanb.africanb.Business.offreVoyage;
 
 
 import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.repository.offreVoyage.JourSemaineRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
@@ -14,13 +12,10 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.PrixOffreVoyageTransformer;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.ProgrammeTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.ProgrammeTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
-import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

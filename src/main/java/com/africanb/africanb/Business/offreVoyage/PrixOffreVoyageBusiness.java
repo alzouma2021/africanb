@@ -13,7 +13,7 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
-import com.africanb.africanb.helper.dto.transformer.offrreVoyage.PrixOffreVoyageTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;

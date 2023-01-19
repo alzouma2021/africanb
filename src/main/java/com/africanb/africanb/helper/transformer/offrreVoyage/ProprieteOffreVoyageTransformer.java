@@ -1,12 +1,10 @@
-package com.africanb.africanb.helper.dto.transformer.offrreVoyage;
+package com.africanb.africanb.helper.transformer.offrreVoyage;
 
 
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageString;
+import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.ProprieteOffreVoyageDTO;
+import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,17 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface ValeurCaracteristiqueOffreVoyageStringTransformer {
+public interface ProprieteOffreVoyageTransformer {
 
-
-    ValeurCaracteristiqueOffreVoyageStringTransformer INSTANCE = Mappers.getMapper(ValeurCaracteristiqueOffreVoyageStringTransformer.class);
+    ProprieteOffreVoyageTransformer INSTANCE = Mappers.getMapper(ProprieteOffreVoyageTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
-            @Mapping(source = "entity.valeur", target = "valeur"),
+            @Mapping(source = "entity.estObligatoire", target = "estObligatoire"),
+
+            @Mapping(source = "entity.typeProprieteOffreVoyage.designation", target = "typeProprieteOffreVoyageDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -38,30 +37,29 @@ public interface ValeurCaracteristiqueOffreVoyageStringTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ValeurCaracteristiqueOffreVoyageStringDTO toDto(ValeurCaracteristiqueOffreVoyageString entity) throws ParseException;;
+    ProprieteOffreVoyageDTO toDto(ProprieteOffreVoyage entity) throws ParseException;;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<ValeurCaracteristiqueOffreVoyageStringDTO> toDtos(List<ValeurCaracteristiqueOffreVoyageString> entities) throws ParseException;
+    List<ProprieteOffreVoyageDTO> toDtos(List<ProprieteOffreVoyage> entities) throws ParseException;
 
-    default ValeurCaracteristiqueOffreVoyageStringDTO toLiteDto(ValeurCaracteristiqueOffreVoyageString entity) {
+    default ProprieteOffreVoyageDTO toLiteDto(ProprieteOffreVoyage entity) {
         if (entity == null) {
             return null;
         }
-        ValeurCaracteristiqueOffreVoyageStringDTO dto = new ValeurCaracteristiqueOffreVoyageStringDTO();
+        ProprieteOffreVoyageDTO dto = new ProprieteOffreVoyageDTO();
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
-        dto.setValeur(entity.getValeur());
-        //dto.setJourSemaineDesignation(entity.getJourSemaine().getDesignation());
+        dto.setTypeProprieteOffreVoyageDesignation(entity.getTypeProprieteOffreVoyage().getDesignation());
         return dto;
     }
 
-    default List<ValeurCaracteristiqueOffreVoyageStringDTO> toLiteDtos(List<ValeurCaracteristiqueOffreVoyageString> entities) {
+    default List<ProprieteOffreVoyageDTO> toLiteDtos(List<ProprieteOffreVoyage> entities) {
         if (entities == null || entities.stream().allMatch(o -> o == null)) {
             return null;
         }
-        List<ValeurCaracteristiqueOffreVoyageStringDTO> dtos = new ArrayList<ValeurCaracteristiqueOffreVoyageStringDTO>();
-        for (ValeurCaracteristiqueOffreVoyageString entity : entities) {
+        List<ProprieteOffreVoyageDTO> dtos = new ArrayList<ProprieteOffreVoyageDTO>();
+        for (ProprieteOffreVoyage entity : entities) {
             dtos.add(toLiteDto(entity));
         }
         return dtos;
@@ -71,8 +69,6 @@ public interface ValeurCaracteristiqueOffreVoyageStringTransformer {
             @Mapping(source = "dto.id", target = "id"),
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
-            @Mapping(source = "dto.valeur", target = "valeur"),
-
 
             @Mapping(source="dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source="dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -80,7 +76,9 @@ public interface ValeurCaracteristiqueOffreVoyageStringTransformer {
             @Mapping(source="dto.updatedBy", target="updatedBy"),
             @Mapping(source="dto.createdBy", target="createdBy"),
             @Mapping(source="dto.deletedBy", target="deletedBy"),
-            @Mapping(source="dto.isDeleted", target="isDeleted")
+            @Mapping(source="dto.isDeleted", target="isDeleted"),
+
+            @Mapping(source="typeProprieteOffreVoyage", target="typeProprieteOffreVoyage")
     })
-    ValeurCaracteristiqueOffreVoyageString toEntity(ValeurCaracteristiqueOffreVoyageStringDTO dto) throws ParseException;
+    ProprieteOffreVoyage toEntity(ProprieteOffreVoyageDTO dto, Reference typeProprieteOffreVoyage) throws ParseException;
 }

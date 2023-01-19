@@ -33,6 +33,13 @@ public class ValeurCaracteristiqueOffreVoyage implements Serializable{
 	@NotNull
 	private String designation;
 	private String description;
+	@Transient
+	private String valeurTexte; //Contient la valeur de la propriété.En fonction,du type de la propriété,elle sera convertie dans le bon type
+
+	@ManyToOne
+	private OffreVoyage offreVoyage;
+	@ManyToOne
+	private ProprieteOffreVoyage proprieteOffreVoyage;
 
 	@Column(name="is_deleted")
 	private Boolean    isDeleted ;
