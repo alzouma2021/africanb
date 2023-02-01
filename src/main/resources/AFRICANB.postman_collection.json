@@ -671,6 +671,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getTravelOfferByCompagnieTransport",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":{\n        \"compagnieTransportRaisonSociale\": \"amm\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/offreVoyages/getTravelOfferByCompagnieTransport",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"offreVoyages",
+								"getTravelOfferByCompagnieTransport"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
