@@ -4,7 +4,6 @@ package com.africanb.africanb.Business.offreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
@@ -69,6 +68,7 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
     public Response<ValeurCaracteristiqueOffreVoyageDTO> create(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) throws ParseException {
         Response<ValeurCaracteristiqueOffreVoyageDTO> response = new Response<ValeurCaracteristiqueOffreVoyageDTO>();
         List<ValeurCaracteristiqueOffreVoyage> items = new ArrayList<ValeurCaracteristiqueOffreVoyage>();
+        List<ValeurCaracteristiqueOffreVoyageDTO> itemsDto= new ArrayList<ValeurCaracteristiqueOffreVoyageDTO>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
@@ -111,20 +111,24 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
                 response.setHasError(true);
                 return response;
             }
-
-            //TODO Transformation de la classe ValeurCaracteristiqueOffreVoyageDTO dans la bonne classe fille DTO
-
-            //TODO Appel d'une fonction qui permet de faire appel au bon service pour la creation de la bonne classe fille
-
+            if(existingProprieteOffreVoyage.getTypeProprieteOffreVoyage()==null
+                         || existingProprieteOffreVoyage.getTypeProprieteOffreVoyage().getDesignation()==null) {
+                response.setStatus(functionalError.DATA_EXIST("Le type de la propriété de l'offre de voyage n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            itemDto.setTypeProprieteOffreVoyageDesignation(existingProprieteOffreVoyage.getTypeProprieteOffreVoyage().getDesignation());
+            itemDto=Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(itemDto);
+            itemsDto= (List<ValeurCaracteristiqueOffreVoyageDTO>) saveValeurCaracteristiqueOffreVoyageDTOEnFonctionDuTypeDeLaPropriete(itemDto,locale);
         }
-        if (CollectionUtils.isEmpty(items)) {
+        if (CollectionUtils.isEmpty(itemsDto)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
             return response;
-        }
+        }/*
         List<ValeurCaracteristiqueOffreVoyageBooleanDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? ValeurCaracteristiqueOffreVoyageBooleanTransformer.INSTANCE.toLiteDtos(items)
-                                    : ValeurCaracteristiqueOffreVoyageBooleanTransformer.INSTANCE.toDtos(items);
+                                    : ValeurCaracteristiqueOffreVoyageBooleanTransformer.INSTANCE.toDtos(items);*/
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -402,40 +406,13 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
     }
 
     @Override
-    public ValeurCaracteristiqueOffreVoyageDTO transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO dto) {
-        if(dto!=null){
-            if(dto.getOffreVoyageDesignation()!=null ){
-               if( dto.getOffreVoyageDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_TYPE_LONG)) {
-                   ValeurCaracteristiqueOffreVoyageLongDTO valeurLongDTO = new ValeurCaracteristiqueOffreVoyageLongDTO();
-                   valeurLongDTO = (ValeurCaracteristiqueOffreVoyageLongDTO) dto;
-                   return valeurLongDTO;
-               }
-                else if( dto.getOffreVoyageDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_TYPE_BOOLEAN)) {
-                    ValeurCaracteristiqueOffreVoyageBooleanDTO valeurBooleanDTO = new ValeurCaracteristiqueOffreVoyageBooleanDTO();
-                    valeurBooleanDTO = (ValeurCaracteristiqueOffreVoyageBooleanDTO) dto;
-                    return valeurBooleanDTO;
-                }
-               else if( dto.getOffreVoyageDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_TYPE_STRING)) {
-                   ValeurCaracteristiqueOffreVoyageStringDTO valeurStringDTO = new ValeurCaracteristiqueOffreVoyageStringDTO();
-                   valeurStringDTO = (ValeurCaracteristiqueOffreVoyageStringDTO) dto;
-                   return valeurStringDTO;
-               }
-               else {
-                   //
-               }
-            }
-        }
-        return new ValeurCaracteristiqueOffreVoyageDTO();
-    }
-
-    @Override
     public ValeurCaracteristiqueOffreVoyageDTO saveValeurCaracteristiqueOffreVoyageDTOEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO,Locale locale) throws ParseException {
 
         if(valeurCaracteristiqueOffreVoyageDTO instanceof  ValeurCaracteristiqueOffreVoyageLongDTO){
             Request<ValeurCaracteristiqueOffreVoyageLongDTO> subRequest = new Request<ValeurCaracteristiqueOffreVoyageLongDTO>();
             List<ValeurCaracteristiqueOffreVoyageLongDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageLongDTO>());
-            ValeurCaracteristiqueOffreVoyageLongDTO valeurLongDTO =  new ValeurCaracteristiqueOffreVoyageLongDTO();
-            valeurLongDTO = (ValeurCaracteristiqueOffreVoyageLongDTO) valeurCaracteristiqueOffreVoyageDTO;
+            //ValeurCaracteristiqueOffreVoyageLongDTO valeurLongDTO =  new ValeurCaracteristiqueOffreVoyageLongDTO();
+            ValeurCaracteristiqueOffreVoyageLongDTO valeurLongDTO = (ValeurCaracteristiqueOffreVoyageLongDTO) valeurCaracteristiqueOffreVoyageDTO;
             //Conversion
             log.info("_ 445 Affichae de la valeur texte avant conversion en Long" +valeurLongDTO.getValeurTexte());
             Long valeur = Utilities.convertStringToLong(valeurLongDTO.getValeurTexte());
@@ -450,46 +427,105 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
                 response.setHasError(Boolean.TRUE);
                 return new ValeurCaracteristiqueOffreVoyageDTO();
             }
-            ValeurCaracteristiqueOffreVoyageDTO rtn = subResponse.getItems().get(0);
+            ValeurCaracteristiqueOffreVoyageDTO rtn = new ValeurCaracteristiqueOffreVoyageDTO();
+            rtn.setId( subResponse.getItems().get(0).getId());
+            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
+            rtn.setDescription( subResponse.getItems().get(0).getDescription());
+            rtn.setValeurTexte( subResponse.getItems().get(0).getValeur().toString());
+            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
+            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
+            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
+            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
+            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
+            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
+            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
+            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
+            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
+            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
+            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
+            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
+            rtn.setOffreVoyageDesignation(subResponse.getItems().get(0).getOffreVoyageDesignation());
+            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
+            rtn.setProprieteOffreVoyageDesignation(subResponse.getItems().get(0).getProprieteOffreVoyageDesignation());
+            rtn.setTypeProprieteOffreVoyageDesignation(subResponse.getItems().get(0).getTypeProprieteOffreVoyageDesignation());
+
             return rtn;
         }
         else if(valeurCaracteristiqueOffreVoyageDTO instanceof  ValeurCaracteristiqueOffreVoyageStringDTO){
             Request<ValeurCaracteristiqueOffreVoyageStringDTO> subRequest = new Request<ValeurCaracteristiqueOffreVoyageStringDTO>();
             List<ValeurCaracteristiqueOffreVoyageStringDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageStringDTO>());
-            ValeurCaracteristiqueOffreVoyageStringDTO valeurStringDTO =  new ValeurCaracteristiqueOffreVoyageStringDTO();
-            valeurStringDTO = (ValeurCaracteristiqueOffreVoyageStringDTO) valeurCaracteristiqueOffreVoyageDTO;
+            ValeurCaracteristiqueOffreVoyageStringDTO valeurStringDTO = (ValeurCaracteristiqueOffreVoyageStringDTO) valeurCaracteristiqueOffreVoyageDTO;
             //Conversion
             valeurStringDTO.setValeur(valeurStringDTO.getValeurTexte());
             itemsDTO.add(valeurStringDTO);
             subRequest.setDatas( itemsDTO);
-            //subRequest.setUser(request.getUser());
             Response<ValeurCaracteristiqueOffreVoyageStringDTO> subResponse = valeurCaracteristiqueOffreVoyageStringBusiness.create(subRequest,locale);
             if (subResponse.isHasError()) {
                 response.setStatus(subResponse.getStatus());
                 response.setHasError(Boolean.TRUE);
                 return new ValeurCaracteristiqueOffreVoyageDTO();
             }
-            ValeurCaracteristiqueOffreVoyageDTO rtn = subResponse.getItems().get(0);
+            ValeurCaracteristiqueOffreVoyageDTO rtn = new ValeurCaracteristiqueOffreVoyageDTO();
+            rtn.setId( subResponse.getItems().get(0).getId());
+            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
+            rtn.setDescription( subResponse.getItems().get(0).getDescription());
+            rtn.setValeurTexte( subResponse.getItems().get(0).getValeur().toString());
+            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
+            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
+            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
+            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
+            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
+            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
+            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
+            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
+            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
+            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
+            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
+            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
+            rtn.setOffreVoyageDesignation(subResponse.getItems().get(0).getOffreVoyageDesignation());
+            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
+            rtn.setProprieteOffreVoyageDesignation(subResponse.getItems().get(0).getProprieteOffreVoyageDesignation());
+            rtn.setTypeProprieteOffreVoyageDesignation(subResponse.getItems().get(0).getTypeProprieteOffreVoyageDesignation());
+
             return rtn;
         }
         else if(valeurCaracteristiqueOffreVoyageDTO instanceof  ValeurCaracteristiqueOffreVoyageBooleanDTO){
             Request<ValeurCaracteristiqueOffreVoyageBooleanDTO> subRequest = new Request<ValeurCaracteristiqueOffreVoyageBooleanDTO>();
             List<ValeurCaracteristiqueOffreVoyageBooleanDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ValeurCaracteristiqueOffreVoyageBooleanDTO>());
-            ValeurCaracteristiqueOffreVoyageBooleanDTO valeurBooleanDTO =  new ValeurCaracteristiqueOffreVoyageBooleanDTO();
-            valeurBooleanDTO = (ValeurCaracteristiqueOffreVoyageBooleanDTO) valeurCaracteristiqueOffreVoyageDTO;
+            ValeurCaracteristiqueOffreVoyageBooleanDTO valeurBooleanDTO = (ValeurCaracteristiqueOffreVoyageBooleanDTO) valeurCaracteristiqueOffreVoyageDTO;
             //Conversion
             Boolean valeur = Utilities.convertStringToBoolean(valeurBooleanDTO.getValeurTexte());
             valeurBooleanDTO.setValeur(valeur);
             itemsDTO.add(valeurBooleanDTO);
             subRequest.setDatas( itemsDTO);
-            //subRequest.setUser(request.getUser());
             Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> subResponse = valeurCaracteristiqueOffreVoyageBooleanBusiness.create(subRequest,locale);
             if (subResponse.isHasError()) {
                 response.setStatus(subResponse.getStatus());
                 response.setHasError(Boolean.TRUE);
                 return new ValeurCaracteristiqueOffreVoyageDTO();
             }
-            ValeurCaracteristiqueOffreVoyageDTO rtn = subResponse.getItems().get(0);
+            ValeurCaracteristiqueOffreVoyageDTO rtn = new ValeurCaracteristiqueOffreVoyageDTO();
+            rtn.setId( subResponse.getItems().get(0).getId());
+            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
+            rtn.setDescription( subResponse.getItems().get(0).getDescription());
+            rtn.setValeurTexte( subResponse.getItems().get(0).getValeur().toString());
+            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
+            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
+            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
+            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
+            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
+            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
+            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
+            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
+            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
+            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
+            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
+            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
+            rtn.setOffreVoyageDesignation(subResponse.getItems().get(0).getOffreVoyageDesignation());
+            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
+            rtn.setProprieteOffreVoyageDesignation(subResponse.getItems().get(0).getProprieteOffreVoyageDesignation());
+            rtn.setTypeProprieteOffreVoyageDesignation(subResponse.getItems().get(0).getTypeProprieteOffreVoyageDesignation());
+
             return rtn;
         }
         else{

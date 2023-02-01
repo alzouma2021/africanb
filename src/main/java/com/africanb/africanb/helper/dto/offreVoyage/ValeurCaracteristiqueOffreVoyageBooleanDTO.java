@@ -4,6 +4,7 @@ import com.africanb.africanb.helper.searchFunctions.SearchParam;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**

@@ -664,6 +664,49 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         return response;
     }
 
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<OffreVoyageDTO> getTravelOfferByCompagnieTransport(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<OffreVoyageDTO> response = new Response<OffreVoyageDTO>();
+        List<OffreVoyage> items = new ArrayList<OffreVoyage>();
+        if (request.getData() == null ) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("idCompagnieTransport", request.getData().getCompagnieTransportRaisonSociale());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        String raisonCompagnie=request.getData().getCompagnieTransportRaisonSociale();
+        CompagnieTransport existingCompagnieTransport = null;
+        existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(raisonCompagnie, false);
+        if (existingCompagnieTransport == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
+            response.setHasError(true);
+            return response;
+        }
+        log.info("_684 Affichage de la raison scoaile de la compagnie="+existingCompagnieTransport.toString());
+        items = offreVoyageRepository.getTravelOfferByCompagnieTransport(raisonCompagnie,false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie ne dipose d'aucune offre de voyage", locale));
+            response.setHasError(true);
+            return response;
+        }
+
+        List<OffreVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? OffreVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : OffreVoyageTransformer.INSTANCE.toDtos(items);
+
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end update l'offre de voyage-----");
+        return response;
+    }
+
 
     private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale
     locale, Response < Boolean > response, List < PrixOffreVoyage > existingEntityPrixOffreVoyageList){

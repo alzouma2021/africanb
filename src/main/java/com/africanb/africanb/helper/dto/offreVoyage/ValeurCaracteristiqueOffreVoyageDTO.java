@@ -30,6 +30,7 @@ public class ValeurCaracteristiqueOffreVoyageDTO {
 
 	private String offreVoyageDesignation;
 	private String proprieteOffreVoyageDesignation;
+	private String typeProprieteOffreVoyageDesignation;
 
 	private Boolean  isDeleted;
 	private String updatedAt;

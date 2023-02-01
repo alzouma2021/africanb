@@ -7,8 +7,5 @@ import java.text.ParseException;
 import java.util.Locale;
 
 public interface ValeurCaracteristiqueOffreVoyageInterface {
-
-    public ValeurCaracteristiqueOffreVoyageDTO transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO);
-
     public ValeurCaracteristiqueOffreVoyageDTO saveValeurCaracteristiqueOffreVoyageDTOEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO, Locale locale) throws ParseException;
 }
