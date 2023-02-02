@@ -3,6 +3,7 @@ package com.africanb.africanb.Business.offreVoyage;
 
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.VilleEscale;
 import com.africanb.africanb.dao.repository.compagnie.VilleRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
@@ -13,13 +14,19 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
+import com.africanb.africanb.helper.transformer.compagnie.VilleTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.transformer.offrreVoyage.VilleEscaleTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -304,5 +311,46 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
         return response;
         */
         return null;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<VilleDTO> getVilleByOffreVoyageDesignation(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<VilleDTO> response = new Response<VilleDTO>();
+        List<Ville> items = Collections.synchronizedList(new ArrayList<Ville>());
+        if (request.getData() == null ) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("offrVoyageDesigntaion", request.getData().getDesignation());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        String offreVoyageDesignation=request.getData().getDesignation();
+        OffreVoyage existingOffreVoyage = null;
+        existingOffreVoyage= offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
+        if (existingOffreVoyage == null) {
+            response.setStatus(functionalError.DATA_EXIST("L'offre de voyage n'existe pas", locale));
+            response.setHasError(true);
+            return response;
+        }
+        items =villeEscaleRepository.getVilleByOffreVoyageDesignation(offreVoyageDesignation,false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("L'offre de voayage ne dispose d'aucune ville escale", locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? VilleTransformer.INSTANCE.toLiteDtos(items)
+                : VilleTransformer.INSTANCE.toDtos(items);
+
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end Ville Escale Offre Voyage-----");
+        return response;
     }
 }
