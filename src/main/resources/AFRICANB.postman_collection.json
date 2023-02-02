@@ -789,6 +789,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getPrixByOffreVoyageDesignation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":\n        {\n            \"designation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prixOffreVoyages/getPrixTravelOfferByOffreVoyageDesignation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prixOffreVoyages",
+								"getPrixTravelOfferByOffreVoyageDesignation"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -874,6 +903,35 @@
 							"port": "8080",
 							"path": [
 								"jourSemaines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getJourSemaineByOffreVoyage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":\n        {\n        \"designation\":\"AbidjanDaloaCompagnieTransport\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/jourSemaines/getJourSemaineByVoyageDesignation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jourSemaines",
+								"getJourSemaineByVoyageDesignation"
 							]
 						}
 					},
@@ -996,6 +1054,35 @@
 							"port": "8080",
 							"path": [
 								"villeEscales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "villeEscaleParOffreVoyage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " { \n    \"data\":\n        {\n          \"designation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/villeEscales/getVilleByOffreVoyageDesignation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"villeEscales",
+								"getVilleByOffreVoyageDesignation"
 							]
 						}
 					},

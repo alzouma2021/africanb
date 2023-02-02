@@ -603,7 +603,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 response.setHasError(true);
                 return response;
             }
-
             //Vérifier si l'offre de voyage comporte au moins un prix
             List<PrixOffreVoyage> existingEntityPrixOffreVoyageList = null;
             existingEntityPrixOffreVoyageList = prixOffreVoyageRepository.findAllByOffreVoyageDesignation(existingOffreVoyage.getDesignation(), false);

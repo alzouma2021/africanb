@@ -1,26 +1,35 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
+import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
+import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.JourSemaineRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
+import com.africanb.africanb.dao.repository.offreVoyage.ProgrammeRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
+import com.africanb.africanb.helper.transformer.compagnie.VilleTransformer;
 import com.africanb.africanb.helper.transformer.offrreVoyage.JourSemaineTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
+import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransformer;
+import com.africanb.africanb.helper.transformer.offrreVoyage.ProgrammeTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -45,6 +54,8 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
     private ProgrammeBusiness programmeBusiness;
     @Autowired
     private OffreVoyageRepository offreVoyageRepository;
+    @Autowired
+    private ProgrammeRepository programmeRepository;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
@@ -415,5 +426,55 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
         return response;
     */
         return null;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<JourSemaineDTO> getJourSemaineByVoyageDesignation(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<JourSemaineDTO> response = new Response<JourSemaineDTO>();
+        List<JourSemaine> items = Collections.synchronizedList(new ArrayList<JourSemaine>());
+        List<JourSemaineDTO> itemsDTO = Collections.synchronizedList(new ArrayList<JourSemaineDTO>());
+        if (request.getData() == null ) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("offrVoyageDesignation", request.getData().getDesignation());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        String offreVoyageDesignation=request.getData().getDesignation();
+        OffreVoyage existingOffreVoyage = null;
+        existingOffreVoyage= offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
+        if (existingOffreVoyage == null) {
+            response.setStatus(functionalError.DATA_EXIST("L'offre de voyage n'existe pas", locale));
+            response.setHasError(true);
+            return response;
+        }
+        items =jourSemaineRepository.findAllByOffreVoyageDesignation(offreVoyageDesignation,false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("L'offre de voayage n'est programmé sur aucun de jour de la semaine", locale));
+            response.setHasError(true);
+            return response;
+        }
+        for(JourSemaine jourSemaine: items){
+            List<Programme> itemsProg = Collections.synchronizedList(new ArrayList<Programme>());
+            JourSemaineDTO entityToDto = JourSemaineTransformer.INSTANCE.toDto(jourSemaine);
+            itemsProg=programmeRepository.findByJourSemaine(entityToDto.getDesignation(),false);
+            if(!CollectionUtils.isEmpty(itemsProg)){
+                List<ProgrammeDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                        ? ProgrammeTransformer.INSTANCE.toLiteDtos(itemsProg)
+                        : ProgrammeTransformer.INSTANCE.toDtos(itemsProg);
+                entityToDto.setProgrammeDTOList(itemsDto);
+            }
+            itemsDTO.add(entityToDto);
+        }
+        response.setItems(itemsDTO);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end jour semaine-----");
+        return response;
     }
 }
