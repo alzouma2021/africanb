@@ -20,10 +20,7 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.*;
 import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
@@ -68,6 +65,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     private VilleEscaleBusiness villeEscaleBusiness;
     @Autowired
     private JourSemaineBusiness jourSemaineBusinesse;
+    @Autowired
+    private ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
@@ -196,7 +195,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                     return response;
                 }
             }
-            //Check if villeEscaleList
+            //Check if villeEscaleDTOList
             if(!CollectionUtils.isEmpty(itemDto.getVilleEscaleDTOList())){
                 Request<VilleEscaleDTO> subRequestVilleEscale = new Request<VilleEscaleDTO>();
                 subRequestVilleEscale.setDatas((List<VilleEscaleDTO>) itemDto.getVilleEscaleDTOList());
@@ -206,6 +205,21 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                     villeEscaleDTO.setOffreVoyageDesignation(entitySaved.getDesignation());
                 }
                 Response<VilleEscaleDTO> subResponse = villeEscaleBusiness.create(subRequestVilleEscale, locale);
+                if (subResponse.isHasError()) {
+                    response.setStatus(subResponse.getStatus());
+                    response.setHasError(Boolean.TRUE);
+                    return response;
+                }
+            }
+            //Check if ValeurCaracteristiqueOffreVoyageDTOList
+            if(!CollectionUtils.isEmpty(itemDto.getValeurCaracteristiqueOffreVoyageDTOList())){
+                Request<ValeurCaracteristiqueOffreVoyageDTO> subRequestValeurCaracteristiqueOffreVoyage = new Request<ValeurCaracteristiqueOffreVoyageDTO>();
+                subRequestValeurCaracteristiqueOffreVoyage.setDatas((List<ValeurCaracteristiqueOffreVoyageDTO>) itemDto.getValeurCaracteristiqueOffreVoyageDTOList());
+                for(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDto: itemDto.getValeurCaracteristiqueOffreVoyageDTOList()){
+                    valeurCaracteristiqueOffreVoyageDto.setOffreVoyageDesignation(entitySaved.getDesignation());
+                }
+                //subRequest.setUser(request.getUser());
+                Response<ValeurCaracteristiqueOffreVoyageDTO> subResponse = valeurCaracteristiqueOffreVoyageBusiness.create(subRequestValeurCaracteristiqueOffreVoyage, locale);
                 if (subResponse.isHasError()) {
                     response.setStatus(subResponse.getStatus());
                     response.setHasError(Boolean.TRUE);
@@ -687,7 +701,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             response.setHasError(true);
             return response;
         }
-        log.info("_684 Affichage de la raison scoaile de la compagnie="+existingCompagnieTransport.toString());
         items = offreVoyageRepository.getTravelOfferByCompagnieTransport(raisonCompagnie,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie ne dipose d'aucune offre de voyage", locale));

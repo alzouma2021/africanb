@@ -49,7 +49,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Côte d'ivoire\",\n        \"description\":\"Un pays de l'Afrique de l'ouest\"\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"France\",\n        \"description\":\"Un pays de de l'europe\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -102,6 +102,67 @@
 			]
 		},
 		{
+			"name": "REFERENCEFAMILLE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleCategorieVoyaeur\",\n        \"description\":\"la famille reference de categorie famille\"\n        },\n        {\n        \"designation\":\"referenceFamilleMode\",\n        \"description\":\"la famille reference mode\"\n        },\n        {\n        \"designation\":\"referenceFamilleTypeOffreVoyage\",\n        \"description\":\"la famille reference du type de l'offre de voyage\"\n        },\n        {\n        \"designation\":\"referenceFamilleJourSemaine\",\n        \"description\":\"la famille reference du jour de la semaine\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleTypeProprieteOffreFamille\",\n        \"description\":\"la famille reference de categorie famille\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "VILLE",
 			"item": [
 				{
@@ -111,7 +172,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Séguéla\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Sinfra\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Soubré\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tabou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tafiré\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Taï\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tanda\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiagba\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiapoum\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiassalé\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiébissou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiédio\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiéningboué\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tingréla\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tinhou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tiobli\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Togoniéré\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Touba\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Tougbo\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Toulepleu\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Toumodi\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Toumoukoro\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Vavoua\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Varalé\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yakassé-Mé\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yamoussoukro\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yaou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Yorodougou\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Zonneu\",\n        \"paysId\": 2\n        },\n        {\n        \"designation\":\"Zouan-Hounien\",\n        \"paysId\": 2\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Paris\",\n        \"paysId\": 79\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -350,67 +411,6 @@
 			]
 		},
 		{
-			"name": "REFERENCEFAMILLE",
-			"item": [
-				{
-					"name": "create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleCategorieVoyaeur\",\n        \"description\":\"la famille reference de categorie famille\"\n        },\n        {\n        \"designation\":\"referenceFamilleMode\",\n        \"description\":\"la famille reference mode\"\n        },\n        {\n        \"designation\":\"referenceFamilleTypeOffreVoyage\",\n        \"description\":\"la famille reference du type de l'offre de voyage\"\n        },\n        {\n        \"designation\":\"referenceFamilleJourSemaine\",\n        \"description\":\"la famille reference du jour de la semaine\"\n        }\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/referencesFamille",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"referencesFamille"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create1",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/referencesFamille",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"referencesFamille"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "REFERENCE",
 			"item": [
 				{
@@ -595,6 +595,34 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"AbidjanDaloaCompagnieTransport\",\n            \"compagnieTransportRaisonSociale\":\"amm\",\n            \"typeOffreVoyageDesignation\":\"National\",\n            \"villeDepartDesignation\":\"Abidjan\",\n            \"villeDestinationDesignation\":\"Daloa\",\n            \"prixOffreVoyageDTOList\":[\n                {\n                \"designation\":\"prixOffreVoyage002\",\n                \"prix\":5000,\n                \"modeDesignation\":\"Classique\",\n                \"categorieVoyageurDesignation\":\"Adulte\"\n                }\n            ],\n            \"jourSemaineDTOList\":[\n                {\n                    \"designation\":\"jourSemaine0090\",\n                    \"jourSemaineDesignation\":\"Lundi\",\n                    \"programmeDTOList\":[\n                        {\n                        \"designation\":\"programme010\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"08H00\",\n                        \"heureArrivee\":\"11H00\"\n                        },\n                        {\n                        \"designation\":\"programme011\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"12H00\",\n                        \"heureArrivee\":\"15H00\"\n                        },\n                        {\n                        \"designation\":\"programme012\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"15H00\",\n                        \"heureArrivee\":\"18H00\"\n                        }\n                    ]\n                },\n                {\n                    \"designation\":\"jourSemaine010\",\n                    \"jourSemaineDesignation\":\"Mardi\",\n                    \"programmeDTOList\":[\n                        {\n                        \"designation\":\"programme013\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"08H00\",\n                        \"heureArrivee\":\"11H00\"\n                        },\n                        {\n                        \"designation\":\"programme014\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"12H00\",\n                        \"heureArrivee\":\"15H00\"\n                        },\n                        {\n                        \"designation\":\"programme015\",\n                        \"dateArrivee\":\"30/12/2022\",\n                        \"dateDepart\":\"30/12/2022\",\n                        \"heureDepart\":\"15H00\",\n                        \"heureArrivee\":\"18H00\"\n                        }\n                    ]\n                }\n            ],\n            \"villeEscaleDTOList\":[\n                {\n                    \"villeDesignation\":\"Abidjan\",\n                    \"position\":1\n                },\n                {\n                    \"villeDesignation\":\"Yamoussoukro\",\n                    \"position\":2\n                },\n                {\n                    \"villeDesignation\":\"Daloa\",\n                    \"position\":3\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/offreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"offreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"AbidjanDaloa-CompagnieTransport4\",\n            \"compagnieTransportRaisonSociale\":\"amm\",\n            \"typeOffreVoyageDesignation\":\"National\",\n            \"villeDepartDesignation\":\"Abidjan\",\n            \"villeDestinationDesignation\":\"Daloa\",\n            \"valeurCaracteristiqueOffreVoyageDTOList\":[\n                {\n                \"designation\":\"valeurCaracteristiqueWifi04\",\n                \"valeurTexte\":\"true\",\n                \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n                \"proprieteOffreVoyageDesignation\":\"Wifi\"\n                },\n                {\n                \"designation\":\"valeurCaracteristiqueWifi05\",\n                \"valeurTexte\":\"true\",\n                \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n                \"proprieteOffreVoyageDesignation\":\"Prise de charge\"\n                },\n                {\n                \"designation\":\"valeurCaracteristiqueWifi06\",\n                \"valeurTexte\":\"true\",\n                \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n                \"proprieteOffreVoyageDesignation\":\"Confort\"\n                }\n            ]\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1145,6 +1173,68 @@
 							"path": [
 								"proprieteOffreVoyages",
 								"getAllProprieteOffreVoyage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VALEURCARACTERISTIQUEOFFREVOYAGE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"valeurCaracteristiqueWifi01\",\n        \"valeurTexte\":\"true\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"proprieteOffreVoyageDesignation\":\"Wifi\"\n        },\n        {\n        \"designation\":\"valeurCaracteristiqueWifi02\",\n         \"valeurTexte\":\"true\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"proprieteOffreVoyageDesignation\":\"Prise de charge\"\n        },\n        {\n        \"designation\":\"valeurCaracteristiqueWifi03\",\n        \"valeurTexte\":\"true\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"proprieteOffreVoyageDesignation\":\"Confort\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/valeurCaracteristiqueOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"valeurCaracteristiqueOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllValeurCaracteristiqueOffreVoyage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":{\n        \"designation\":\"AbidjanDaloa-CompagnieTransport4\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/valeurCaracteristiqueOffreVoyages/getAllValeurCaracteristiqueOffreVoyageByOffreVoyageDesignation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"valeurCaracteristiqueOffreVoyages",
+								"getAllValeurCaracteristiqueOffreVoyageByOffreVoyageDesignation"
 							]
 						}
 					},

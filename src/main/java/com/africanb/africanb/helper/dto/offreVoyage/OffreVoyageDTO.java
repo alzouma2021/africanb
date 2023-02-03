@@ -40,6 +40,7 @@ public class OffreVoyageDTO {
     private List<PrixOffreVoyageDTO> prixOffreVoyageDTOList;
     private List<JourSemaineDTO> jourSemaineDTOList;
     private List<VilleEscaleDTO> villeEscaleDTOList;
+    private List<ValeurCaracteristiqueOffreVoyageDTO> valeurCaracteristiqueOffreVoyageDTOList;
 
     // Search param
     private SearchParam<String> designationParam;
