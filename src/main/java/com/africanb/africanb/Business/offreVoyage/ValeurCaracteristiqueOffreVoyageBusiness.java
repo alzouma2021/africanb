@@ -1,6 +1,7 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
+import ch.qos.logback.core.util.StringCollectionUtil;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.offreVoyage.*;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
@@ -115,11 +116,12 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
                 response.setHasError(true);
                 return response;
             }
-            if(existingProprieteOffreVoyage.getTypeProprieteOffreVoyage()==null
-                         || existingProprieteOffreVoyage.getTypeProprieteOffreVoyage().getDesignation()==null) {
-                response.setStatus(functionalError.DATA_EXIST("Le type de la propriété de l'offre de voyage n'existe pas", locale));
-                response.setHasError(true);
-                return response;
+            if(existingProprieteOffreVoyage.getEstObligatoire() == true){
+                if(itemDto.getValeurTexte()==null){
+                    response.setStatus(functionalError.DATA_EXIST("La propriete offre de voyage " +existingProprieteOffreVoyage.getDesignation()+ ", est obligatoire.Sa valeur doit être définie", locale));
+                    response.setHasError(true);
+                    return response;
+                }
             }
             itemDto.setTypeProprieteOffreVoyageDesignation(existingProprieteOffreVoyage.getTypeProprieteOffreVoyage().getDesignation());
             itemDto=Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(itemDto);
@@ -137,7 +139,6 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
         response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
-
 
     @Override
     public Response<ValeurCaracteristiqueOffreVoyageDTO> update(Request<ValeurCaracteristiqueOffreVoyageDTO> request, Locale locale) throws ParseException {
