@@ -33,8 +33,9 @@ public class EmailServiceBusiness implements EmailServiceInterface {
 
     private static final Logger log = LoggerFactory.getLogger(EmailServiceBusiness.class);
 
-    @Autowired
+    @Autowired(required = true)
     public JavaMailSender emailSender;
+
     private Response<EmailDTO> response;
 
     @Autowired
