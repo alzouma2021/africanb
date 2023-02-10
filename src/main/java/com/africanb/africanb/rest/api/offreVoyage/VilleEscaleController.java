@@ -1,16 +1,13 @@
 package com.africanb.africanb.rest.api.offreVoyage;
 
 
-import com.africanb.africanb.Business.offreVoyage.PrixOffreVoyageBusiness;
 import com.africanb.africanb.Business.offreVoyage.VilleEscaleBusiness;
-import com.africanb.africanb.dao.entity.offreVoyage.VilleEscale;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;

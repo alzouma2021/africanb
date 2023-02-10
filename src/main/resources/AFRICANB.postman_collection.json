@@ -159,6 +159,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "create2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleBagage\",\n        \"description\":\"la famille reference de bagage\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -534,6 +562,34 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"refElementInteger\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementLong\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementBoolean\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementString\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementDate\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementDateTime\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        },\n        {\n        \"designation\":\"refElementFloat\",\n        \"referenceFamilleDesignation\":\"referenceFamilleTypeProprieteOffreFamille\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create4",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Petite Valise\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Moyenne Valise\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Grosse Valise\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"petit Sac\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Moyen Sac\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Gros Sac\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1235,6 +1291,39 @@
 							"path": [
 								"valeurCaracteristiqueOffreVoyages",
 								"getAllValeurCaracteristiqueOffreVoyageByOffreVoyageDesignation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BAGAGE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"bagage001\",\n        \"coutBagageParTypeBagage\":1000,\n        \"nombreBagageGratuitParTypeBagage\":2,\n        \"typeBagageDesignation\":\"Petite Valise\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n        {\n        \"designation\":\"bagage002\",\n        \"coutBagageParTypeBagage\":2000,\n        \"nombreBagageGratuitParTypeBagage\":0,\n        \"typeBagageDesignation\":\"Grosse Valise\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n        {\n        \"designation\":\"bagage003\",\n        \"coutBagageParTypeBagage\":2000,\n        \"nombreBagageGratuitParTypeBagage\":0,\n        \"typeBagageDesignation\":\"Moyenne Valise\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bagages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bagages"
 							]
 						}
 					},

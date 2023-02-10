@@ -1,13 +1,12 @@
-package com.africanb.africanb.rest.api.offreVoyage;
+package com.africanb.africanb.rest.api.compagnie;
 
 
-import com.africanb.africanb.Business.offreVoyage.PrixOffreVoyageBusiness;
+import com.africanb.africanb.Business.compagnie.BagageBusiness;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
+import com.africanb.africanb.helper.dto.compagnie.BagageDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
@@ -25,13 +24,13 @@ import java.util.Locale;
 @Log
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value="/prixOffreVoyages")
-public class PrixOffreVoyageController {
+@RequestMapping(value="/bagages")
+public class BagageController {
 
     @Autowired
-    private ControllerFactory<PrixOffreVoyageDTO> controllerFactory;
+    private ControllerFactory<BagageDTO> controllerFactory;
     @Autowired
-    private PrixOffreVoyageBusiness prixOffreVoyageBusiness;
+    private BagageBusiness bagageBusiness;
     @Autowired
     private TechnicalError technicalError;
     @Autowired
@@ -40,46 +39,45 @@ public class PrixOffreVoyageController {
     private HttpServletRequest requestBasic;
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<PrixOffreVoyageDTO> create(@RequestBody Request<PrixOffreVoyageDTO> request) {
+    public Response<BagageDTO> create(@RequestBody Request<BagageDTO> request) {
         log.info("start method create");
-        Response<PrixOffreVoyageDTO> response = controllerFactory.create(prixOffreVoyageBusiness, request, FunctionalityEnum.CREATE_PRIXOFFREVOYAGE);
+        Response<BagageDTO> response = controllerFactory.create(bagageBusiness, request, FunctionalityEnum.CREATE_PRIXOFFREVOYAGE);
         log.info("end method create");
         return response;
     }
 
     @RequestMapping(value="",method=RequestMethod.PUT,consumes = {"application/json"},produces={"application/json"})
-    public Response<PrixOffreVoyageDTO> update(@RequestBody Request<PrixOffreVoyageDTO> request) {
+    public Response<BagageDTO> update(@RequestBody Request<BagageDTO> request) {
         log.info("start method update");
-        Response<PrixOffreVoyageDTO> response = controllerFactory.update(prixOffreVoyageBusiness, request, FunctionalityEnum.UPDATE_PRIXOFFREVOYAGE);
+        Response<BagageDTO> response = controllerFactory.update(bagageBusiness, request, FunctionalityEnum.UPDATE_PRIXOFFREVOYAGE);
         log.info("end method update");
         return response;
     }
 
     @RequestMapping(value="",method=RequestMethod.DELETE,consumes = {"application/json"},produces={"application/json"})
-    public Response<PrixOffreVoyageDTO> delete(@RequestBody Request<PrixOffreVoyageDTO> request) {
+    public Response<BagageDTO> delete(@RequestBody Request<BagageDTO> request) {
         log.info("start method delete");
-        Response<PrixOffreVoyageDTO> response = controllerFactory.delete(prixOffreVoyageBusiness, request, FunctionalityEnum.DELETE_PRIXOFFREVOYAGE);
+        Response<BagageDTO> response = controllerFactory.delete(bagageBusiness, request, FunctionalityEnum.DELETE_PRIXOFFREVOYAGE);
         log.info("end method delete");
         return response;
     }
 
     @RequestMapping(value="/getByCriteria",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<PrixOffreVoyageDTO> getByCriteria(@RequestBody Request<PrixOffreVoyageDTO> request) {
-        log.info("start method /prixOffreVoyage/getByCriteria");
-        Response<PrixOffreVoyageDTO> response = controllerFactory.getByCriteria(prixOffreVoyageBusiness, request, FunctionalityEnum.VIEW_PRIXOFFREVOYAGE);
-        log.info("end method /prixOffreVoyage/getByCriteria");
+    public Response<BagageDTO> getByCriteria(@RequestBody Request<BagageDTO> request) {
+        log.info("start method /bagage/getByCriteria");
+        Response<BagageDTO> response = controllerFactory.getByCriteria(bagageBusiness, request, FunctionalityEnum.VIEW_PRIXOFFREVOYAGE);
+        log.info("end method /bagage/getByCriteria");
         return response;
     }
 
-    @RequestMapping(value="/getPrixTravelOfferByOffreVoyageDesignation",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<PrixOffreVoyageDTO> getPrixTravelOfferByOffreVoyageDesignation(@RequestBody Request<OffreVoyageDTO> request) {
-        log.info("start method getPrixTravelOfferByOffreVoyageDesignation");
-        Response<PrixOffreVoyageDTO> response = new Response<PrixOffreVoyageDTO>();
+    @RequestMapping(value="/getBagageByCompagnieTransportRaisonSociale",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<BagageDTO> getBagageByCompagnieTransportRaisonSociale(@RequestBody Request<BagageDTO> request) {
+        Response<BagageDTO> response = new Response<BagageDTO>();
         //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale = new Locale(languageID, "");
         try{
-            response=prixOffreVoyageBusiness.getPrixTravelOfferByOffreVoyageDesignation(request,locale);
+            response=bagageBusiness.getAllBagageByCompagnieTransportRaisonSociale(request,locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }
