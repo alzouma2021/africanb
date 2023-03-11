@@ -43,7 +43,6 @@ import java.util.*;
 @Component
 public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDTO>, Response<OffreVoyageDTO>> {
 
-
     private Response<OffreVoyageDTO> response;
     @Autowired
     private ReferenceRepository referenceRepository;

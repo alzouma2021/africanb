@@ -16,12 +16,12 @@ import java.util.Date;
  * @author Alzouma Moussa Mahamadou
  */
 @Entity
-@Table(name = "bagage")
+@Table(name = "gare")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Bagage implements Serializable {
+public class Gare implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,12 +32,18 @@ public class Bagage implements Serializable {
     @NotNull
     private String designation;
     private String description;
-    private Long coutBagageParTypeBagage; //Cette propriété stocke le prix de baga
-    private Long nombreBagageGratuitParTypeBagage; //Cette propriété stocke le nombre de bagages gratuit par type de bagages
+
+    @NotNull
+    private String email;
+    @NotNull
+    private String telephone1;
+    @NotNull
+    private String telephone2;
+    @NotNull
+    private String adresseLocalisation;
+
     @ManyToOne
-    private Reference typeBagage;  //FamilleReferenceBagage
-    @ManyToOne
-    private CompagnieTransport compagnieTransport;
+    private CompagnieTransport compagnieTransport;  //FamilleReferenceMode
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;
@@ -51,5 +57,5 @@ public class Bagage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
     private Long  deletedBy;
-    
+
 }
