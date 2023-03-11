@@ -1330,6 +1330,68 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "GARE",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"gare001\",\n        \"email\":\"gare001@gmail.com\",\n        \"telephone1\":\"0101010101\",\n        \"telephone2\":\"0202020202\",\n        \"adresseLocalisation\":\"TreichVille\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n        {\n        \"designation\":\"gare002\",\n        \"email\":\"gare002@gmail.com\",\n        \"telephone1\":\"0101010101\",\n        \"telephone2\":\"0202020202\",\n        \"adresseLocalisation\":\"Marcory\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n        {\n        \"designation\":\"gare003\",\n        \"email\":\"gare003@gmail.com\",\n        \"telephone1\":\"0101010101\",\n        \"telephone2\":\"0202020202\",\n        \"adresseLocalisation\":\"Koumassi\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/gares",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gares"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getGareByCompagnieTransportRaisonScoiale",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\":{\n        \"compagnieTransportRaisonSociale\":\"amm\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/gares/getGareByCompagnieTransportRaisonScoiale",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gares",
+								"getGareByCompagnieTransportRaisonScoiale"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

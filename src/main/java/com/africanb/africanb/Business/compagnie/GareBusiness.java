@@ -104,7 +104,7 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
                 return response;
             }
             CompagnieTransport existingCompagnieTransport = null;
-            existingCompagnieTransport = compagnieTransportRepository.findByDesignation(itemDto.getCompagnieTransportRaisonSociale(),false);
+            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport ayant  pour raison sociale -> " + itemDto.getCompagnieTransportRaisonSociale() +", n'existe pas", locale));
                 response.setHasError(true);
