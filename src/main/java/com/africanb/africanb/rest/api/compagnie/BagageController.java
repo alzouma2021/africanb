@@ -1,6 +1,5 @@
 package com.africanb.africanb.rest.api.compagnie;
 
-
 import com.africanb.africanb.Business.compagnie.BagageBusiness;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
