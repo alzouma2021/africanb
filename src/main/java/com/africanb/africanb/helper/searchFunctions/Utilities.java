@@ -11,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.format.DateTimeFormat;*/
 
 
+import com.africanb.africanb.dao.entity.compagnie.AbonnementPrelevement;
+import com.africanb.africanb.helper.dto.compagnie.AbonnementPeriodiqueDTO;
+import com.africanb.africanb.helper.dto.compagnie.AbonnementPrelevementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnementDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
@@ -102,6 +106,72 @@ public class Utilities {
                     return new ValeurCaracteristiqueOffreVoyageDTO();
             }
         return new ValeurCaracteristiqueOffreVoyageDTO();
+    }
+
+    public static ModeAbonnementDTO transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(ModeAbonnementDTO dto) {
+        if(dto!=null)
+               if(dto instanceof AbonnementPeriodiqueDTO){
+                    AbonnementPeriodiqueDTO rtn = new AbonnementPeriodiqueDTO();
+                    rtn.setId(dto.getId());
+                    rtn.setDesignation(dto.getDesignation());
+                    rtn.setDescription(dto.getDescription());
+
+                    rtn.setDateDebutAbonnement(dto.getDateDebutAbonnement());
+                    rtn.setDateFinAbonnement(dto.getDateFinAbonnement());
+                    rtn.setRedevancePublicite(dto.getRedevancePublicite());
+                    rtn.setRedevance(dto.getRedevance());
+
+                    rtn.setCompagnieTransportRaisonSociale(dto.getCompagnieTransportRaisonSociale());
+                    rtn.setPeriodiciteAbonnementDesignation(dto.getPeriodiciteAbonnementDesignation());
+
+                    rtn.setIsDeleted(dto.getIsDeleted());
+                    rtn.setUpdatedAt(dto.getUpdatedAt());
+                    rtn.setCreatedAt(dto.getCreatedAt());
+                    rtn.setDeletedAt(dto.getDeletedAt());
+                    rtn.setUpdatedBy(dto.getUpdatedBy());
+                    rtn.setCreatedBy(dto.getCreatedBy());
+                    rtn.setCreatedBy(dto.getCreatedBy());
+
+                    rtn.setCreatedAtParam(dto.getCreatedAtParam());
+                    rtn.setUpdatedAtParam(dto.getUpdatedAtParam());
+                    rtn.setIsDeletedParam(dto.getIsDeletedParam());
+                    rtn.setOrderField(dto.getOrderField());
+                    rtn.setOrderDirection(dto.getOrderDirection());
+
+                    return rtn;
+               } else if (dto instanceof AbonnementPrelevementDTO) {
+                   AbonnementPrelevementDTO rtn = new AbonnementPrelevementDTO();
+                   rtn.setId(dto.getId());
+                   rtn.setDesignation(dto.getDesignation());
+                   rtn.setDescription(dto.getDescription());
+
+                   rtn.setDateDebutAbonnement(dto.getDateDebutAbonnement());
+                   rtn.setDateFinAbonnement(dto.getDateFinAbonnement());
+                   rtn.setTaux(dto.getTaux());
+
+                   rtn.setCompagnieTransportRaisonSociale(dto.getCompagnieTransportRaisonSociale());
+                   rtn.setPeriodiciteAbonnementDesignation(dto.getPeriodiciteAbonnementDesignation());
+
+                   rtn.setIsDeleted(dto.getIsDeleted());
+                   rtn.setUpdatedAt(dto.getUpdatedAt());
+                   rtn.setCreatedAt(dto.getCreatedAt());
+                   rtn.setDeletedAt(dto.getDeletedAt());
+                   rtn.setUpdatedBy(dto.getUpdatedBy());
+                   rtn.setCreatedBy(dto.getCreatedBy());
+                   rtn.setCreatedBy(dto.getCreatedBy());
+
+                   rtn.setCreatedAtParam(dto.getCreatedAtParam());
+                   rtn.setUpdatedAtParam(dto.getUpdatedAtParam());
+                   rtn.setIsDeletedParam(dto.getIsDeletedParam());
+                   rtn.setOrderField(dto.getOrderField());
+                   rtn.setOrderDirection(dto.getOrderDirection());
+
+                   return rtn;
+               }else {
+                   return new ModeAbonnementDTO();
+               }
+
+        return new ModeAbonnementDTO();
     }
 
     public static boolean isBlank(String str) {
