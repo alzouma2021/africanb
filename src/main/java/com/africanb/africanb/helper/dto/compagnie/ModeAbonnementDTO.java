@@ -27,6 +27,7 @@ public class ModeAbonnementDTO {
 	private String dateFinAbonnement ;
 	private String compagnieTransportRaisonSociale;
 	private String periodiciteAbonnementDesignation;
+	private String typeModeAbonnementDesignation;
 
 	//Si l'abonnement correspond à un mode d'abonnement periodique alors la propriété taux sera null ou 0
 	//Si l'abonnement correspond à un mode d'abonnement prelevement alors les propriétés redevance et redevancePublicite seront null

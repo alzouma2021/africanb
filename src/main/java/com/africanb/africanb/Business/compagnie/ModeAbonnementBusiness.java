@@ -1,6 +1,8 @@
 package com.africanb.africanb.Business.compagnie;
 
 
+import com.africanb.africanb.dao.entity.compagnie.AbonnementPeriodique;
+import com.africanb.africanb.dao.entity.compagnie.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement;
 import com.africanb.africanb.dao.entity.offreVoyage.*;
@@ -8,6 +10,7 @@ import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.AbonnementPeriodiqueRepository;
 import com.africanb.africanb.dao.repository.compagnie.AbonnementPrelevementRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
+import com.africanb.africanb.dao.repository.compagnie.ModeAbonnementRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -20,10 +23,12 @@ import com.africanb.africanb.helper.dto.compagnie.ModeAbonnementDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.*;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
+import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -38,7 +43,6 @@ import java.util.*;
 @Component
 public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonnementDTO>, Response<ModeAbonnementDTO>> {
 
-
     private Response<ModeAbonnementDTO> response;
 
     @Autowired
@@ -49,6 +53,8 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
     private ReferenceRepository referenceRepository;
     @Autowired
     private AbonnementPeriodiqueBusiness abonnementPeriodiqueBusiness;
+    @Autowired
+    private ModeAbonnementRepository modeAbonnementRepository;
     @Autowired
     private AbonnementPrelevementBusiness abonnementPrelevementBusiness;
     @Autowired
@@ -113,8 +119,17 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(true);
                 return response;
             }
+            //Verify typeModeAbonnement
+            Reference existingTypeModeAbonnement = null;
+            existingTypeModeAbonnement = referenceRepository.findByDesignation(itemDto.getTypeModeAbonnementDesignation(),false);
+            if (existingTypeModeAbonnement == null) {
+                response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            log.info("_117 Avant transformation Affichage de l'objet itemDto :: "+ itemDto.toString());
             itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            log.info("_117 Affichage de l'objet itemDto :: "+ itemDto.toString());
+            log.info("_123 Apres transformation Affichage de l'objet itemDto :: "+ itemDto.toString());
             ModeAbonnementDTO entitySaved=null;
             entitySaved=saveModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
             log.info("_120 Affichage de l'objet entitySaved :: "+ entitySaved.toString());
@@ -131,7 +146,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         return response;
     }
 
-
+    @Override
     public Response<ModeAbonnementDTO> update(Request<ModeAbonnementDTO> request, Locale locale) throws ParseException {
         Response<ModeAbonnementDTO> response = new Response<ModeAbonnementDTO>();
         List<ModeAbonnement> items = new ArrayList<ModeAbonnement>();
@@ -175,6 +190,14 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
             existingPeriodiciteAbonnement = referenceRepository.findByDesignation(itemDto.getPeriodiciteAbonnementDesignation(),false);
             if (existingPeriodiciteAbonnement == null) {
                 response.setStatus(functionalError.DATA_EXIST("La periodicite de l'abonnement n'existe pas", locale));
+                response.setHasError(true);
+                return response;
+            }
+            //Verify typeModeAbonnement
+            Reference existingTypeModeAbonnement = null;
+            existingTypeModeAbonnement = referenceRepository.findByDesignation(itemDto.getTypeModeAbonnementDesignation(),false);
+            if (existingTypeModeAbonnement == null) {
+                response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
@@ -323,45 +346,44 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         return null;
     }
 
-  /*  @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public Response<ValeurCaracteristiqueOffreVoyageDTO> getAllValeurCaracteristiqueOffreVoyageByOffreVoyageDesignation(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
-        Response<ValeurCaracteristiqueOffreVoyageDTO> response = new Response<ValeurCaracteristiqueOffreVoyageDTO>();
-        List<ValeurCaracteristiqueOffreVoyageDTO> itemsDto= new ArrayList<ValeurCaracteristiqueOffreVoyageDTO>();
-        List<ValeurCaracteristiqueOffreVoyage> items = new ArrayList<ValeurCaracteristiqueOffreVoyage>();
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<ModeAbonnementDTO> getModeAbonnementByCompagnieTransport(Request<ModeAbonnementDTO> request, Locale locale) throws ParseException {
+        Response<ModeAbonnementDTO> response = new Response<ModeAbonnementDTO>();
+        List<ModeAbonnementDTO> itemsDto= new ArrayList<ModeAbonnementDTO>();
+        List<ModeAbonnement> items = new ArrayList<ModeAbonnement>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
             return response;
         }
         Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        fieldsToVerify.put("offreVoyageDesignation", request.getData().getDesignation());
+        fieldsToVerify.put("compagnieTransportRaisonSociale", request.getData().getCompagnieTransportRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             response.setHasError(true);
             return response;
         }
-        String offreVoyageDesignation=request.getData().getDesignation();
-        OffreVoyage existingOffreVoyage = null;
-        existingOffreVoyage = offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
-        if (existingOffreVoyage == null) {
-            response.setStatus(functionalError.DATA_EXIST("Offre de voyage n'existe pas", locale));
+        String compagnieTransportRaisonScoiale=request.getData().getCompagnieTransportRaisonSociale();
+        CompagnieTransport existingCompagnieTransport = null;
+        existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(compagnieTransportRaisonScoiale,false);
+        if (existingCompagnieTransport == null) {
+            response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items= (List<ValeurCaracteristiqueOffreVoyage>) valeurCaracteristiqueOffreVoyageRepository.findAllByOffreVoyageDesignation(offreVoyageDesignation,false);
+        items=(List<ModeAbonnement>) modeAbonnementRepository.findByCompagnieTransport(compagnieTransportRaisonScoiale,false);
         if (CollectionUtils.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie ne dipose d'aucune offre de voyage", locale));
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport ne dispose d'aucun mode d'abonnement", locale));
             response.setHasError(true);
             return response;
         }
-        itemsDto=convertValeurCaracteristiqueOffreVoyagesFilleToValeurCaracteristiqueOffreVoyageDTO(items);
+        itemsDto=transformerClasseFilleEnClasseModeAbonnementDTO(items);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end update l'offre de voyage-----");
+        log.info("----end update Mode Abonnement-----");
         return response;
-    }*/
-
+    }
 
     public ModeAbonnementDTO saveModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(ModeAbonnementDTO modeAbonnementDTO,Locale locale) throws ParseException {
 
@@ -457,8 +479,8 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
 
     public ModeAbonnementDTO updateModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(ModeAbonnementDTO modeAbonnementDTO,Locale locale) throws ParseException {
 
-        if(modeAbonnementDTO instanceof AbonnementPeriodiqueDTO){
-
+        if(modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PERIODIQUE)){
+            log.info("_474 Affichae :: modeAbonnementDTO ="+modeAbonnementDTO.toString());//TODO A effacer
             Request<AbonnementPeriodiqueDTO> subRequest = new Request<AbonnementPeriodiqueDTO>();
             List<AbonnementPeriodiqueDTO> itemsDTO = Collections.synchronizedList(new ArrayList<AbonnementPeriodiqueDTO>());
             AbonnementPeriodiqueDTO abonnementPeriodiqueDTO = (AbonnementPeriodiqueDTO) modeAbonnementDTO;
@@ -499,7 +521,8 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
 
             return rtn;
         }
-        else if(modeAbonnementDTO instanceof AbonnementPrelevementDTO){
+        else if(modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PRELEVEMENT)){
+            log.info("_516 Affichae :: modeAbonnementDTO ="+modeAbonnementDTO.toString());//TODO A effacer
             Request<AbonnementPrelevementDTO> subRequest = new Request<AbonnementPrelevementDTO>();
             List<AbonnementPrelevementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<AbonnementPrelevementDTO>());
             AbonnementPrelevementDTO abonnementPrelevementDTO = (AbonnementPrelevementDTO) modeAbonnementDTO;
@@ -545,4 +568,81 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         }
         return new ModeAbonnementDTO();
     }
+
+    public  List<ModeAbonnementDTO> transformerClasseFilleEnClasseModeAbonnementDTO(List<ModeAbonnement> modeAbonnementList) {
+        List<ModeAbonnementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModeAbonnementDTO>());
+
+        for(ModeAbonnement modeAbonnement:modeAbonnementList) {
+            if(modeAbonnement instanceof AbonnementPrelevement){
+                AbonnementPrelevement abonnementPrelevement = new AbonnementPrelevement();
+                abonnementPrelevement= (AbonnementPrelevement) abonnementPrelevement;
+                ModeAbonnementDTO rtn = new ModeAbonnementDTO();
+
+                rtn.setId( abonnementPrelevement.getId());
+                rtn.setDesignation( abonnementPrelevement.getDesignation());
+                rtn.setDescription( abonnementPrelevement.getDescription());
+
+                // rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
+                rtn.setTaux(abonnementPrelevement.getTaux());
+                rtn.setDateDebutAbonnement(abonnementPrelevement.getDateDebutAbonnement().toString());
+                rtn.setDateFinAbonnement(abonnementPrelevement.getDateFinAbonnement().toString());
+                rtn.setPeriodiciteAbonnementDesignation(abonnementPrelevement.getPeriodiciteAbonnement().getDesignation());
+                rtn.setCompagnieTransportRaisonSociale(abonnementPrelevement.getCompagnieTransport().getRaisonSociale());
+
+                rtn.setDeletedAt( abonnementPrelevement.getDeletedAt()!=null?abonnementPrelevement.getDeletedAt().toString():null);
+                rtn.setUpdatedAt( abonnementPrelevement.getUpdatedAt()!=null?abonnementPrelevement.getUpdatedAt().toString():null);
+                rtn.setCreatedAt( abonnementPrelevement.getCreatedAt()!=null?abonnementPrelevement.getCreatedAt().toString():null);
+                rtn.setCreatedBy( abonnementPrelevement.getCreatedBy());
+                rtn.setIsDeleted( abonnementPrelevement.getIsDeleted());
+                rtn.setDeletedBy( abonnementPrelevement.getDeletedBy());
+                rtn.setUpdatedBy( abonnementPrelevement.getUpdatedBy());
+               /* rtn.setIsDeletedParam( abonnementPrelevement.getDeletedAt()!=null?abonnementPrelevement.getDeletedAt().toString():null);
+                rtn.setUpdatedAtParam( abonnementPrelevement.getDeletedAt()!=null?abonnementPrelevement.getDeletedAt().toString():null);
+                rtn.setCreatedAtParam( abonnementPrelevement.getCreatedAtParam());
+                rtn.setCreatedByParam( abonnementPrelevement.getCreatedByParam());
+                rtn.setUpdatedByParam( abonnementPrelevement.getUpdatedByParam());
+                rtn.setOrderDirection( abonnementPrelevement.getOrderDirection());*/
+
+                itemsDTO.add(rtn);
+            }
+            else if(modeAbonnement instanceof AbonnementPeriodique){
+                AbonnementPeriodique abonnementPeriodique = new AbonnementPeriodique();
+                abonnementPeriodique= (AbonnementPeriodique) abonnementPeriodique;
+                ModeAbonnementDTO rtn = new ModeAbonnementDTO();
+
+                rtn.setId( abonnementPeriodique.getId());
+                rtn.setDesignation( abonnementPeriodique.getDesignation());
+                rtn.setDescription( abonnementPeriodique.getDescription());
+
+                rtn.setRedevance( abonnementPeriodique.getRedevance());
+                rtn.setRedevancePublicite( abonnementPeriodique.getRedevancePublicite());
+                //rtn.setTaux(abonnementPeriodique.getTaux());
+                rtn.setDateDebutAbonnement(abonnementPeriodique.getDateDebutAbonnement().toString());
+                rtn.setDateFinAbonnement(abonnementPeriodique.getDateFinAbonnement().toString());
+                rtn.setPeriodiciteAbonnementDesignation(abonnementPeriodique.getPeriodiciteAbonnement().getDesignation());
+                rtn.setCompagnieTransportRaisonSociale(abonnementPeriodique.getCompagnieTransport().getRaisonSociale());
+
+                rtn.setDeletedAt( abonnementPeriodique.getDeletedAt()!=null?abonnementPeriodique.getDeletedAt().toString():null);
+                rtn.setUpdatedAt( abonnementPeriodique.getUpdatedAt()!=null?abonnementPeriodique.getUpdatedAt().toString():null);
+                rtn.setCreatedAt( abonnementPeriodique.getCreatedAt()!=null?abonnementPeriodique.getCreatedAt().toString():null);
+                rtn.setCreatedBy( abonnementPeriodique.getCreatedBy());
+                rtn.setIsDeleted( abonnementPeriodique.getIsDeleted());
+                rtn.setDeletedBy( abonnementPeriodique.getDeletedBy());
+                rtn.setUpdatedBy( abonnementPeriodique.getUpdatedBy());
+               /* rtn.setIsDeletedParam( abonnementPeriodique.getDeletedAt()!=null?abonnementPeriodique.getDeletedAt().toString():null);
+                rtn.setUpdatedAtParam( abonnementPeriodique.getDeletedAt()!=null?abonnementPeriodique.getDeletedAt().toString():null);
+                rtn.setCreatedAtParam( abonnementPeriodique.getCreatedAtParam());
+                rtn.setCreatedByParam( abonnementPeriodique.getCreatedByParam());
+                rtn.setUpdatedByParam( abonnementPeriodique.getUpdatedByParam());
+                rtn.setOrderDirection( abonnementPeriodique.getOrderDirection());*/
+
+                itemsDTO.add(rtn);
+            }
+            else{
+
+            }
+        }
+        return itemsDTO;
+    }
+
 }

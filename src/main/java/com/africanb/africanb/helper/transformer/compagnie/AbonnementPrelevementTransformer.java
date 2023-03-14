@@ -29,8 +29,8 @@ public interface AbonnementPrelevementTransformer {
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
-            @Mapping(source = "entity.dateDebutAbonnement", target = "dateDebutAbonnement"),
-            @Mapping(source = "entity.dateFinAbonnement", target = "dateFinAbonnement"),
+            @Mapping(source = "entity.dateDebutAbonnement", dateFormat="dd/MM/yyyy",target = "dateDebutAbonnement"),
+            @Mapping(source = "entity.dateFinAbonnement", dateFormat="dd/MM/yyyy",target = "dateFinAbonnement"),
             @Mapping(source = "entity.taux", target = "taux"),
 
             @Mapping(source = "entity.compagnieTransport.raisonSociale", target = "compagnieTransportRaisonSociale"),
@@ -78,8 +78,8 @@ public interface AbonnementPrelevementTransformer {
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
 
-            @Mapping(source = "dto.dateDebutAbonnement", target = "dateDebutAbonnement"),
-            @Mapping(source = "dto.dateFinAbonnement", target = "dateFinAbonnement"),
+            @Mapping(source = "dto.dateDebutAbonnement", dateFormat="dd/MM/yyyy", target = "dateDebutAbonnement"),
+            @Mapping(source = "dto.dateFinAbonnement", dateFormat="dd/MM/yyyy", target = "dateFinAbonnement"),
             @Mapping(source = "dto.taux", target = "taux"),
 
             @Mapping(source = "dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),

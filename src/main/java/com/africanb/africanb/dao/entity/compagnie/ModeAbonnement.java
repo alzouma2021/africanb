@@ -44,6 +44,8 @@ public class ModeAbonnement implements Serializable{
 	private CompagnieTransport compagnieTransport;
 	@ManyToOne
 	private Reference periodiciteAbonnement;
+	@ManyToOne
+	private Reference typeModdAbonnement;
 
 	@Column(name="is_deleted")
 	private Boolean    isDeleted ;

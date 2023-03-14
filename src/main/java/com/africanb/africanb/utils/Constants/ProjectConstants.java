@@ -16,4 +16,7 @@ public class ProjectConstants {
     public final static String REF_ELEMENT_TYPE_DATETIME="refElementDateTime";
     public final static String REF_ELEMENT_TYPE_FLOAT="refElementFloat";
 
+
+    public final static String REF_ELEMENT_ABONNEMENT_PERIODIQUE="AbonnementPeriodique";
+    public final static String REF_ELEMENT_ABONNEMENT_PRELEVEMENT="AbonnementPrelevement";
 }

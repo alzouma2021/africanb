@@ -77,8 +77,8 @@ public interface AbonnementPeriodiqueTransformer {
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
 
-            @Mapping(source = "dto.dateDebutAbonnement", target = "dateDebutAbonnement"),
-            @Mapping(source = "dto.dateFinAbonnement", target = "dateFinAbonnement"),
+            @Mapping(source = "dto.dateDebutAbonnement", dateFormat="dd/MM/yyyy",target = "dateDebutAbonnement"),
+            @Mapping(source = "dto.dateFinAbonnement",   dateFormat="dd/MM/yyyy",target = "dateFinAbonnement"),
             @Mapping(source = "dto.redevance", target = "redevance"),
             @Mapping(source = "dto.redevancePublicite", target = "redevancePublicite"),
 
