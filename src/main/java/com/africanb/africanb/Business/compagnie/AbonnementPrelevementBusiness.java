@@ -4,9 +4,11 @@ package com.africanb.africanb.Business.compagnie;
 import com.africanb.africanb.dao.entity.compagnie.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.AbonnementPrelevementRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
+import com.africanb.africanb.dao.repository.compagnie.ModeAbonnementRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -37,11 +39,12 @@ import java.util.*;
 @Component
 public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<AbonnementPrelevementDTO>, Response<AbonnementPrelevementDTO>> {
 
-
     private Response<AbonnementPrelevementDTO> response;
 
     @Autowired
     AbonnementPrelevementRepository abonnementPrelevementRepository;
+    @Autowired
+    ModeAbonnementRepository modeAbonnementRepository;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
@@ -81,11 +84,9 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
                 response.setHasError(true);
                 return response;
             }
-            //Check if periodiciteAbonnement exists
-            Reference existingPeriodiciteAbonnement = null;
-            existingPeriodiciteAbonnement = periodiciteAbonnementRepository.findByDesignation(itemDto.getPeriodiciteAbonnementDesignation(),false);
+            Reference existingPeriodiciteAbonnement = periodiciteAbonnementRepository.findByDesignation(itemDto.getPeriodiciteAbonnementDesignation(), false);
             if (existingPeriodiciteAbonnement == null) {
-                response.setStatus(functionalError.DATA_EXIST("La periodicite abonnement n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("AbonnementPeriodique -> " + itemDto.getPeriodiciteAbonnementDesignation()+" n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
@@ -112,6 +113,7 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
 
     @Override
     public Response<AbonnementPrelevementDTO> update(Request<AbonnementPrelevementDTO> request, Locale locale) throws ParseException {
+        log.info("_115 debut de modification");
         Response<AbonnementPrelevementDTO> response = new Response<AbonnementPrelevementDTO>();
         List<AbonnementPrelevement> items = new ArrayList<AbonnementPrelevement>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
@@ -119,6 +121,7 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
             response.setHasError(true);
             return response;
         }
+        log.info("_123 Affichage de la variable ="+request.getDatas() .toString());
         List<AbonnementPrelevementDTO>itemsDtos = Collections.synchronizedList(new ArrayList<AbonnementPrelevementDTO>());
         for(AbonnementPrelevementDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
@@ -136,12 +139,15 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
             itemsDtos.add(dto);
         }
         for(AbonnementPrelevementDTO dto: itemsDtos) {
-            AbonnementPrelevement entityToSave = abonnementPrelevementRepository.findOne(dto.getId(), false);
+            //Check If AbonnenementPrelevelent exists
+            AbonnementPrelevement entityToSave=null;
+            entityToSave=abonnementPrelevementRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'abonnement suivant -> " + dto.getId() +", n'existe pas", locale));
+                response.setStatus(functionalError.DATA_EXIST("L'abonnement ayant l'identifiant"+dto.getId()+" n'existe pas", locale)) ;
                 response.setHasError(true);
                 return response;
             }
+            //entityToSave= Utilities.transformerEntityModeAbonnementEnEntityAbonnementPrelevement(existingModeAbonnement);
             String periodiciteAbonnementDesignation=entityToSave.getPeriodiciteAbonnement()!=null&&entityToSave.getPeriodiciteAbonnement().getDesignation()!=null
                                  ?  entityToSave.getPeriodiciteAbonnement().getDesignation()
                                  :  null;
@@ -182,7 +188,6 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
         List<AbonnementPrelevementDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                 ? AbonnementPrelevementTransformer.INSTANCE.toLiteDtos(items)
                                 : AbonnementPrelevementTransformer.INSTANCE.toDtos(items);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -316,4 +321,5 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
     */
         return null;
     }
+
 }

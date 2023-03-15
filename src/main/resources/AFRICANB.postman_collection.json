@@ -187,6 +187,62 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "create3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleAbonnement\",\n        \"description\":\"la famille reference d'abonnement\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create4",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamillePeriodiciteAbonnement\",\n        \"description\":\"la famille reference de la periodicité d'abonnement\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -590,6 +646,62 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Petite Valise\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Moyenne Valise\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Grosse Valise\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"petit Sac\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Moyen Sac\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        },\n        {\n        \"designation\":\"Gros Sac\",\n        \"referenceFamilleDesignation\":\"referenceFamilleBagage\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create5",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"AbonnementPeriodique\",\n        \"referenceFamilleDesignation\":\"referenceFamilleAbonnement\"\n        },\n        {\n        \"designation\":\"AbonnementPrelevement\",\n        \"referenceFamilleDesignation\":\"referenceFamilleAbonnement\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create6",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Mensuel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        },\n        {\n        \"designation\":\"Trimestriel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        },\n        {\n        \"designation\":\"Semestruel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        },\n        {\n        \"designation\":\"Annuel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1386,6 +1498,152 @@
 							"path": [
 								"gares",
 								"getGareByCompagnieTransportRaisonScoiale"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MODEABONNEMENT",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"modeFinancement007\",\n            \"dateDebutAbonnement\":\"14/03/2022\",\n            \"dateFinAbonnement\":\"14/03/2022\",\n            \"redevance\":100000,\n            \"redevancePublicite\":0,\n            \"typeModeAbonnementDesignation\":\"AbonnementPeriodique\",\n            \"periodiciteAbonnementDesignation\":\"Semestruel\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/modeAbonnements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"modeAbonnements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"modeFinancement400\",\n            \"dateDebutAbonnement\":\"14/03/2022\",\n            \"dateFinAbonnement\":\"14/03/2022\",\n            \"taux\":10,\n            \"typeModeAbonnementDesignation\":\"AbonnementPrelevement\",\n            \"periodiciteAbonnementDesignation\":\"Annuel\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/modeAbonnements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"modeAbonnements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/modeAbonnements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"modeAbonnements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update1",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"id\":209,\n            \"dateDebutAbonnement\":\"14/08/2022\",\n            \"dateFinAbonnement\":\"14/08/2022\",\n            \"redevance\":500000,\n            \"redevancePrelevement\":500000,\n            \"typeModeAbonnementDesignation\":\"AbonnementPeriodique\",\n            \"periodiciteAbonnementDesignation\":\"Annuel\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/modeAbonnements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"modeAbonnements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":{\n            \"compagnieTransportRaisonSociale\":\"amm\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/modeAbonnements/getModeAbonnementByCompagnieTransport",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"modeAbonnements",
+								"getModeAbonnementByCompagnieTransport"
 							]
 						}
 					},

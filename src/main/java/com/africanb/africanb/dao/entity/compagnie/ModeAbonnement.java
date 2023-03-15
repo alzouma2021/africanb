@@ -1,7 +1,5 @@
 package com.africanb.africanb.dao.entity.compagnie;
 
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.utils.Reference.Reference;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -45,7 +43,7 @@ public class ModeAbonnement implements Serializable{
 	@ManyToOne
 	private Reference periodiciteAbonnement;
 	@ManyToOne
-	private Reference typeModdAbonnement;
+	private Reference typeModeAbonnement;
 
 	@Column(name="is_deleted")
 	private Boolean    isDeleted ;

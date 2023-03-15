@@ -12,6 +12,7 @@ import org.joda.time.format.DateTimeFormat;*/
 
 
 import com.africanb.africanb.dao.entity.compagnie.AbonnementPrelevement;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement;
 import com.africanb.africanb.helper.dto.compagnie.AbonnementPeriodiqueDTO;
 import com.africanb.africanb.helper.dto.compagnie.AbonnementPrelevementDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnementDTO;
@@ -20,6 +21,7 @@ import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVo
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
+import lombok.extern.java.Log;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -39,9 +41,9 @@ public class Utilities {
 
     private static final Logger logger = LogManager.getLogManager().getLogger("");
     public static ValeurCaracteristiqueOffreVoyageDTO transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO dto) {
-        if(dto!=null && dto.getTypeProprieteOffreVoyageDesignation()!=null)
+        if(dto!=null && dto.getTypeProprieteOffreVoyageDesignation()!=null) {
             switch (dto.getTypeProprieteOffreVoyageDesignation()) {
-                case ProjectConstants.REF_ELEMENT_TYPE_LONG :
+                case ProjectConstants.REF_ELEMENT_TYPE_LONG:
                     ValeurCaracteristiqueOffreVoyageLongDTO rtn = new ValeurCaracteristiqueOffreVoyageLongDTO();
                     rtn.setId(dto.getId());
                     rtn.setDesignation(dto.getDesignation());
@@ -62,7 +64,7 @@ public class Utilities {
                     rtn.setOrderField(dto.getOrderField());
                     rtn.setOrderDirection(dto.getOrderDirection());
                     return rtn;
-                case ProjectConstants.REF_ELEMENT_TYPE_BOOLEAN :
+                case ProjectConstants.REF_ELEMENT_TYPE_BOOLEAN:
                     ValeurCaracteristiqueOffreVoyageBooleanDTO rtnBoolean = new ValeurCaracteristiqueOffreVoyageBooleanDTO();
                     rtnBoolean.setId(dto.getId());
                     rtnBoolean.setDesignation(dto.getDesignation());
@@ -83,7 +85,7 @@ public class Utilities {
                     rtnBoolean.setOrderField(dto.getOrderField());
                     rtnBoolean.setOrderDirection(dto.getOrderDirection());
                     return rtnBoolean;
-                case ProjectConstants.REF_ELEMENT_TYPE_STRING :
+                case ProjectConstants.REF_ELEMENT_TYPE_STRING:
                     ValeurCaracteristiqueOffreVoyageStringDTO rtnString = new ValeurCaracteristiqueOffreVoyageStringDTO();
                     rtnString.setId(dto.getId());
                     rtnString.setDesignation(dto.getDesignation());
@@ -107,7 +109,38 @@ public class Utilities {
                 default:
                     return new ValeurCaracteristiqueOffreVoyageDTO();
             }
+        }
         return new ValeurCaracteristiqueOffreVoyageDTO();
+    }
+
+    public static AbonnementPrelevement transformerEntityModeAbonnementEnEntityAbonnementPrelevement(ModeAbonnement entity){
+        if(entity==null) return new AbonnementPrelevement();
+
+        AbonnementPrelevement rtn = new AbonnementPrelevement();
+        AbonnementPrelevement entityToUpdate = new AbonnementPrelevement();
+        entityToUpdate= (AbonnementPrelevement) entity;
+
+        rtn.setId(entityToUpdate.getId());
+        rtn.setDesignation(entityToUpdate.getDesignation());
+        rtn.setDescription(entityToUpdate.getDescription());
+
+        rtn.setDateDebutAbonnement(entityToUpdate.getDateDebutAbonnement());
+        rtn.setDateFinAbonnement(entityToUpdate.getDateFinAbonnement());
+        rtn.setTaux(entityToUpdate.getTaux());
+
+        rtn.setCompagnieTransport(entityToUpdate.getCompagnieTransport());
+        rtn.setPeriodiciteAbonnement(entityToUpdate.getPeriodiciteAbonnement());
+        rtn.setTypeModeAbonnement(entityToUpdate.getTypeModeAbonnement());
+
+        rtn.setIsDeleted(entityToUpdate.getIsDeleted());
+        rtn.setUpdatedAt(entityToUpdate.getUpdatedAt());
+        rtn.setCreatedAt(entityToUpdate.getCreatedAt());
+        rtn.setDeletedAt(entityToUpdate.getDeletedAt());
+        rtn.setUpdatedBy(entityToUpdate.getUpdatedBy());
+        rtn.setCreatedBy(entityToUpdate.getCreatedBy());
+        rtn.setCreatedBy(entityToUpdate.getCreatedBy());
+
+        return rtn;
     }
 
     public static ModeAbonnementDTO transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(ModeAbonnementDTO dto) {
@@ -126,6 +159,7 @@ public class Utilities {
 
                     rtnPeriodique.setCompagnieTransportRaisonSociale(dto.getCompagnieTransportRaisonSociale());
                     rtnPeriodique.setPeriodiciteAbonnementDesignation(dto.getPeriodiciteAbonnementDesignation());
+                    rtnPeriodique.setTypeModeAbonnementDesignation(dto.getTypeModeAbonnementDesignation());
 
                     rtnPeriodique.setIsDeleted(dto.getIsDeleted());
                     rtnPeriodique.setUpdatedAt(dto.getUpdatedAt());
@@ -143,7 +177,6 @@ public class Utilities {
 
                     return rtnPeriodique;
                 case ProjectConstants.REF_ELEMENT_ABONNEMENT_PRELEVEMENT:
-
                     AbonnementPrelevementDTO rtnPrelevement = new AbonnementPrelevementDTO();
                     rtnPrelevement.setId(dto.getId());
                     rtnPrelevement.setDesignation(dto.getDesignation());
@@ -155,6 +188,7 @@ public class Utilities {
 
                     rtnPrelevement.setCompagnieTransportRaisonSociale(dto.getCompagnieTransportRaisonSociale());
                     rtnPrelevement.setPeriodiciteAbonnementDesignation(dto.getPeriodiciteAbonnementDesignation());
+                    rtnPrelevement.setTypeModeAbonnementDesignation(dto.getTypeModeAbonnementDesignation());
 
                     rtnPrelevement.setIsDeleted(dto.getIsDeleted());
                     rtnPrelevement.setUpdatedAt(dto.getUpdatedAt());
@@ -169,76 +203,11 @@ public class Utilities {
                     rtnPrelevement.setIsDeletedParam(dto.getIsDeletedParam());
                     rtnPrelevement.setOrderField(dto.getOrderField());
                     rtnPrelevement.setOrderDirection(dto.getOrderDirection());
-
                     return rtnPrelevement;
-
                 default:
                     return new ModeAbonnementDTO();
             }
         }
-      /*  if(dto!=null)
-               if(dto instanceof AbonnementPeriodiqueDTO){
-                    AbonnementPeriodiqueDTO rtn = new AbonnementPeriodiqueDTO();
-                    rtn.setId(dto.getId());
-                    rtn.setDesignation(dto.getDesignation());
-                    rtn.setDescription(dto.getDescription());
-
-                    rtn.setDateDebutAbonnement(dto.getDateDebutAbonnement());
-                    rtn.setDateFinAbonnement(dto.getDateFinAbonnement());
-                    rtn.setRedevancePublicite(dto.getRedevancePublicite());
-                    rtn.setRedevance(dto.getRedevance());
-
-                    rtn.setCompagnieTransportRaisonSociale(dto.getCompagnieTransportRaisonSociale());
-                    rtn.setPeriodiciteAbonnementDesignation(dto.getPeriodiciteAbonnementDesignation());
-
-                    rtn.setIsDeleted(dto.getIsDeleted());
-                    rtn.setUpdatedAt(dto.getUpdatedAt());
-                    rtn.setCreatedAt(dto.getCreatedAt());
-                    rtn.setDeletedAt(dto.getDeletedAt());
-                    rtn.setUpdatedBy(dto.getUpdatedBy());
-                    rtn.setCreatedBy(dto.getCreatedBy());
-                    rtn.setCreatedBy(dto.getCreatedBy());
-
-                    rtn.setCreatedAtParam(dto.getCreatedAtParam());
-                    rtn.setUpdatedAtParam(dto.getUpdatedAtParam());
-                    rtn.setIsDeletedParam(dto.getIsDeletedParam());
-                    rtn.setOrderField(dto.getOrderField());
-                    rtn.setOrderDirection(dto.getOrderDirection());
-
-                    return rtn;
-               } else if (dto instanceof AbonnementPrelevementDTO) {
-
-                   AbonnementPrelevementDTO rtn = new AbonnementPrelevementDTO();
-                   rtn.setId(dto.getId());
-                   rtn.setDesignation(dto.getDesignation());
-                   rtn.setDescription(dto.getDescription());
-
-                   rtn.setDateDebutAbonnement(dto.getDateDebutAbonnement());
-                   rtn.setDateFinAbonnement(dto.getDateFinAbonnement());
-                   rtn.setTaux(dto.getTaux());
-
-                   rtn.setCompagnieTransportRaisonSociale(dto.getCompagnieTransportRaisonSociale());
-                   rtn.setPeriodiciteAbonnementDesignation(dto.getPeriodiciteAbonnementDesignation());
-
-                   rtn.setIsDeleted(dto.getIsDeleted());
-                   rtn.setUpdatedAt(dto.getUpdatedAt());
-                   rtn.setCreatedAt(dto.getCreatedAt());
-                   rtn.setDeletedAt(dto.getDeletedAt());
-                   rtn.setUpdatedBy(dto.getUpdatedBy());
-                   rtn.setCreatedBy(dto.getCreatedBy());
-                   rtn.setCreatedBy(dto.getCreatedBy());
-
-                   rtn.setCreatedAtParam(dto.getCreatedAtParam());
-                   rtn.setUpdatedAtParam(dto.getUpdatedAtParam());
-                   rtn.setIsDeletedParam(dto.getIsDeletedParam());
-                   rtn.setOrderField(dto.getOrderField());
-                   rtn.setOrderDirection(dto.getOrderDirection());
-
-                   return rtn;
-               }else {
-                   return new ModeAbonnementDTO();
-               }
-        */
         return new ModeAbonnementDTO();
     }
 
@@ -447,8 +416,4 @@ public class Utilities {
     }
 
 */
-
-
-
-
 }

@@ -127,12 +127,9 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(true);
                 return response;
             }
-            log.info("_117 Avant transformation Affichage de l'objet itemDto :: "+ itemDto.toString());
             itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            log.info("_123 Apres transformation Affichage de l'objet itemDto :: "+ itemDto.toString());
             ModeAbonnementDTO entitySaved=null;
             entitySaved=saveModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
-            log.info("_120 Affichage de l'objet entitySaved :: "+ entitySaved.toString());
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -200,12 +197,10 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
                 response.setHasError(true);
                 return response;
-            }
+            };
             itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            log.info("_117 Affichage de l'objet itemDto :: "+ itemDto.toString());
             ModeAbonnementDTO entitySaved=null;
             entitySaved=updateModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
-            log.info("_120 Affichage de l'objet entitySaved :: "+ entitySaved.toString());
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -447,7 +442,6 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
 
-           // rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
             rtn.setTaux( subResponse.getItems().get(0).getTaux());
             rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
             rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
@@ -478,95 +472,96 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
 
 
     public ModeAbonnementDTO updateModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(ModeAbonnementDTO modeAbonnementDTO,Locale locale) throws ParseException {
+      if(modeAbonnementDTO!=null){
+          if(modeAbonnementDTO.getTypeModeAbonnementDesignation()!= null
+                  && modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PERIODIQUE)){
+              Request<AbonnementPeriodiqueDTO> subRequest = new Request<AbonnementPeriodiqueDTO>();
+              List<AbonnementPeriodiqueDTO> itemsDTO = Collections.synchronizedList(new ArrayList<AbonnementPeriodiqueDTO>());
+              AbonnementPeriodiqueDTO abonnementPeriodiqueDTO = (AbonnementPeriodiqueDTO) modeAbonnementDTO;
+              //Conversion
+              itemsDTO.add(abonnementPeriodiqueDTO);
+              subRequest.setDatas( itemsDTO);
+              Response<AbonnementPeriodiqueDTO> subResponse = abonnementPeriodiqueBusiness.update(subRequest,locale);
+              if (subResponse.isHasError()) {
+                  response.setStatus(subResponse.getStatus());
+                  response.setHasError(Boolean.TRUE);
+                  return new ModeAbonnementDTO();
+              }
+              ModeAbonnementDTO rtn = new ModeAbonnementDTO();
+              rtn.setId( subResponse.getItems().get(0).getId());
+              rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
+              rtn.setDescription( subResponse.getItems().get(0).getDescription());
 
-        if(modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PERIODIQUE)){
-            log.info("_474 Affichae :: modeAbonnementDTO ="+modeAbonnementDTO.toString());//TODO A effacer
-            Request<AbonnementPeriodiqueDTO> subRequest = new Request<AbonnementPeriodiqueDTO>();
-            List<AbonnementPeriodiqueDTO> itemsDTO = Collections.synchronizedList(new ArrayList<AbonnementPeriodiqueDTO>());
-            AbonnementPeriodiqueDTO abonnementPeriodiqueDTO = (AbonnementPeriodiqueDTO) modeAbonnementDTO;
-            //Conversion
-            itemsDTO.add(abonnementPeriodiqueDTO);
-            subRequest.setDatas( itemsDTO);
-            Response<AbonnementPeriodiqueDTO> subResponse = abonnementPeriodiqueBusiness.update(subRequest,locale);
-            if (subResponse.isHasError()) {
-                response.setStatus(subResponse.getStatus());
-                response.setHasError(Boolean.TRUE);
-                return new ModeAbonnementDTO();
-            }
-            ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
+              rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
+              rtn.setRedevancePublicite( subResponse.getItems().get(0).getRedevancePublicite());
+              rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
+              rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
+              rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
+              rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
 
-            rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
-            rtn.setRedevancePublicite( subResponse.getItems().get(0).getRedevancePublicite());
-            rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
-            rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
-            rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
+              rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
+              rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
+              rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
+              rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
+              rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
+              rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
+              rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
+              rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
+              rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
+              rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
+              rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
+              rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
+              rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
 
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
+              return rtn;
+          }
+          else if(modeAbonnementDTO.getTypeModeAbonnementDesignation()!= null
+                  && modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PRELEVEMENT)){
+              Request<AbonnementPrelevementDTO> subRequest = new Request<AbonnementPrelevementDTO>();
+              List<AbonnementPrelevementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<AbonnementPrelevementDTO>());
+              AbonnementPrelevementDTO abonnementPrelevementDTO = (AbonnementPrelevementDTO) modeAbonnementDTO;
+              //Conversion
+              itemsDTO.add(abonnementPrelevementDTO);
+              subRequest.setDatas(itemsDTO);
+              Response<AbonnementPrelevementDTO> subResponse = abonnementPrelevementBusiness.update(subRequest,locale);
+              if (subResponse.isHasError()) {
+                  response.setStatus(subResponse.getStatus());
+                  response.setHasError(Boolean.TRUE);
+                  return new AbonnementPrelevementDTO();
+              }
+              ModeAbonnementDTO rtn = new ModeAbonnementDTO();
+              rtn.setId( subResponse.getItems().get(0).getId());
+              rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
+              rtn.setDescription( subResponse.getItems().get(0).getDescription());
 
-            return rtn;
-        }
-        else if(modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PRELEVEMENT)){
-            log.info("_516 Affichae :: modeAbonnementDTO ="+modeAbonnementDTO.toString());//TODO A effacer
-            Request<AbonnementPrelevementDTO> subRequest = new Request<AbonnementPrelevementDTO>();
-            List<AbonnementPrelevementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<AbonnementPrelevementDTO>());
-            AbonnementPrelevementDTO abonnementPrelevementDTO = (AbonnementPrelevementDTO) modeAbonnementDTO;
-            //Conversion
-            itemsDTO.add(abonnementPrelevementDTO);
-            subRequest.setDatas( itemsDTO);
-            Response<AbonnementPrelevementDTO> subResponse = abonnementPrelevementBusiness.update(subRequest,locale);
-            if (subResponse.isHasError()) {
-                response.setStatus(subResponse.getStatus());
-                response.setHasError(Boolean.TRUE);
-                return new AbonnementPrelevementDTO();
-            }
-            ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
+              // rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
+              rtn.setTaux( subResponse.getItems().get(0).getTaux());
+              rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
+              rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
+              rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
+              rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
 
-            // rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
-            rtn.setTaux( subResponse.getItems().get(0).getTaux());
-            rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
-            rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
-            rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
+              rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
+              rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
+              rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
+              rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
+              rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
+              rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
+              rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
+              rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
+              rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
+              rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
+              rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
+              rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
+              rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
 
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
+              return rtn;
+          }
+          else{
 
-            return rtn;
-        }
-        else{
-
-        }
-        return new ModeAbonnementDTO();
+          }
+      }
+      return new ModeAbonnementDTO();
     }
 
     public  List<ModeAbonnementDTO> transformerClasseFilleEnClasseModeAbonnementDTO(List<ModeAbonnement> modeAbonnementList) {
@@ -575,11 +570,11 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         for(ModeAbonnement modeAbonnement:modeAbonnementList) {
             if(modeAbonnement instanceof AbonnementPrelevement){
                 AbonnementPrelevement abonnementPrelevement = new AbonnementPrelevement();
-                abonnementPrelevement= (AbonnementPrelevement) abonnementPrelevement;
+                abonnementPrelevement= (AbonnementPrelevement) modeAbonnement;
                 ModeAbonnementDTO rtn = new ModeAbonnementDTO();
 
-                rtn.setId( abonnementPrelevement.getId());
-                rtn.setDesignation( abonnementPrelevement.getDesignation());
+                rtn.setId(abonnementPrelevement.getId());
+                rtn.setDesignation(abonnementPrelevement.getDesignation());
                 rtn.setDescription( abonnementPrelevement.getDescription());
 
                 // rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
@@ -596,18 +591,12 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 rtn.setIsDeleted( abonnementPrelevement.getIsDeleted());
                 rtn.setDeletedBy( abonnementPrelevement.getDeletedBy());
                 rtn.setUpdatedBy( abonnementPrelevement.getUpdatedBy());
-               /* rtn.setIsDeletedParam( abonnementPrelevement.getDeletedAt()!=null?abonnementPrelevement.getDeletedAt().toString():null);
-                rtn.setUpdatedAtParam( abonnementPrelevement.getDeletedAt()!=null?abonnementPrelevement.getDeletedAt().toString():null);
-                rtn.setCreatedAtParam( abonnementPrelevement.getCreatedAtParam());
-                rtn.setCreatedByParam( abonnementPrelevement.getCreatedByParam());
-                rtn.setUpdatedByParam( abonnementPrelevement.getUpdatedByParam());
-                rtn.setOrderDirection( abonnementPrelevement.getOrderDirection());*/
 
                 itemsDTO.add(rtn);
             }
             else if(modeAbonnement instanceof AbonnementPeriodique){
                 AbonnementPeriodique abonnementPeriodique = new AbonnementPeriodique();
-                abonnementPeriodique= (AbonnementPeriodique) abonnementPeriodique;
+                abonnementPeriodique= (AbonnementPeriodique) modeAbonnement;
                 ModeAbonnementDTO rtn = new ModeAbonnementDTO();
 
                 rtn.setId( abonnementPeriodique.getId());
@@ -616,9 +605,8 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
 
                 rtn.setRedevance( abonnementPeriodique.getRedevance());
                 rtn.setRedevancePublicite( abonnementPeriodique.getRedevancePublicite());
-                //rtn.setTaux(abonnementPeriodique.getTaux());
-                rtn.setDateDebutAbonnement(abonnementPeriodique.getDateDebutAbonnement().toString());
-                rtn.setDateFinAbonnement(abonnementPeriodique.getDateFinAbonnement().toString());
+                rtn.setDateDebutAbonnement(abonnementPeriodique.getDateDebutAbonnement()!=null?abonnementPeriodique.getDateDebutAbonnement().toString():null);
+                rtn.setDateFinAbonnement(abonnementPeriodique.getDateFinAbonnement()!=null?abonnementPeriodique.getDateFinAbonnement().toString():null);
                 rtn.setPeriodiciteAbonnementDesignation(abonnementPeriodique.getPeriodiciteAbonnement().getDesignation());
                 rtn.setCompagnieTransportRaisonSociale(abonnementPeriodique.getCompagnieTransport().getRaisonSociale());
 
@@ -629,12 +617,6 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 rtn.setIsDeleted( abonnementPeriodique.getIsDeleted());
                 rtn.setDeletedBy( abonnementPeriodique.getDeletedBy());
                 rtn.setUpdatedBy( abonnementPeriodique.getUpdatedBy());
-               /* rtn.setIsDeletedParam( abonnementPeriodique.getDeletedAt()!=null?abonnementPeriodique.getDeletedAt().toString():null);
-                rtn.setUpdatedAtParam( abonnementPeriodique.getDeletedAt()!=null?abonnementPeriodique.getDeletedAt().toString():null);
-                rtn.setCreatedAtParam( abonnementPeriodique.getCreatedAtParam());
-                rtn.setCreatedByParam( abonnementPeriodique.getCreatedByParam());
-                rtn.setUpdatedByParam( abonnementPeriodique.getUpdatedByParam());
-                rtn.setOrderDirection( abonnementPeriodique.getOrderDirection());*/
 
                 itemsDTO.add(rtn);
             }
@@ -644,5 +626,4 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         }
         return itemsDTO;
     }
-
 }
