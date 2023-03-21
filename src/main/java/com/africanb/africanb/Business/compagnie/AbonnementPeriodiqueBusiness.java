@@ -1,28 +1,20 @@
 package com.africanb.africanb.Business.compagnie;
 
 
-import com.africanb.africanb.dao.entity.compagnie.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.AbonnementPeriodiqueRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
-import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
-import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
-import com.africanb.africanb.dao.repository.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.AbonnementPeriodiqueDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.compagnie.AbonnementPeriodiqueTransformer;
-import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageBooleanTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;

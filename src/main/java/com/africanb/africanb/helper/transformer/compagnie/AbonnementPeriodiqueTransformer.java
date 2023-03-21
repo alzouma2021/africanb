@@ -1,10 +1,9 @@
 package com.africanb.africanb.helper.transformer.compagnie;
 
-
-import com.africanb.africanb.dao.entity.compagnie.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.AbonnementPeriodiqueDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;

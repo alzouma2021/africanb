@@ -1,7 +1,5 @@
-package com.africanb.africanb.helper.dto.compagnie;
+package com.africanb.africanb.helper.dto.compagnie.ModeAbonnement;
 
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;

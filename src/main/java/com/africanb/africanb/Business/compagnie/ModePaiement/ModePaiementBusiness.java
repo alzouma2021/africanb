@@ -1,5 +1,7 @@
-package com.africanb.africanb.Business.compagnie;
+package com.africanb.africanb.Business.compagnie.ModePaiement;
 
+import com.africanb.africanb.Business.compagnie.AbonnementPeriodiqueBusiness;
+import com.africanb.africanb.Business.compagnie.AbonnementPrelevementBusiness;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
@@ -16,6 +18,7 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
@@ -36,9 +39,9 @@ import java.util.*;
  */
 @Log
 @Component
-public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonnementDTO>, Response<ModeAbonnementDTO>> {
+public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiementDTO>, Response<ModePaiementDTO>> {
 
-    private Response<ModeAbonnementDTO> response;
+    private Response<ModePaiementDTO> response;
 
     @Autowired
     private FunctionalError functionalError;
@@ -62,7 +65,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ModeAbonnementBusiness() {
+    public ModePaiementBusiness() {
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

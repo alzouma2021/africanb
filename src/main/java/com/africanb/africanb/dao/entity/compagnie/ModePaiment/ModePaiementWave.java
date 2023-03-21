@@ -1,5 +1,6 @@
-package com.africanb.africanb.dao.entity.compagnie;
+package com.africanb.africanb.dao.entity.compagnie.ModePaiment;
 
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,13 +16,13 @@ import java.io.Serializable;
  * @Author Alzouma Moussa Mahamadou
  */
 @Entity
-@Table(name="abonnementprelevement")
-@DiscriminatorValue("prelevement")
+@Table(name="modepaiementwave")
+@DiscriminatorValue("wave")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AbonnementPrelevement extends ModeAbonnement implements Serializable {
+public class ModePaiementWave extends ModePaiement implements Serializable {
 	@Column(nullable = false)
-	private long taux;
+	private String telephoneWave;
 }

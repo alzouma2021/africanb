@@ -1,7 +1,6 @@
 package com.africanb.africanb.dao.repository.compagnie;
 
-import com.africanb.africanb.dao.entity.compagnie.AbonnementPeriodique;
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +16,6 @@ public interface AbonnementPeriodiqueRepository extends JpaRepository<Abonnement
     AbonnementPeriodique findByDesignation(@Param("designation") String designation, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select ap from AbonnementPeriodique ap where  ap.compagnieTransport.raisonSociale = :compagnieTransportRaisonSociale  and ap.isDeleted= :isDeleted")
-    AbonnementPeriodique findByCompagnieTransportRaisonSociale( @Param("compagnieTransportRaisonSociale") String compagnieTransportRaisonSociale, @Param("isDeleted") Boolean isDeleted);
+    AbonnementPeriodique findByCompagnieTransportRaisonSociale(@Param("compagnieTransportRaisonSociale") String compagnieTransportRaisonSociale, @Param("isDeleted") Boolean isDeleted);
 
 }

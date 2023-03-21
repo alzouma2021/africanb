@@ -1,4 +1,4 @@
-package com.africanb.africanb.dao.repository.compagnie;
+package com.africanb.africanb.dao.repository.compagnie.ModePaiement;
 
 
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;

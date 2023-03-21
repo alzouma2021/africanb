@@ -1,5 +1,6 @@
-package com.africanb.africanb.dao.entity.compagnie;
+package com.africanb.africanb.dao.entity.compagnie.ModeAbonnement;
 
+import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.utils.Reference.Reference;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

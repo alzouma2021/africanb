@@ -1,14 +1,10 @@
-package com.africanb.africanb.helper.dto.compagnie;
+package com.africanb.africanb.helper.dto.compagnie.ModePaiement;
 
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.util.Date;
 
 /**
  * @Author Alzouma Moussa Mahamadou
@@ -17,24 +13,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ModeAbonnementDTO {
-
+public class ModePaiementDTO {
 
 	private Long id;
 	private String designation;
 	private String description;
-	private String dateDebutAbonnement ;
-	private String dateFinAbonnement ;
 	private String compagnieTransportRaisonSociale;
-	private String periodiciteAbonnementDesignation;
-	private String typeModeAbonnementDesignation;
-
-	//Si l'abonnement correspond à un mode d'abonnement periodique alors la propriété taux sera null ou 0
-	//Si l'abonnement correspond à un mode d'abonnement prelevement alors les propriétés redevance et redevancePublicite seront null
-
-	private long redevance;
-	private long redevancePublicite;
-	private long taux;
+	private String typeModePaiementDesignation;
 
 	private Boolean  isDeleted;
 	private String updatedAt;
@@ -53,5 +38,4 @@ public class ModeAbonnementDTO {
 
 	private String orderField;
 	private String orderDirection;
-
 }

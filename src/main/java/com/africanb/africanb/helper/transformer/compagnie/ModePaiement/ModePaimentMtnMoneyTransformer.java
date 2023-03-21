@@ -1,11 +1,11 @@
-package com.africanb.africanb.helper.transformer.compagnie;
-
-
+package com.africanb.africanb.helper.transformer.compagnie.ModePaiement;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
+import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementMtnMoney;
+import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementOrangeMoney;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementMtnMoneyDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementOrangeMoneyDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -18,22 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface AbonnementPrelevementTransformer {
+public interface ModePaimentMtnMoneyTransformer {
 
 
-    AbonnementPrelevementTransformer INSTANCE = Mappers.getMapper(AbonnementPrelevementTransformer.class);
+    ModePaimentMtnMoneyTransformer INSTANCE = Mappers.getMapper(ModePaimentMtnMoneyTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
-            @Mapping(source = "entity.dateDebutAbonnement", dateFormat="dd/MM/yyyy",target = "dateDebutAbonnement"),
-            @Mapping(source = "entity.dateFinAbonnement", dateFormat="dd/MM/yyyy",target = "dateFinAbonnement"),
-            @Mapping(source = "entity.taux", target = "taux"),
+            @Mapping(source = "entity.telephoneMtnMoney", target = "telephoneMtnMoney"),
 
             @Mapping(source = "entity.compagnieTransport.raisonSociale", target = "compagnieTransportRaisonSociale"),
-            @Mapping(source = "entity.periodiciteAbonnement.designation", target = "periodiciteAbonnementDesignation"),
+            @Mapping(source = "entity.typeModePaiement.designation", target = "typeModePaiementDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -43,30 +41,29 @@ public interface AbonnementPrelevementTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    AbonnementPrelevementDTO toDto(AbonnementPrelevement entity) throws ParseException;;
+    ModePaiementMtnMoneyDTO toDto(ModePaiementMtnMoney entity) throws ParseException;;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
-    List<AbonnementPrelevementDTO> toDtos(List<AbonnementPrelevement> entities) throws ParseException;
+    List<ModePaiementMtnMoneyDTO> toDtos(List<ModePaiementMtnMoney> entities) throws ParseException;
 
-    default AbonnementPrelevementDTO toLiteDto(AbonnementPrelevement entity) {
+    default ModePaiementMtnMoneyDTO toLiteDto(ModePaiementMtnMoney entity) {
         if (entity == null) {
             return null;
         }
-        AbonnementPrelevementDTO dto = new AbonnementPrelevementDTO();
+        ModePaiementMtnMoneyDTO dto = new ModePaiementMtnMoneyDTO();
         dto.setId( entity.getId() );
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
-        dto.setTaux(entity.getTaux());
-
+        dto.setTelephoneMtnMoney(entity.getTelephoneMtnMoney());
         return dto;
     }
 
-    default List<AbonnementPrelevementDTO> toLiteDtos(List<AbonnementPrelevement> entities) {
+    default List<ModePaiementMtnMoneyDTO> toLiteDtos(List<ModePaiementMtnMoney> entities) {
         if (entities == null || entities.stream().allMatch(o -> o == null)) {
             return null;
         }
-        List<AbonnementPrelevementDTO> dtos = new ArrayList<AbonnementPrelevementDTO>();
-        for (AbonnementPrelevement entity : entities) {
+        List<ModePaiementMtnMoneyDTO> dtos = new ArrayList<ModePaiementMtnMoneyDTO>();
+        for (ModePaiementMtnMoney entity : entities) {
             dtos.add(toLiteDto(entity));
         }
         return dtos;
@@ -76,10 +73,7 @@ public interface AbonnementPrelevementTransformer {
             @Mapping(source = "dto.id", target = "id"),
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
-
-            @Mapping(source = "dto.dateDebutAbonnement", dateFormat="dd/MM/yyyy", target = "dateDebutAbonnement"),
-            @Mapping(source = "dto.dateFinAbonnement", dateFormat="dd/MM/yyyy", target = "dateFinAbonnement"),
-            @Mapping(source = "dto.taux", target = "taux"),
+            @Mapping(source = "dto.telephoneMtnMoney", target = "telephoneMtnMoney"),
 
             @Mapping(source = "dto.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "dto.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -90,7 +84,7 @@ public interface AbonnementPrelevementTransformer {
             @Mapping(source = "dto.isDeleted", target="isDeleted"),
 
             @Mapping(source = "compagnieTransport", target="compagnieTransport"),
-            @Mapping(source = "periodiciteAbonnement", target="periodiciteAbonnement")
+            @Mapping(source = "typeModePaiement", target="typeModePaiement"),
     })
-    AbonnementPrelevement toEntity(AbonnementPrelevementDTO dto, CompagnieTransport compagnieTransport, Reference periodiciteAbonnement) throws ParseException;
+    ModePaiementMtnMoney toEntity(ModePaiementMtnMoneyDTO dto, CompagnieTransport compagnieTransport, Reference typeModePaiement) throws ParseException;
 }

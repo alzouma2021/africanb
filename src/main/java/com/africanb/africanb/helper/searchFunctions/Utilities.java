@@ -10,28 +10,19 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.format.DateTimeFormat;*/
 
-
-import com.africanb.africanb.dao.entity.compagnie.AbonnementPrelevement;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement;
-import com.africanb.africanb.helper.dto.compagnie.AbonnementPeriodiqueDTO;
-import com.africanb.africanb.helper.dto.compagnie.AbonnementPrelevementDTO;
-import com.africanb.africanb.helper.dto.compagnie.ModeAbonnementDTO;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
-import lombok.extern.java.Log;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;

@@ -1,10 +1,7 @@
 package com.africanb.africanb.Business.compagnie;
 
-
-import com.africanb.africanb.dao.entity.compagnie.AbonnementPeriodique;
-import com.africanb.africanb.dao.entity.compagnie.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement;
+import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.AbonnementPrelevementRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
@@ -15,10 +12,8 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.AbonnementPeriodiqueDTO;
-import com.africanb.africanb.helper.dto.compagnie.AbonnementPrelevementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.compagnie.AbonnementPeriodiqueTransformer;
 import com.africanb.africanb.helper.transformer.compagnie.AbonnementPrelevementTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
