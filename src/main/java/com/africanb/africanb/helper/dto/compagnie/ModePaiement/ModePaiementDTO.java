@@ -1,10 +1,12 @@
 package com.africanb.africanb.helper.dto.compagnie.ModePaiement;
 
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 /**
  * @Author Alzouma Moussa Mahamadou
@@ -20,6 +22,7 @@ public class ModePaiementDTO {
 	private String description;
 	private String compagnieTransportRaisonSociale;
 	private String typeModePaiementDesignation;
+	private String telephoneGenerique;
 
 	private Boolean  isDeleted;
 	private String updatedAt;

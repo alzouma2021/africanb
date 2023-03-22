@@ -16,7 +16,14 @@ public class ProjectConstants {
     public final static String REF_ELEMENT_TYPE_DATETIME="refElementDateTime";
     public final static String REF_ELEMENT_TYPE_FLOAT="refElementFloat";
 
-
+    //ModeAbonnement
     public final static String REF_ELEMENT_ABONNEMENT_PERIODIQUE="AbonnementPeriodique";
     public final static String REF_ELEMENT_ABONNEMENT_PRELEVEMENT="AbonnementPrelevement";
+
+    //ModePaiement
+    public final static String REF_ELEMENT_MODE_PAIEMENT_ORANGE_MONEY="ModePaiementOrangeMoney";
+    public final static String REF_ELEMENT_MODE_PAIEMENT_MTN_MONEY="ModePaiementMtnMoney";
+    public final static String REF_ELEMENT_MODE_PAIEMENT_MOOV_MONEY="ModePaiementMoovMoney";
+    public final static String REF_ELEMENT_MODE_PAIEMENT_WAVE_MONEY="ModePaiementWaveMoney";
+    public final static String REF_ELEMENT_MODE_PAIEMENT_EN_ESPECE="ModePaiementEnEspece";
 }

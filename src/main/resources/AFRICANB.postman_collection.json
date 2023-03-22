@@ -243,6 +243,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "create5",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleModePaiement\",\n        \"description\":\"la famille reference des modes de paiement\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencesFamille",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencesFamille"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -702,6 +730,34 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Mensuel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        },\n        {\n        \"designation\":\"Trimestriel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        },\n        {\n        \"designation\":\"Semestruel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        },\n        {\n        \"designation\":\"Annuel\",\n        \"referenceFamilleDesignation\":\"referenceFamillePeriodiciteAbonnement\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/references",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"references"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create7",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"ModePaiementOrangeMoney\",\n        \"referenceFamilleDesignation\":\"referenceFamilleModePaiement\"\n        },\n        {\n        \"designation\":\"ModePaiementMtnMoney\",\n        \"referenceFamilleDesignation\":\"referenceFamilleModePaiement\"\n        },\n        {\n        \"designation\":\"ModePaiementMoovMoney\",\n        \"referenceFamilleDesignation\":\"referenceFamilleModePaiement\"\n        },\n        {\n        \"designation\":\"ModePaiementWaveMoney\",\n        \"referenceFamilleDesignation\":\"referenceFamilleModePaiement\"\n        },\n        {\n        \"designation\":\"ModePaiementEnEspece\",\n        \"referenceFamilleDesignation\":\"referenceFamilleModePaiement\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1644,6 +1700,39 @@
 							"path": [
 								"modeAbonnements",
 								"getModeAbonnementByCompagnieTransport"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MODEPAIEMENT",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"modePaiementOrangeMoney\",\n            \"telephoneGenerique\":\"0101010101\",\n            \"typeModePaiementDesignation\":\"ModePaiementOrangeMoney\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n         {\n            \"designation\":\"modePaiementWaveMoney\",\n            \"telephoneGenerique\":\"0101010101\",\n            \"typeModePaiementDesignation\":\"ModePaiementWaveMoney\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n         {\n            \"designation\":\"modePaiementMtnMoney\",\n            \"telephoneGenerique\":\"0101010101\",\n            \"typeModePaiementDesignation\":\"ModePaiementMtnMoney\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n         {\n            \"designation\":\"modePaiementEnEspece\",\n            \"telephoneGenerique\":\"0101010101\",\n            \"typeModePaiementDesignation\":\"ModePaiementEnEspece\",\n            \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/modePaiements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"modePaiements"
 							]
 						}
 					},
