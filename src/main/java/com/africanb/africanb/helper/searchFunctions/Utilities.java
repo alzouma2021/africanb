@@ -1,15 +1,5 @@
 package com.africanb.africanb.helper.searchFunctions;
 
-/*import ci.sgabs.gs.souscriptionApp.dao.entity.Users;
-import ci.sgabs.gs.souscriptionApp.helper.enums.OperatorEnum;
-import com.africanb.africanb.helper.enums.OperatorEnum;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.slf4j.Slf4j;
-import org.joda.time.format.DateTimeFormat;*/
-
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
@@ -328,7 +318,6 @@ public class Utilities {
                     modePaiementEnEspeceDTO.setIsDeletedParam(dto.getIsDeletedParam());
                     modePaiementEnEspeceDTO.setOrderField(dto.getOrderField());
                     modePaiementEnEspeceDTO.setOrderDirection(dto.getOrderDirection());
-
                     return modePaiementEnEspeceDTO;
                 default:
                     return new ModePaiementDTO();

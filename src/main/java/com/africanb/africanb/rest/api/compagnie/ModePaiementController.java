@@ -71,16 +71,17 @@ public class ModePaiementController {
         log.info("end method /programme/getByCriteria");
         return response;
     }
-   /*
-    @RequestMapping(value="/getModeAbonnementByCompagnieTransport",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<ModeAbonnementDTO> getModeAbonnementByCompagnieTransport(@RequestBody Request<ModeAbonnementDTO> request) {
+
+    @RequestMapping(value="/getModePaiementByCompagnieTransport",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<ModePaiementDTO> getModePaiementByCompagnieTransport(@RequestBody Request<ModePaiementDTO> request) {
         log.info("start method validateAdhesionRequestCompagny");
-        Response<ModeAbonnementDTO> response = new Response<ModeAbonnementDTO>();
+        Response<ModePaiementDTO> response = new Response<ModePaiementDTO>();
         //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale = new Locale(languageID, "");
         try{
-            response= modePaiementBusiness.getModeAbonnementByCompagnieTransport(request,locale);
+            response= modePaiementBusiness.getModePaiementByCompagnieTransport(request,locale);
+            log.info("_84 Affichage de la reponse ="+response.getItems().toString());
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }
@@ -95,5 +96,5 @@ public class ModePaiementController {
             exceptionUtils.EXCEPTION(response,locale,e);
         }
         return response;
-    }*/
+    }
 }
