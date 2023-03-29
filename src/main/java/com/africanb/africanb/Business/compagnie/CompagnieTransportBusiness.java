@@ -28,6 +28,7 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.document.DocumentTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
+import com.africanb.africanb.utils.document.DocumentUtils;
 import com.africanb.africanb.utils.emailService.BodiesOfEmail;
 import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
@@ -696,7 +697,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         }
         //Check file size
         Double limitSize = Double.parseDouble(limitFileSizeDefault);
-        boolean compareFileSizeToLimitSize=Utilities.compareFileSizeToLimitSize(file,limitSize);
+        boolean compareFileSizeToLimitSize= DocumentUtils.compareFileSizeToLimitSize(file,limitSize);
         if(!compareFileSizeToLimitSize){
             response.setStatus(functionalError.SAVE_FAIL("La taille du document ne doit pas depasser 1 Mo",locale));
             response.setHasError(true);
@@ -713,9 +714,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         documentDTO.setTypeMime(contentType);
         documentDTO.setExtension(extension);
         //Check if directory exists on hard disk
-        boolean checkIfDirectoryExists = Utilities.checkIfDirectoryExists(path);
+        boolean checkIfDirectoryExists = DocumentUtils.checkIfDirectoryExists(path);
         if(!checkIfDirectoryExists){
-            boolean createDirectoryOnHardDisk = Utilities.createDirectoryOnHardDisk(path);
+            boolean createDirectoryOnHardDisk = DocumentUtils.createDirectoryOnHardDisk(path);
             if(!createDirectoryOnHardDisk){
                 response.setStatus(functionalError.SAVE_FAIL("Erreur de creation :: repertoire inexistant",locale));
                 response.setHasError(true);
@@ -725,7 +726,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         //Create a file on disk local
         boolean createFileOnDiskHard=false;
         String fileLocation = path + filename + "." + extension;
-        createFileOnDiskHard=Utilities.createFileOnDiskHard(content, fileLocation);
+        createFileOnDiskHard=DocumentUtils.createFileOnDiskHard(content, fileLocation);
         if(!createFileOnDiskHard){
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation du fichier",locale));
             response.setHasError(true);
@@ -759,20 +760,5 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
         return response;
-    }
-
-    private static void createFileOnDiskHard(byte[] content, String fileLocation) throws IOException {
-        File newFile = new File(fileLocation);
-        FileOutputStream fos = null;
-        try{
-            fos = new FileOutputStream(newFile);
-            fos.write(content);
-        }catch (IOException ex){
-            ex.printStackTrace();
-        } catch (SecurityException se){
-            se.printStackTrace();
-        }finally {
-            fos.close();
-        }
     }
 }
