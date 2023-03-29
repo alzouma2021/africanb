@@ -26,6 +26,12 @@ import java.util.logging.Logger;
 public class Utilities {
 
     private static final Logger logger = LogManager.getLogManager().getLogger("");
+
+    /**
+     *
+     * @param dto
+     * @return ValeurCaracteristiqueOffreVoyageDTO
+     */
     public static ValeurCaracteristiqueOffreVoyageDTO transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO dto) {
         if(dto!=null && dto.getTypeProprieteOffreVoyageDesignation()!=null) {
             switch (dto.getTypeProprieteOffreVoyageDesignation()) {
@@ -99,6 +105,11 @@ public class Utilities {
         return new ValeurCaracteristiqueOffreVoyageDTO();
     }
 
+    /**
+     *
+     * @param entity
+     * @return  AbonnementPrelevement
+     */
     public static AbonnementPrelevement transformerEntityModeAbonnementEnEntityAbonnementPrelevement(ModeAbonnement entity){
         if(entity==null) return new AbonnementPrelevement();
 
@@ -129,6 +140,11 @@ public class Utilities {
         return rtn;
     }
 
+    /**
+     *
+     * @param dto
+     * @return ModeAbonnementDTO
+     */
     public static ModeAbonnementDTO transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(ModeAbonnementDTO dto) {
         if (dto != null && dto.getTypeModeAbonnementDesignation() != null){
             switch (dto.getTypeModeAbonnementDesignation()) {
@@ -197,6 +213,11 @@ public class Utilities {
         return new ModeAbonnementDTO();
     }
 
+    /**
+     *
+     * @param dto
+     * @return ModePaiementDTO
+     */
     public static ModePaiementDTO transformerLaClasseModePaiementtEnClasseFilleCorrespondante(ModePaiementDTO dto) {
         if (dto != null && dto.getTypeModePaiementDesignation() != null){
             switch (dto.getTypeModePaiementDesignation()) {

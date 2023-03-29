@@ -13,6 +13,13 @@ import java.io.IOException;
 public class DocumentUtils {
 
 
+    /**
+     *
+     * @param content
+     * @param fileLocation
+     * @return boolean
+     * @throws IOException
+     */
     public static boolean createFileOnDiskHard(byte[] content, String fileLocation) throws IOException {
         if(Utilities.isBlank(fileLocation) || content.length==0) return false;
         File newFile = new File(fileLocation);
@@ -32,6 +39,11 @@ public class DocumentUtils {
         return true;
     }
 
+    /**
+     *
+     * @param path
+     * @return boolean
+     */
     public static boolean checkIfDirectoryExists(String path){
         if(path==null) return false;
         File directory = null;
@@ -45,6 +57,11 @@ public class DocumentUtils {
         return true;
     }
 
+    /**
+     *
+     * @param pathDirectory
+     * @return boolean
+     */
     public static boolean createDirectoryOnHardDisk(String pathDirectory){
         File directory = null;
         try{
@@ -57,6 +74,12 @@ public class DocumentUtils {
         return true;
     }
 
+    /**
+     *
+     * @param file
+     * @param limitSize
+     * @return boolean
+     */
     public static boolean compareFileSizeToLimitSize(MultipartFile file, Double limitSize) {
         long fileSize = file.getSize(); //Taille en octets
         double fileSizeInMb = fileSize / (1024 * 1024.0); // Taille en mégaoctets
