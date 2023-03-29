@@ -9,6 +9,7 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
+import com.africanb.africanb.helper.dto.document.DocumentDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -148,4 +150,31 @@ public class CompagnieTransportController {
         return response;
     }
 
+    @RequestMapping(value="/uploadAttestionTransport",method= RequestMethod.POST,consumes = {"multipart/form-data"},produces={"application/json"})
+    public Response<DocumentDTO> uploadAttestionTransport(@RequestParam("file") MultipartFile file, @RequestParam String raisonSociale) {
+        Response<DocumentDTO> response = new Response<DocumentDTO>();
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        //Initialisation CompagnieTransportDTO
+        Request<CompagnieTransportDTO> request = new Request<CompagnieTransportDTO>();
+        CompagnieTransportDTO compagnieTransportDTO= new CompagnieTransportDTO();
+        compagnieTransportDTO.setRaisonSociale(raisonSociale);
+        request.setData(compagnieTransportDTO);
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=compagnieTransportBusiness.uploadAttestionTransport(request,file,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
 }

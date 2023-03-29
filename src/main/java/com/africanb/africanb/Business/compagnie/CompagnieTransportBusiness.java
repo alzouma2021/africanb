@@ -5,23 +5,27 @@
 
 package com.africanb.africanb.Business.compagnie;
 
+import com.africanb.africanb.Business.document.DocumentBusiness;
+import com.africanb.africanb.dao.entity.compagnie.CompagnieAttestionTransport;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
-import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
-import com.africanb.africanb.dao.repository.compagnie.StatusUtilCompagnieTransportRepository;
-import com.africanb.africanb.dao.repository.compagnie.StatusUtilRepository;
-import com.africanb.africanb.dao.repository.compagnie.VilleRepository;
+import com.africanb.africanb.dao.entity.document.Document;
+import com.africanb.africanb.dao.repository.compagnie.*;
+import com.africanb.africanb.dao.repository.document.DocumentRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.CompagnieAttestionTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
+import com.africanb.africanb.helper.dto.document.DocumentDTO;
 import com.africanb.africanb.helper.transformer.compagnie.CompagnieTransportTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
+import com.africanb.africanb.helper.transformer.document.DocumentTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.emailService.BodiesOfEmail;
@@ -29,28 +33,48 @@ import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Log
 @Component
 public class CompagnieTransportBusiness implements IBasicBusiness<Request<CompagnieTransportDTO>, Response<CompagnieTransportDTO>> {
 
     private Response<CompagnieTransportDTO> response;
+
+    @Value("${africanb.document.path}")
+    private String path;
+    @Value("${taille.limite.attestation.transport}")
+    private String limitFileSizeDefault;
+
     @Autowired
     private StatusUtilRepository statusUtilRepository;
     @Autowired
     private CompagnieTransportRepository compagnieTransportRepository;
     @Autowired
     private VilleRepository villeRepository;
+    @Autowired
+    private DocumentBusiness documentBusiness;
+    @Autowired
+    private CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness;
+
+    @Autowired
+    private CompagnieAttestationTransportRepository compagnieAttestationTransportRepository;
     @Autowired
     private StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository;
     @Autowired
@@ -625,9 +649,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         }
         Long count=0L;
         count=compagnieTransportRepository.countAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
-        log.info("_493 COUNT=====:"+count); //TODO A effacer
         items=compagnieTransportRepository.getAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false, PageRequest.of(request.getIndex(), request.getSize()));
-        log.info("_494 ITEMS=====:"+items.toString()); //TODO A effacer
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport valide n'est disponible",locale));
             response.setHasError(true);
@@ -643,4 +665,114 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         return response;
     }
 
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class,IllegalArgumentException.class, IOException.class})
+    public  Response<DocumentDTO> uploadAttestionTransport(Request<CompagnieTransportDTO> request, MultipartFile file, Locale locale) throws ParseException, IOException {
+        Response<DocumentDTO> response = new Response<DocumentDTO>();
+        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        if(request.getData()==null){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Vérification champ raisonSociale
+        fieldsToVerify.put("compagnieRaisonSociale",request.getData().getRaisonSociale());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        if(file.isEmpty()){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Fichier vide ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Get Extension
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        if(!extension.equalsIgnoreCase("PDF")){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Le document doit être au format PDF ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Check file size
+        Double limitSize = Double.parseDouble(limitFileSizeDefault);
+        boolean compareFileSizeToLimitSize=Utilities.compareFileSizeToLimitSize(file,limitSize);
+        if(!compareFileSizeToLimitSize){
+            response.setStatus(functionalError.SAVE_FAIL("La taille du document ne doit pas depasser 1 Mo",locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Check the file size
+        byte[] content = file.getBytes();
+        String contentType = file.getContentType();
+        String filename = UUID.randomUUID().toString();
+        //Initialisation documentDTO
+        DocumentDTO documentDTO = new DocumentDTO();
+        documentDTO.setDesignation(request.getData().getRaisonSociale());
+        documentDTO.setPath(filename);
+        documentDTO.setTypeMime(contentType);
+        documentDTO.setExtension(extension);
+        //Check if directory exists on hard disk
+        boolean checkIfDirectoryExists = Utilities.checkIfDirectoryExists(path);
+        if(!checkIfDirectoryExists){
+            boolean createDirectoryOnHardDisk = Utilities.createDirectoryOnHardDisk(path);
+            if(!createDirectoryOnHardDisk){
+                response.setStatus(functionalError.SAVE_FAIL("Erreur de creation :: repertoire inexistant",locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        //Create a file on disk local
+        boolean createFileOnDiskHard=false;
+        String fileLocation = path + filename + "." + extension;
+        createFileOnDiskHard=Utilities.createFileOnDiskHard(content, fileLocation);
+        if(!createFileOnDiskHard){
+            response.setStatus(functionalError.SAVE_FAIL("Erreur de creation du fichier",locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Creating documentDTO
+        Request<DocumentDTO> subRequest = new Request<DocumentDTO>();
+        subRequest.setData(documentDTO);
+        Response<DocumentDTO> subResponse = documentBusiness.create(subRequest, locale);
+        if (subResponse.isHasError()) {
+            response.setStatus(subResponse.getStatus());
+            response.setHasError(Boolean.TRUE);
+            return response;
+        }
+        //Creating compagnieAttestionTransportDTO
+        List<CompagnieAttestionTransportDTO> itemsDTO = new ArrayList<CompagnieAttestionTransportDTO>();
+        CompagnieAttestionTransportDTO compagnieAttestionTransportDTO = new CompagnieAttestionTransportDTO();
+        compagnieAttestionTransportDTO.setCompagnieRaisonSociale(request.getData().getRaisonSociale());
+        compagnieAttestionTransportDTO.setDocumentDesignation(subResponse.getItem().getDesignation());
+        itemsDTO.add(compagnieAttestionTransportDTO);
+        Request<CompagnieAttestionTransportDTO> subRequest1 = new Request<CompagnieAttestionTransportDTO>();
+        subRequest1.setDatas(itemsDTO);
+        Response<CompagnieAttestionTransportDTO> subResponse1 = compagnieAttestionTransportBusiness.create(subRequest1, locale);
+        if (subResponse.isHasError()) {
+            response.setStatus(subResponse.getStatus());
+            response.setHasError(Boolean.TRUE);
+            return response;
+        }
+        //return document for response
+        response.setItem(subResponse.getItem());
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        return response;
+    }
+
+    private static void createFileOnDiskHard(byte[] content, String fileLocation) throws IOException {
+        File newFile = new File(fileLocation);
+        FileOutputStream fos = null;
+        try{
+            fos = new FileOutputStream(newFile);
+            fos.write(content);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        } catch (SecurityException se){
+            se.printStackTrace();
+        }finally {
+            fos.close();
+        }
+    }
 }

@@ -519,6 +519,47 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "uploadAttestionTransport",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"contentType": "application/form-data",
+									"type": "file",
+									"src": "cvint-compressé.pdf"
+								},
+								{
+									"key": "raisonSociale",
+									"value": "\"amm14\"",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/compagnieTransport/uploadAttestionTransport",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"compagnieTransport",
+								"uploadAttestionTransport"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
