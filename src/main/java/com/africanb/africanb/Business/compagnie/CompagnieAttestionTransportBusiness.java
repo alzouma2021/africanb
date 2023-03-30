@@ -127,6 +127,7 @@ public class CompagnieAttestionTransportBusiness implements IBasicBusiness<Reque
             return response;
         }
         List<CompagnieAttestionTransport> itemsSaved = null;
+        log.info("_130 Affichage CompagnieAttestionTransport ="+ items.toString());
         itemsSaved = compagnieAttestionTransportRepository.saveAll((Iterable<CompagnieAttestionTransport>) items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("CompagnieAttestionTransport", locale));

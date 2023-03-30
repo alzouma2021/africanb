@@ -10,6 +10,7 @@ import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.document.DocumentDTO;
+import com.africanb.africanb.helper.dto.document.DocumentReponseDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
@@ -157,11 +158,36 @@ public class CompagnieTransportController {
         //Initialisation CompagnieTransportDTO
         Request<CompagnieTransportDTO> request = new Request<CompagnieTransportDTO>();
         CompagnieTransportDTO compagnieTransportDTO= new CompagnieTransportDTO();
+        log.info(" Affichage de la raison sociale ="+raisonSociale); //TODO A effacer
         compagnieTransportDTO.setRaisonSociale(raisonSociale);
         request.setData(compagnieTransportDTO);
         Locale locale = new Locale(languageID, "");
         try{
             response=compagnieTransportBusiness.uploadAttestionTransport(request,file,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
+
+    @RequestMapping(value="/getLinkedAttestionTransport",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<DocumentReponseDTO> getLinkedAttestionTransport(@RequestBody Request<CompagnieTransportDTO> request) {
+        Response<DocumentReponseDTO> response = new Response<DocumentReponseDTO>();
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        //Initialisation CompagnieTransportDTO
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=compagnieTransportBusiness.getLinkedAttestionTransport(request,locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }

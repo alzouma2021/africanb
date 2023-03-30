@@ -12,7 +12,6 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.document.Document;
 import com.africanb.africanb.dao.repository.compagnie.*;
-import com.africanb.africanb.dao.repository.document.DocumentRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -23,9 +22,9 @@ import com.africanb.africanb.helper.dto.compagnie.CompagnieAttestionTransportDTO
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.document.DocumentDTO;
+import com.africanb.africanb.helper.dto.document.DocumentReponseDTO;
 import com.africanb.africanb.helper.transformer.compagnie.CompagnieTransportTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.document.DocumentTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.document.DocumentUtils;
@@ -39,9 +38,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,9 +55,11 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
     private Response<CompagnieTransportDTO> response;
 
     @Value("${africanb.document.path}")
-    private String path;
+    private String documentpath;
     @Value("${taille.limite.attestation.transport}")
     private String limitFileSizeDefault;
+    @Value("${racine.document.path}")
+    private String racineDocumentPath;
 
     @Autowired
     private StatusUtilRepository statusUtilRepository;
@@ -683,6 +681,13 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
+        CompagnieTransport existingEntity=null;
+        existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
+        if (existingEntity == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
+            response.setHasError(true);
+            return response;
+        }
         if(file.isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Fichier vide ",locale));
             response.setHasError(true);
@@ -714,9 +719,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         documentDTO.setTypeMime(contentType);
         documentDTO.setExtension(extension);
         //Check if directory exists on hard disk
-        boolean checkIfDirectoryExists = DocumentUtils.checkIfDirectoryExists(path);
+        boolean checkIfDirectoryExists = DocumentUtils.checkIfDirectoryExists(documentpath);
         if(!checkIfDirectoryExists){
-            boolean createDirectoryOnHardDisk = DocumentUtils.createDirectoryOnHardDisk(path);
+            boolean createDirectoryOnHardDisk = DocumentUtils.createDirectoryOnHardDisk(documentpath);
             if(!createDirectoryOnHardDisk){
                 response.setStatus(functionalError.SAVE_FAIL("Erreur de creation :: repertoire inexistant",locale));
                 response.setHasError(true);
@@ -725,7 +730,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         }
         //Create a file on disk local
         boolean createFileOnDiskHard=false;
-        String fileLocation = path + filename + "." + extension;
+        String fileLocation = documentpath + filename + "." + extension;
         createFileOnDiskHard=DocumentUtils.createFileOnDiskHard(content, fileLocation);
         if(!createFileOnDiskHard){
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation du fichier",locale));
@@ -757,6 +762,66 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         }
         //return document for response
         response.setItem(subResponse.getItem());
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        return response;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class,IllegalArgumentException.class, IOException.class})
+    public  Response<DocumentReponseDTO> getLinkedAttestionTransport(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException, IOException {
+        Response<DocumentReponseDTO> response = new Response<DocumentReponseDTO>();
+        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        if(request.getData()==null){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Vérification champ raisonSociale
+        fieldsToVerify.put("compagnieRaisonSociale",request.getData().getRaisonSociale());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Check if compagny exists
+        CompagnieTransport existingEntity=null;
+        existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
+        if (existingEntity == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Check if compagny has a attestation transport
+        String raisonSociale = request.getData().getRaisonSociale();
+        CompagnieAttestionTransport existingCompagnieAttestionTransport = null;
+        existingCompagnieAttestionTransport = compagnieAttestationTransportRepository.findByRaisonSociale(raisonSociale,false);
+        if (existingEntity == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune attestation de transport declarée pour la compagnie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Get information about Attestation Document
+        Document attestationTransportEntity = existingCompagnieAttestionTransport.getAttestionTransport();
+        if(attestationTransportEntity==null || attestationTransportEntity.getPath()==null){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune attestation de transport declarée pour la compagnie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Check if the attestion transport exists on hard disk
+        documentpath = documentpath + attestationTransportEntity.getPath() +"."+ attestationTransportEntity.getExtension();
+        boolean checkIfDocumentExistsOnDirectory = DocumentUtils.checkIfDocumentExistsOnDirectory(documentpath);
+        if(!checkIfDocumentExistsOnDirectory){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune attestation de transport declarée pour la compagnie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        //Build path absolu of attestion transport with Extension
+        String linked =  racineDocumentPath + documentpath;
+        //return document for response
+        DocumentReponseDTO documentReponseDTO = new DocumentReponseDTO();
+        documentReponseDTO.setLinkedAttestionDocument(linked);
+        response.setItem(documentReponseDTO);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
         return response;

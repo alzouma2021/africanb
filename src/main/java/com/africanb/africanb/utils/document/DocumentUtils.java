@@ -1,18 +1,22 @@
 package com.africanb.africanb.utils.document;
 
 import com.africanb.africanb.helper.searchFunctions.Utilities;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * @Author Cette classe implmente toutes les methodes relatives à la gestion des documents
  */
 public class DocumentUtils {
 
-
+    private static final Logger logger = LogManager.getLogManager().getLogger("");
     /**
      *
      * @param content
@@ -50,6 +54,19 @@ public class DocumentUtils {
         try{
             directory = new File(path);
             if(!directory.exists()) return false;
+        }catch (SecurityException se){
+            se.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean checkIfDocumentExistsOnDirectory(String filePath){
+        if(filePath==null) return false;
+        File pdfFile = null;
+        try{
+            pdfFile = new File(filePath);
+            if(!pdfFile.exists()) return false;
         }catch (SecurityException se){
             se.printStackTrace();
             return false;
