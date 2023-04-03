@@ -122,6 +122,14 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(true);
                 return response;
             }
+            //Check if the compagny have a mode abonnement
+            List<ModeAbonnement> exitingModeAbonnementList=null;
+            exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(itemDto.getCompagnieTransportRaisonSociale(),false);
+            if(!CollectionUtils.isEmpty(exitingModeAbonnementList)){
+                response.setStatus(functionalError.SAVE_FAIL("La compagnie possede deja un mode d'abonnement", locale));
+                response.setHasError(true);
+                return response;
+            }
             itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
             ModeAbonnementDTO entitySaved=null;
             entitySaved=saveModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);

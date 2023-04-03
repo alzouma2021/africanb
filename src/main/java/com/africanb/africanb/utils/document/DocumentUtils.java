@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class DocumentUtils {
 
-    private static final Logger logger = LogManager.getLogManager().getLogger("");
+   // private static final Logger logger = LogManager.getLogManager().getLogger("");
     /**
      *
      * @param content

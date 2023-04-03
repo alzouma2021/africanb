@@ -54,7 +54,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     private Response<CompagnieTransportDTO> response;
 
-    @Value("${africanb.document.path}")
+    @Value("${africanb.attestionTransport.path}")
     private String documentpath;
     @Value("${taille.limite.attestation.transport}")
     private String limitFileSizeDefault;

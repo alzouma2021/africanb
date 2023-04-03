@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 //@Slf4j
 public class Utilities {
 
-    private static final Logger logger = LogManager.getLogManager().getLogger("");
+   // private static final Logger logger = LogManager.getLogManager().getLogger("");
 
     /**
      *

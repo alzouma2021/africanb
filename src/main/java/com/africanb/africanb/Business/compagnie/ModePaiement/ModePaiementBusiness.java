@@ -8,6 +8,7 @@ import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.*;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
+import com.africanb.africanb.dao.repository.compagnie.ModeAbonnementRepository;
 import com.africanb.africanb.dao.repository.compagnie.ModePaiement.ModePaiementRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
@@ -19,9 +20,11 @@ import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementD
 import com.africanb.africanb.helper.dto.compagnie.ModePaiement.*;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
+import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -44,6 +47,8 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     private FunctionalError functionalError;
     @Autowired
     private ModePaiementRepository modePaiementRepository;
+    @Autowired
+    private ModeAbonnementRepository modeAbonnementRepository;
     @Autowired
     private CompagnieTransportRepository compagnieTransportRepository;
     @Autowired
@@ -100,8 +105,26 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                     response.setHasError(true);
                     return response;
                 }
+                //Check the compagny mode abonnement
+                /*List<ModeAbonnement> exitingModeAbonnementList=null;
+                exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(dto.getCompagnieTransportRaisonSociale(),false);
+                if(CollectionUtils.isEmpty(exitingModeAbonnementList)){
+                    response.setStatus(functionalError.SAVE_FAIL("La compagnie ne dispose pas de mode abonnement", locale));
+                    response.setHasError(true);
+                    return response;
+                }*/
                 itemsDtos.add(dto);
             }
+        }
+        for(ModePaiementDTO dto: itemsDtos){
+            //Check the compagny mode abonnement
+                /*List<ModeAbonnement> exitingModeAbonnementList=null;
+                exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(dto.getCompagnieTransportRaisonSociale(),false);
+                if(CollectionUtils.isEmpty(exitingModeAbonnementList)){
+                    response.setStatus(functionalError.SAVE_FAIL("La compagnie ne dispose pas de mode abonnement", locale));
+                    response.setHasError(true);
+                    return response;
+                }*/
         }
         for(ModePaiementDTO itemDto : itemsDtos){
             //Verify Compagnie transport
@@ -111,6 +134,26 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
                 response.setHasError(true);
                 return response;
+            }
+            //Check the compagny mode abonnement
+            List<ModeAbonnement> exitingModeAbonnementList=null;
+            exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(itemDto.getCompagnieTransportRaisonSociale(),false);
+            if(CollectionUtils.isEmpty(exitingModeAbonnementList)){
+                response.setStatus(functionalError.SAVE_FAIL("La compagnie ne dispose pas de mode abonnement", locale));
+                response.setHasError(true);
+                return response;
+            }else{
+                for(ModeAbonnement modeAbonnement: exitingModeAbonnementList){
+                    if(modeAbonnement!=null){
+                        if(modeAbonnement instanceof AbonnementPrelevement){
+                            if(itemDto.getTypeModePaiementDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_MODE_PAIEMENT_EN_ESPECE)){
+                                response.setStatus(functionalError.DATA_EXIST("Impossible de pouvoir définir un mode de paiement en espece.Car,la société a défini un mode d'abonnement prélevement", locale));
+                                response.setHasError(true);
+                                return response;
+                            }
+                        }
+                    }
+                }
             }
             //Verify typeModeAbonnement
             Reference existingTypeModeAbonnement = null;
